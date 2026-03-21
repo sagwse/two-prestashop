@@ -1,0 +1,39 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+Дякуємо за покупку в магазині {shop_name}!
+
+Деталі замовлення
+
+Замовлення: {order_name} Розміщено {date}
+Оплата: {payment}
+
+Артикул	Товар	Ціна	Кількість	Сума {products_txt} {discounts_txt}
+Товари	{total_products}
+Знижки	{total_discounts}
+Доставка	{total_shipping}
+В тому числі ПДВ	{total_tax_paid}
+Всього сплачено	{total_paid}
+
+Доставка
+
+Перевізник: {carrier}
+Оплата: {payment}
+Упаковка із вторинної сировини: {recycled_packaging_label}
+
+Адреса доставки
+
+{delivery_block_txt}
+
+Платіжна адреса
+
+{invoice_block_txt}
+
+Ви можете переглянути ваше замовлення і звантажити рахунок в розділі [Історія і деталі моїх замовлень]({history_url}) вашого облікового запису.
+
+Якщо ви маєте гостьовий акаунт, ви можете відстежувати замовлення в розділі [Відстеження гостьового замовлення]({guest_tracking_url}) в нашому магазині.
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

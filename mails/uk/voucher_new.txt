@@ -1,0 +1,13 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Купон з промокодом згенеровано
+
+Ваш новий купон з промокодом: {voucher_num}
+Щоб скористатися ним, просто скопіюйте/вставте цей код під час оформлення замовлення.
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

@@ -1,0 +1,12 @@
+ 
+
+{shop_url}
+
+Вітаємо,
+
+Підписатись на розсилку
+
+Дякуємо за підписку на наші новини. Ми даруємо вам купон зі знижкою: {discount}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

@@ -1,0 +1,11 @@
+ 
+
+{shop_url}
+
+Здравствуйте,
+
+Складские запасы меньше указанного минимума: {warning_coverage}
+Текущий складской запас: {current_coverage}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

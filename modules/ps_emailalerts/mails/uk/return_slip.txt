@@ -1,0 +1,28 @@
+ 
+
+{shop_url}
+
+Вітаємо,
+Ви отримали запит на нове повернення для {shop_name}.
+
+Деталі повернення
+
+Замовлення: {order_name} Розміщено {date}
+Покупець: {firstname} {lastname}, ({email})
+
+Артикул	Товар	Кількість  {items}
+
+Адреса доставки
+
+{delivery_block_html}
+
+Платіжна адреса
+
+{invoice_block_html}
+
+Повідомлення клієнта:
+
+{message}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

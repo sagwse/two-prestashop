@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>ps_googleanalytics</name>
+    <displayName><![CDATA[Аналитика Google]]></displayName>
+    <version><![CDATA[5.0.3]]></version>
+    <description><![CDATA[Получение понятных данных по клиентам из важных метрик с помощью аналитики Google]]></description>
+    <author><![CDATA[PrestaShop]]></author>
+    <tab><![CDATA[analytics_stats]]></tab>
+	<confirmUninstall><![CDATA[Точно хотите удалить аналитику Google? Все данные этого модуля будут удалены.]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+</module>

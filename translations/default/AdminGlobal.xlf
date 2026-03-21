@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="AdminGlobal.xlf" source-language="en-US" target-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="3fb945148b79393766564f737e309860">
+        <source>Deleted customer</source>
+        <target>Deleted customer</target>
+        <note>File: modules/dashproducts/dashproducts.php [Line: 122]</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

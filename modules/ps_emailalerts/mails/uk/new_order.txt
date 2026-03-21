@@ -1,0 +1,39 @@
+ 
+
+{shop_url}
+
+Поздоровляємо!
+У магазині {shop_name} розміщено нове замовлення від клієнта: {firstname} {lastname} ({email})
+
+Деталі замовлення
+
+Замовлення: {order_name} Розміщено {date}
+Оплата: {payment}
+
+Артикул	Товар	Ціна	Кількість	Сума  {items}
+Товари	{total_products}
+Знижки	{total_discounts}
+Подарункова упаковка	{total_wrapping}
+Доставка	{total_shipping}
+В тому числі ПДВ	{total_tax_paid}
+Всього сплачено	{total_paid}
+
+Перевізник
+
+Перевізник: {carrier}
+Оплата: {payment}
+
+Адреса доставки
+
+{delivery_block_html}
+
+Платіжна адреса
+
+{invoice_block_html}
+
+Повідомлення клієнта:
+
+{message}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

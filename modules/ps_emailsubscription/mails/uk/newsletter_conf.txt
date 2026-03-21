@@ -1,0 +1,10 @@
+ 
+
+{shop_url}
+
+Вітаємо,
+
+Дякуємо за підписку на наші новини
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

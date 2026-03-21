@@ -1,0 +1,12 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Від вашого імені було здійснено нове замовлення.
+
+Щоб здійснити оплату, перейдіть на сторінку {order_link}.
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

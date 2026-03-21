@@ -1,0 +1,2 @@
+/* checkout.js — mytheme v0.7.1 stub
+   Полная реализация → v0.8.0 (checkout) */

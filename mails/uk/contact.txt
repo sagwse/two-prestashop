@@ -1,0 +1,16 @@
+ 
+
+{shop_url}
+
+Повідомлення від клієнта {shop_name}
+
+E-mail адреса клієнта: {email}
+Замовлення №:  {order_name}
+Прикріплений файл: {attached_file}
+
+Повідомлення клієнта:
+
+{message}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

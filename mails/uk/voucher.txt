@@ -1,0 +1,14 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Замовлення №: {order_name} - Купон з промокодом згенеровано
+
+Ми раді повідомити вам, що на ваше ім’я створено купон для замовлення з номером {order_name}.
+Промокод: {voucher_num} на суму {voucher_amount}
+Щоб скористатися ним, просто скопіюйте/вставте цей код під час оформлення замовлення.
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

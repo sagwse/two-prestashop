@@ -1,0 +1,1684 @@
+/* =============================================================================
+ * theme.css — глобальные стили mytheme
+ * PrestaShop 9.0 / Bootstrap 5.3 / BEM / Vanilla CSS
+ *
+ * СОДЕРЖАНИЕ:
+ *  00. CSS Variables (токены дизайна)
+ *  01. Reset & Base
+ *  02. Typography
+ *  03. Utility classes
+ *  04. Announcement Bar
+ *  05. Top Bar (desktop)
+ *  06. Site Header (обёртка + smart sticky)
+ *  07. Main Header (desktop)
+ *  08. Site Nav (desktop navigation)
+ *  09. Mobile Top Bar
+ *  10. Mobile Bottom Nav Bar
+ *  11. Offcanvas: Mobile Menu
+ *  12. Offcanvas: Contact
+ *  13. Offcanvas: Mini-Cart
+ *  14. Offcanvas: Mini-Wishlist
+ *  15. Footer: Benefits Bar
+ *  16. Footer: Footer Main + колонки + аккордеон
+ *  17. Footer: Subfooter
+ *  18. Spacer мобильного nav bar
+ *  19. PrestaShop Admin Bar fix
+ * ============================================================================= */
+
+/* =============================================================================
+ * 00. CSS VARIABLES — токены дизайна
+ *
+ * Цветовая модель: OKLCH (CSS Color Level 4)
+ *   Преимущества перед HEX/HSL:
+ *   — Визуальная равномерность: L (яркость) воспринимается одинаково
+ *     независимо от оттенка. oklch(60% ...) всегда выглядит как "средний"
+ *     тон — в HEX это не гарантировано.
+ *   — Безопасные градиенты: переход между цветами не проходит через
+ *     "серую зону" как в HSL.
+ *   — P3 гамут: браузеры на modern hardware показывают более насыщенные
+ *     цвета там где монитор позволяет.
+ *   — Браузерная поддержка: Chrome 111+, Firefox 113+, Safari 15.4+ (2026: 97%+)
+ *
+ * Корпоративные цвета G&G Vitamins (официальный представитель в Украине):
+ *   Бренд:   #587459  →  oklch(47% 0.07 145)  тёмно-зелёный
+ *   Акцент:  #8CA68C  →  oklch(66% 0.07 145)  средне-зелёный
+ *   Психология цвета (Hue Institute, 2024): зелёный в диапазоне 140–150°
+ *   ассоциируется с натуральностью, здоровьем и доверием — оптимально
+ *   для нутрицевтиков и фармацевтических брендов.
+ *
+ * Структура токенов:
+ *   — Цветовая система          (primary, surface, text, border, functional)
+ *   — Типографика               (font-family, размеры)
+ *   -- Компоненты шапки/навигации
+ *   — Компоненты мобильного UI
+ *   — Offcanvas
+ *   — Футер
+ *   — Переходы и анимации
+ *   — Радиусы и отступы
+ *   — Высоты фиксированных элементов
+ *
+ * Переопределение для конкретного магазина: только эту секцию.
+ * Вся остальная тема использует переменные — менять нужно лишь значения здесь.
+ * ============================================================================= */
+:root {
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ЦВЕТОВАЯ СИСТЕМА — корпоративная палитра G&G
+   * Все оттенки одного hue (145) — гарантирует визуальное единство.
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Primary — основной бренд-цвет. Кнопки, активные элементы, иконки. */
+  --color-primary:          oklch(47% 0.07 145);   /* G&G brand: #587459 */
+  --color-primary-dark:     oklch(35% 0.07 145);   /* Hover на primary-кнопках */
+  --color-primary-light:    oklch(66% 0.07 145);   /* G&G accent: #8CA68C — hover-иконки, бордеры */
+  --color-primary-subtle:   oklch(95% 0.025 145);  /* Фон активных состояний, hover карточек */
+  --color-primary-xsubtle:  oklch(98% 0.010 145);  /* Сверхлёгкий фон, зебра в таблицах */
+
+  /* Surface — фоны. Чуть тёплые (hue 145), не чисто белые/серые. */
+  --color-surface:          oklch(99% 0.005 145);  /* Фон страницы — почти белый, чуть зелёный */
+  --color-card:             oklch(100% 0 0);       /* Белый — фон карточек, шапки */
+  --color-background:       oklch(97% 0.008 145);  /* Страничный фон (чуть темнее surface) */
+
+  /* Border — границы. Три уровня контраста. */
+  --color-border:           oklch(91% 0.010 145);  /* Стандартные рамки, разделители */
+  --color-border-hover:     oklch(75% 0.040 145);  /* Hover на карточках, активные поля */
+  --color-border-light:     oklch(95% 0.006 145);  /* Лёгкие внутренние разделители */
+
+  /* Text — три уровня иерархии. */
+  --color-text:             oklch(22% 0.020 145);  /* Основной текст — тёмный, чуть зелёный */
+  --color-text-secondary:   oklch(50% 0.030 145);  /* Вторичный: старые цены, подписи */
+  --color-text-muted:       oklch(68% 0.020 145);  /* Третичный: подсказки, счётчики, лейблы */
+  --color-text-light:       oklch(99% 0 0);        /* На тёмном фоне — белый */
+
+  /* Link */
+  --color-link:             oklch(22% 0.020 145);  /* = text по умолчанию */
+  --color-link-hover:       oklch(47% 0.07 145);   /* = primary при наведении */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ФУНКЦИОНАЛЬНЫЕ ЦВЕТА — статусы и бейджи
+   * Яркость намеренно выровнена в диапазоне 55–76%:
+   * все бейджи на белом фоне имеют одинаковый визуальный вес.
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --color-discount:         oklch(55% 0.20 25);    /* Красный — бейдж скидки, скидочная цена */
+  --color-discount-bg:      oklch(97% 0.03 25);    /* Фон для скидочных блоков */
+  --color-new:              oklch(55% 0.15 230);   /* Синий — бейдж «Новинка» */
+  --color-new-bg:           oklch(97% 0.02 230);   /* Фон новинок */
+  --color-sale:             oklch(65% 0.16 60);    /* Оранжевый — бейдж «Акція» */
+  --color-sale-bg:          oklch(97% 0.03 60);    /* Фон акций */
+  --color-rating:           oklch(76% 0.18 85);    /* Золотой — звёзды рейтинга */
+
+  /* Системные уведомления (notifications.tpl) */
+  --color-success:          oklch(55% 0.15 145);   /* Зелёный успех — совпадает с primary */
+  --color-success-bg:       oklch(97% 0.025 145);  /* = primary-xsubtle */
+  --color-warning:          oklch(72% 0.16 80);    /* Жёлто-оранжевый */
+  --color-warning-bg:       oklch(97% 0.03 80);
+  --color-error:            oklch(55% 0.20 25);    /* = discount */
+  --color-error-bg:         oklch(97% 0.03 25);    /* = discount-bg */
+  --color-info:             oklch(58% 0.14 230);   /* Синий информационный */
+  --color-info-bg:          oklch(97% 0.02 230);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * КНОПКИ — основные и вторичные
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Кнопка «До кошика» — primary fill */
+  --color-btn-cart:         oklch(47% 0.07 145);   /* = primary */
+  --color-btn-cart-hover:   oklch(35% 0.07 145);   /* = primary-dark */
+  --color-btn-cart-text:    oklch(99% 0 0);        /* Белый текст */
+
+  /* Кнопка outline — border + text = primary */
+  --color-btn-outline:      oklch(47% 0.07 145);
+  --color-btn-outline-hover-bg: oklch(47% 0.07 145);
+  --color-btn-outline-hover-text: oklch(99% 0 0);
+
+  /* Кнопка disabled */
+  --color-btn-disabled-bg:  oklch(91% 0.010 145);  /* = border */
+  --color-btn-disabled-text: oklch(68% 0.020 145); /* = text-muted */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ТИПОГРАФИКА
+   * Шрифт: system-ui как безопасный fallback (нет CDN-зависимостей).
+   * В production заменить на брендовый шрифт через @font-face.
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --font-base:    system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: var(--font-base); /* заменить если нужен отдельный heading-шрифт */
+
+  --font-size-xs:   0.6875rem;   /* 11px — мелкие лейблы */
+  --font-size-sm:   0.8125rem;   /* 13px — вторичный текст, артикул */
+  --font-size-base: 1rem;        /* 16px — основной текст */
+  --font-size-md:   1.0625rem;   /* 17px — крупнее base */
+  --font-size-lg:   1.25rem;     /* 20px */
+  --font-size-xl:   1.5rem;      /* 24px */
+  --font-size-2xl:  2rem;        /* 32px */
+
+  --line-height-tight:  1.2;
+  --line-height-base:   1.6;
+  --line-height-relaxed: 1.75;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ШАПКА (header + nav)
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Announcement Bar */
+  --announcement-bg:        oklch(47% 0.07 145);   /* = primary */
+  --announcement-color:     oklch(99% 0 0);        /* белый текст */
+  --announcement-height:    40px;
+
+  /* Top Bar (desktop) */
+  --top-bar-bg:             oklch(35% 0.07 145); 
+  --top-bar-color:          oklch(78% 0.020 145);  /* светло-серый зелёный */
+  --top-bar-height:         36px;
+
+  /* Main Header */
+  --header-bg:              oklch(66% 0.07 145);   
+  --header-border:          var(--color-border);
+  --header-height:          var(--header-height-desktop); /* псевдоним для JS */
+  --header-height-desktop:  72px;
+  --header-shadow:          0 2px 8px oklch(22% 0.02 145 / 0.08);
+
+  /* Site Nav */
+  --nav-bg:                 oklch(78% 0.020 145);
+  --nav-border:             var(--color-border-light);
+  --nav-height:             48px;
+  --nav-link-color:         oklch(22% 0.020 145);  /* = text */
+  --nav-link-hover:         var(--color-primary);
+  --nav-dropdown-bg:        oklch(100% 0 0);
+  --nav-dropdown-shadow:    0 8px 24px oklch(22% 0.02 145 / 0.12);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * МОБИЛЬНЫЙ UI
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Mobile Top Bar */
+  --mobile-top-bar-bg:      oklch(100% 0 0);
+  --mobile-top-bar-height:  56px;
+  --mobile-top-bar-shadow:  0 2px 8px oklch(22% 0.02 145 / 0.08);
+
+  /* Mobile Bottom Nav Bar */
+  --mobile-bottom-nav-bg:       oklch(100% 0 0);
+  --mobile-bottom-nav-height:   60px;
+  --mobile-bottom-nav-shadow:   0 -2px 8px oklch(22% 0.02 145 / 0.08);
+  --mobile-bottom-nav-color:    oklch(68% 0.020 145);  /* = text-muted */
+  --mobile-bottom-nav-active:   var(--color-primary);
+  --mobile-bottom-nav-label-size: 10px;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * OFFCANVAS (меню, корзина, wishlist, фильтры)
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --offcanvas-width:        320px;
+  --offcanvas-bg:           oklch(100% 0 0);
+  --offcanvas-header-bg:    oklch(100% 0 0);
+  --offcanvas-border:       var(--color-border);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ФУТЕР
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --footer-bg:              oklch(18% 0.015 145);  /* очень тёмный зелёный — не чёрный */
+  --footer-color:           oklch(72% 0.015 145);  /* средне-серый зелёный */
+  --footer-heading-color:   oklch(99% 0 0);        /* белый */
+  --footer-link-color:      oklch(63% 0.015 145);  /* приглушённый */
+  --footer-link-hover:      oklch(99% 0 0);        /* белый при hover */
+  --footer-border:          oklch(28% 0.015 145);  /* чуть светлее фона */
+
+  --benefits-bar-bg:        var(--color-primary-xsubtle);
+  --benefits-bar-border:    var(--color-border);
+  --benefits-bar-icon:      var(--color-primary);
+
+  --subfooter-bg:           oklch(13% 0.010 145);  /* темнее footer */
+  --subfooter-color:        oklch(55% 0.015 145);
+  --subfooter-link-color:   oklch(60% 0.015 145);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * SECONDARY (вспомогательный тёмный цвет)
+   * Используется в heading-цвете и тёмных элементах.
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --color-secondary:        oklch(22% 0.020 145);  /* = text */
+  --color-secondary-soft:   oklch(38% 0.025 145);  /* чуть светлее */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ПЕРЕХОДЫ И АНИМАЦИИ
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --transition-fast:        150ms ease;
+  --transition-base:        250ms ease;
+  --transition-slow:        400ms ease;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * BORDER RADIUS
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-base:  8px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
+  --radius-pill:  999px;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+   * ОТСТУПЫ И ВЫСОТЫ
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  --section-gap:  3rem;
+
+  /* Суммарная высота всего что «прилипает» сверху (JS обновляет при необходимости).
+     Используется в catalog-toolbar sticky offset и sticky aside. */
+  --header-height: 72px; /* десктоп: только main-header. Обновить если добавится nav sticky. */
+}
+
+
+/* =============================================================================
+ * 01. RESET & BASE
+ * ============================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  /* Отступы для фиксированных элементов — управляются JS/CSS через переменные */
+}
+
+/* Компенсация для фиксированной мобильной шапки */
+@media (max-width: 991.98px) {
+  body {
+    padding-top: var(--mobile-top-bar-height);
+  }
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--color-link-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+/* =============================================================================
+ * 02. TYPOGRAPHY
+ * ============================================================================= */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-secondary);
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 0.5em;
+}
+
+
+/* =============================================================================
+ * 03. UTILITY CLASSES
+ * ============================================================================= */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+
+/* =============================================================================
+ * 04. ANNOUNCEMENT BAR
+ * Статичная акционная плашка над шапкой.
+ * Скрывается при скролле вниз (JS добавляет .announcement-bar--hidden).
+ * ============================================================================= */
+.announcement-bar {
+  background-color: var(--announcement-bg);
+  color: var(--announcement-color);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  min-height: var(--announcement-height);
+  overflow: hidden;
+  transition:
+    max-height var(--transition-slow),
+    opacity var(--transition-base),
+    padding var(--transition-slow);
+  max-height: var(--announcement-height);
+  opacity: 1;
+  will-change: max-height, opacity;
+}
+
+.announcement-bar--hidden {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.announcement-bar__inner {
+  align-items: center;
+  display: flex;
+  height: var(--announcement-height);
+  justify-content: center;
+  text-align: center;
+}
+
+.announcement-bar a {
+  color: currentColor;
+  text-decoration: underline;
+}
+
+
+/* =============================================================================
+ * 05. TOP BAR (desktop only)
+ * ============================================================================= */
+.top-bar {
+  background-color: var(--top-bar-bg);
+  color: var(--top-bar-color);
+  font-size: 0.75rem;
+  height: var(--top-bar-height);
+  transition: max-height var(--transition-slow), opacity var(--transition-base);
+  max-height: var(--top-bar-height);
+}
+
+.top-bar__selector-zone .search-widget,
+.top-bar__selector-zone .cart-preview,
+.top-bar__selector-zone .js-top-menu,
+.top-bar__selector-zone .user-info {
+  display: none !important;
+}
+
+/* ===== Top Bar: скрываем итоги корзины от ps_shoppingcart ===== */
+.top-bar .cart-preview,
+.top-bar .blockcart__count,
+.top-bar #_desktop_cart .cart-products-count,
+.top-bar .cart-totals,
+.top-bar [class*="cart-subtotals"],
+.user-info,
+.top-bar .value {
+  display: none !important;
+}
+
+.top-bar--hidden {
+  max-height: 0;
+  opacity: 0;
+}
+
+.top-bar__inner {
+  align-items: center;
+  display: flex;
+  height: 100%;
+}
+
+.top-bar__right {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+/* PS language/currency selector overrides */
+.top-bar .language-selector,
+.top-bar .currency-selector {
+  color: var(--top-bar-color);
+}
+.top-bar .language-selector a,
+.top-bar .currency-selector a {
+  color: var(--top-bar-color);
+  font-size: 0.75rem;
+}
+.top-bar .language-selector a:hover,
+.top-bar .currency-selector a:hover {
+  color: #FFFFFF;
+}
+
+/* ===== Search Widget ===== */
+.search-widget {
+  flex: 1;
+  max-width: 480px;
+}
+
+.search-widget__form {
+  width: 100%;
+}
+
+.search-widget__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-widget__icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-widget__input {
+  width: 100%;
+  padding: 0.55rem 1rem 0.55rem 2.5rem; /* отступ слева под иконку */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none; /* убирает браузерный крестик у type=search */
+}
+
+.search-widget__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-xsubtle);
+}
+
+/* Убираем нативную кнопку очистки в webkit */
+.search-widget__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+
+/* =============================================================================
+ * 06. SITE HEADER — обёртка + Smart Sticky
+ *
+ * .site-header — содержит только desktop main-header + site-nav
+ * Sticky поведение:
+ *   [базовое]               → position: sticky, top: 0
+ *   .site-header--hidden    → transform: translateY(-100%) — уезжает вверх
+ *   .site-header--compact   → тень усиливается при прилипании
+ *
+ * JS управляет классами через IntersectionObserver (см. theme.js)
+ * ============================================================================= */
+.site-header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  position: sticky;
+  top: 0;
+  z-index: 1030; /* Выше Bootstrap modal (1050), но ниже offcanvas (1045 у BS) */
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  will-change: transform;
+}
+
+/* При скролле вниз — шапка уезжает */
+.site-header--hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
+}
+
+/* При прилипании (был скролл вниз, потом вернулся) */
+.site-header--compact {
+  box-shadow: var(--header-shadow);
+}
+
+
+/* =============================================================================
+ * 07. MAIN HEADER (desktop)
+ * ============================================================================= */
+.main-header {
+  height: var(--header-height-desktop);
+}
+
+.main-header__inner {
+  height: 100%;
+}
+
+/* Логотип */
+.main-header__logo {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.main-header__logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Поиск — занимает всё свободное пространство */
+.main-header__search {
+  flex: 1 1 auto;
+  max-width: 600px;
+}
+
+/* Иконки-кнопки */
+.main-header__actions {
+  flex-shrink: 0;
+}
+
+.main-header__action-btn {
+  align-items: center;
+  color: var(--color-secondary);
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25rem;
+  height: 44px;
+  justify-content: center;
+  position: relative;
+  transition: color var(--transition-fast);
+  width: 44px;
+}
+
+.main-header__action-btn:hover {
+  color: var(--color-primary);
+}
+
+/* Счётчик (badge) над иконкой */
+.main-header__action-btn .cart-count,
+.main-header__action-btn .wishlist-count {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 18px;
+  padding: 2px 4px;
+  position: absolute;
+  right: 2px;
+  text-align: center;
+  top: 2px;
+}
+
+.main-header__action-btn .cart-count:empty,
+.main-header__action-btn .wishlist-count:empty {
+  display: none;
+}
+
+
+/* =============================================================================
+ * 08. SITE NAV — desktop горизонтальное меню
+ * ============================================================================= */
+.site-nav {
+  background-color: var(--nav-bg);
+  border-top: 1px solid var(--nav-border);
+  position: relative;
+}
+
+.site-nav__inner {
+  position: relative;
+}
+
+/* Фильтруем контент в навигации, если он тянется из общих хуков */
+.site-nav__inner .language-selector,
+.site-nav__inner .currency-selector,
+/* .site-nav__inner .search-widget, */
+.site-nav__inner .cart-preview,
+.site-nav__inner .user-info {
+  display: none !important;
+}
+
+
+/* PrestaShop ps_mainmenu рендерит .top-menu — переопределяем здесь */
+.site-nav .top-menu {
+  align-items: center;
+  display: flex;
+  gap: 0;
+  height: var(--nav-height);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+.site-nav .top-menu > li {
+  position: relative;
+}
+
+.site-nav .top-menu > li > a {
+  align-items: center;
+  color: var(--nav-link-color);
+  display: flex;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  gap: 4px;
+  height: var(--nav-height);
+  padding: 0 1rem;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.site-nav .top-menu > li > a:hover,
+.site-nav .top-menu > li.current > a {
+  color: var(--nav-link-hover);
+}
+
+/* Dropdown */
+.site-nav .top-menu > li > .sub-menu {
+  background-color: var(--nav-dropdown-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  box-shadow: var(--nav-dropdown-shadow);
+  left: 0;
+  list-style: none;
+  margin: 0;
+  min-width: 220px;
+  opacity: 0;
+  padding: 0.5rem 0;
+  pointer-events: none;
+  position: absolute;
+  top: 100%;
+  transform: translateY(8px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 100;
+}
+
+.site-nav .top-menu > li:hover > .sub-menu,
+.site-nav .top-menu > li:focus-within > .sub-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.site-nav .top-menu > li > .sub-menu li a {
+  color: var(--color-text);
+  display: block;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.site-nav .top-menu > li > .sub-menu li a:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+
+/* =============================================================================
+ * 09. MOBILE TOP BAR
+ * position: fixed top — всегда поверх контента на мобиле
+ * ============================================================================= */
+.mobile-top-bar {
+  background-color: var(--mobile-top-bar-bg);
+  border-bottom: 1px solid var(--header-border);
+  box-shadow: var(--mobile-top-bar-shadow);
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1030;
+}
+
+.mobile-top-bar__inner {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  height: var(--mobile-top-bar-height);
+  padding: 0 0.75rem;
+}
+
+/* Мини-лого (слева, небольшое) */
+.mobile-top-bar__logo {
+  flex-shrink: 0;
+}
+
+.mobile-top-bar__logo-img {
+  border-radius: var(--radius-sm);
+  display: block;
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+}
+
+/* Поиск — занимает всё пространство */
+.mobile-top-bar__search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Кнопка связи */
+.mobile-top-bar__contact-btn {
+  align-items: center;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-base);
+  color: #fff;
+  display: flex;
+  font-size: 1.125rem;
+  height: 38px;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+  width: 38px;
+  flex-shrink: 0;
+}
+
+.mobile-top-bar__contact-btn:hover {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+
+/* =============================================================================
+ * 10. MOBILE BOTTOM NAV BAR
+ * position: fixed bottom — 5 иконок
+ * ============================================================================= */
+.mobile-bottom-nav {
+  background-color: var(--mobile-bottom-nav-bg);
+  border-top: 1px solid var(--color-border);
+  bottom: 0;
+  box-shadow: var(--mobile-bottom-nav-shadow);
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 1030;
+  /* Safe area для iPhone с notch */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-bottom-nav__list {
+  align-items: center;
+  display: flex;
+  height: var(--mobile-bottom-nav-height);
+  justify-content: space-around;
+}
+
+.mobile-bottom-nav__item {
+  flex: 1;
+  text-align: center;
+}
+
+.mobile-bottom-nav__link {
+  align-items: center;
+  color: var(--mobile-bottom-nav-color);
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25rem;
+  gap: 2px;
+  height: 100%;
+  justify-content: center;
+  min-height: 44px; /* Touch target */
+  padding: 6px 0;
+  position: relative;
+  transition: color var(--transition-fast);
+  width: 100%;
+}
+
+.mobile-bottom-nav__link:hover,
+.mobile-bottom-nav__link--active {
+  color: var(--mobile-bottom-nav-active);
+}
+
+.mobile-bottom-nav__label {
+  font-size: var(--mobile-bottom-nav-label-size);
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Badge корзины */
+.mobile-bottom-nav__badge {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 16px;
+  padding: 2px 3px;
+  position: absolute;
+  right: calc(50% - 18px);
+  text-align: center;
+  top: 4px;
+}
+
+.mobile-bottom-nav__badge:empty {
+  display: none;
+}
+
+
+/* =============================================================================
+ * 11. OFFCANVAS: МОБИЛЬНОЕ МЕНЮ
+ * ============================================================================= */
+.offcanvas-mobile-menu {
+  width: var(--offcanvas-width);
+  max-width: 90vw;
+}
+
+.offcanvas-mobile-menu .offcanvas-header {
+  border-bottom: 1px solid var(--offcanvas-border);
+  padding: 1rem 1.25rem;
+}
+
+.offcanvas-mobile-menu__logo img {
+  height: 36px;
+  width: auto;
+}
+
+.offcanvas-mobile-menu__shop-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.offcanvas-mobile-menu__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+/* Поиск в drawer */
+.offcanvas-mobile-menu__search {
+  padding: 0 1.25rem 1rem;
+}
+
+/* Навигация — PS mainmenu accordion */
+.offcanvas-mobile-menu__nav .top-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.offcanvas-mobile-menu__nav .top-menu > li > a {
+  align-items: center;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text);
+  display: flex;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+}
+
+.offcanvas-mobile-menu__nav .top-menu > li > a:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Подкатегории */
+.offcanvas-mobile-menu__nav .sub-menu {
+  background-color: var(--color-background);
+  list-style: none;
+  padding: 0.25rem 0;
+}
+
+.offcanvas-mobile-menu__nav .sub-menu li a {
+  color: var(--color-text-muted);
+  display: block;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem 0.625rem 2rem;
+}
+
+.offcanvas-mobile-menu__nav .sub-menu li a:hover {
+  color: var(--color-primary);
+}
+
+.offcanvas-mobile-menu__divider {
+  border-color: var(--color-border);
+  margin: 0.5rem 1.25rem;
+}
+
+/* Утилитарные ссылки */
+.offcanvas-mobile-menu__utils {
+  list-style: none;
+  padding: 0;
+}
+
+.offcanvas-mobile-menu__util-link {
+  align-items: center;
+  color: var(--color-text);
+  display: flex;
+  font-size: 0.875rem;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.offcanvas-mobile-menu__util-link:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.offcanvas-mobile-menu__util-link i {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* Язык/валюта внутри drawer */
+.offcanvas-mobile-menu__locale {
+  padding: 0 1.25rem 1rem;
+}
+
+
+/* =============================================================================
+ * 12. OFFCANVAS: СВЯЗАТЬСЯ
+ * placement: bottom — выезжает снизу
+ * ============================================================================= */
+.offcanvas-contact {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 80vh;
+}
+
+.offcanvas-contact__header {
+  border-bottom: 1px solid var(--offcanvas-border);
+}
+
+.offcanvas-contact__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.offcanvas-contact__subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.offcanvas-contact__body {
+  padding: 1.5rem;
+}
+
+.offcanvas-contact__channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+}
+
+.offcanvas-contact__channel-link {
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  color: var(--color-text);
+  display: flex;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.offcanvas-contact__channel-link:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.offcanvas-contact__channel-icon {
+  font-size: 1.5rem;
+  width: 32px;
+  text-align: center;
+}
+
+/* Цвета брендов */
+.offcanvas-contact__channel-link--telegram .offcanvas-contact__channel-icon { color: #2AABEE; }
+.offcanvas-contact__channel-link--viber .offcanvas-contact__channel-icon    { color: #7360F2; }
+.offcanvas-contact__channel-link--whatsapp .offcanvas-contact__channel-icon  { color: #25D366; }
+.offcanvas-contact__channel-link--phone .offcanvas-contact__channel-icon     { color: var(--color-primary); }
+
+.offcanvas-contact__channel-name {
+  font-weight: 600;
+}
+
+.offcanvas-contact__channel-hours {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+
+/* =============================================================================
+ * 13. OFFCANVAS: MINI-CART
+ * На мобиле: offcanvas-bottom (placement: bottom)
+ * На десктопе: offcanvas-end (placement: end / справа)
+ * Переключение через CSS media query — Bootstrap классы меняются через JS
+ * ============================================================================= */
+
+/* Мобиле: снизу */
+.offcanvas-cart {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+/* Десктоп: справа — JS добавляет класс .offcanvas-cart--desktop через resize */
+@media (min-width: 992px) {
+  .offcanvas-cart {
+    border-radius: 0;
+    height: 100% !important;
+    max-height: 100vh;
+    right: 0 !important;
+    width: 400px !important;
+  }
+}
+
+.offcanvas-cart__header {
+  border-bottom: 1px solid var(--offcanvas-border);
+  flex-shrink: 0;
+}
+
+.offcanvas-cart__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.offcanvas-cart__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+.offcanvas-cart__footer {
+  border-top: 1px solid var(--offcanvas-border);
+  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+.offcanvas-cart__checkout-btn {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-base);
+  font-weight: 600;
+  padding: 0.875rem 1.5rem;
+}
+
+.offcanvas-cart__checkout-btn:hover {
+  background-color: var(--color-primary-dark);
+}
+
+
+/* =============================================================================
+ * 14. OFFCANVAS: MINI-WISHLIST
+ * placement: bottom — выезжает снизу
+ * ============================================================================= */
+.offcanvas-wishlist {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.offcanvas-wishlist__header {
+  border-bottom: 1px solid var(--offcanvas-border);
+  flex-shrink: 0;
+}
+
+.offcanvas-wishlist__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.offcanvas-wishlist__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+.offcanvas-wishlist__footer {
+  border-top: 1px solid var(--offcanvas-border);
+  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+
+/* =============================================================================
+ * 15. FOOTER: BENEFITS BAR
+ * Desktop: 5 блоков в ряд
+ * Mobile:  горизонтальный скролл (overflow-x: auto)
+ * ============================================================================= */
+.benefits-bar {
+  background-color: var(--benefits-bar-bg);
+  border-bottom: 1px solid var(--benefits-bar-border);
+  padding: 1.5rem 0;
+}
+
+.benefits-bar__list {
+  align-items: flex-start;
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 991.98px) {
+  .benefits-bar__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    padding-bottom: 4px;
+  }
+
+  .benefits-bar__list::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+}
+
+.benefits-bar__item {
+  align-items: center;
+  display: flex;
+  flex: 1 0 auto;
+  gap: 0.75rem;
+  min-width: 160px;
+}
+
+@media (min-width: 992px) {
+  .benefits-bar__item {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.benefits-bar__icon {
+  align-items: center;
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-base);
+  color: var(--benefits-bar-icon);
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+
+.benefits-bar__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.benefits-bar__title {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.benefits-bar__text {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+
+/* =============================================================================
+ * 16. FOOTER: FOOTER MAIN + КОЛОНКИ + АККОРДЕОН
+ * ============================================================================= */
+.footer-main {
+  background-color: var(--footer-bg);
+  color: var(--footer-color);
+  padding: 3rem 0 2rem;
+}
+
+.footer-col__title {
+  color: var(--footer-heading-color);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+}
+
+/* Заголовок без стрелки (колонки 1 и 4) */
+.footer-col__title--plain {
+  margin-bottom: 1rem;
+}
+
+/* --- Аккордеон на мобиле --- */
+.footer-col__accordion-btn {
+  background: none;
+  border: none;
+  color: var(--footer-heading-color);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.75rem 0;
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--footer-border);
+  margin-bottom: 0;
+  width: 100%;
+}
+
+/* Иконка стрелки — анимируется при раскрытии */
+.footer-col__accordion-icon {
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.footer-col__accordion-btn[aria-expanded="true"] .footer-col__accordion-icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 991.98px) {
+  .footer-col__title {
+    margin-bottom: 0;
+  }
+
+  /* Скрываем desktop-заголовок на мобиле */
+  .footer-col__title .d-none {
+    display: none !important;
+  }
+
+  /* Раскрытый контент аккордеона */
+  .footer-col .collapse.show {
+    padding-top: 0.75rem;
+  }
+}
+
+/* Лого в футере */
+.footer-col__logo-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.footer-col__logo-img {
+  filter: brightness(0) invert(1); /* белый логотип на тёмном фоне */
+  height: 36px;
+  width: auto;
+}
+
+.footer-col__logo-text {
+  color: var(--footer-heading-color);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.footer-col__description {
+  color: var(--footer-color);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+/* Соцсети */
+.footer-col__social {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* PS socialfollow override */
+.footer-col__social .social-sharing,
+.footer-col__social ul {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-col__social a {
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-base);
+  color: var(--footer-color);
+  display: flex;
+  font-size: 1rem;
+  height: 36px;
+  justify-content: center;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  width: 36px;
+}
+
+.footer-col__social a:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Ссылки в колонках */
+.footer-col__links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col__link {
+  color: var(--footer-link-color);
+  font-size: 0.875rem;
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
+}
+
+.footer-col__link:hover {
+  color: var(--footer-link-hover);
+  padding-left: 4px;
+}
+
+/* Newsletter */
+.footer-col--newsletter .footer-col__description {
+  margin-bottom: 1rem;
+}
+
+/* PS emailsubscription override */
+.footer-col__newsletter-form .block_newsletter form,
+.footer-col__newsletter-form form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-col__newsletter-form input[type="email"] {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--footer-border);
+  border-radius: var(--radius-base);
+  color: #fff;
+  flex: 1;
+  font-size: 0.875rem;
+  min-width: 0;
+  padding: 0.625rem 0.875rem;
+  transition: border-color var(--transition-fast);
+}
+
+.footer-col__newsletter-form input[type="email"]::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-col__newsletter-form input[type="email"]:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.footer-col__newsletter-form button,
+.footer-col__newsletter-form input[type="submit"] {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-base);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1rem;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.footer-col__newsletter-form button:hover,
+.footer-col__newsletter-form input[type="submit"]:hover {
+  background-color: var(--color-primary-dark);
+}
+
+
+/* =============================================================================
+ * 17. FOOTER: SUBFOOTER
+ * ============================================================================= */
+.subfooter {
+  background-color: var(--subfooter-bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.25rem 0;
+}
+
+.subfooter__inner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+@media (max-width: 767.98px) {
+  .subfooter__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.subfooter__copyright {
+  color: var(--subfooter-color);
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+/* Иконки оплаты */
+.subfooter__payment {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.subfooter__payment-icon {
+  color: var(--subfooter-color);
+  font-size: 1.75rem;
+  transition: color var(--transition-fast);
+}
+
+.subfooter__payment-icon:hover {
+  color: #FFFFFF;
+}
+
+/* Правовые ссылки */
+.subfooter__legal-list {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  justify-content: flex-end;
+  list-style: none;
+  padding: 0;
+}
+
+@media (max-width: 767.98px) {
+  .subfooter__legal-list {
+    justify-content: center;
+  }
+}
+
+.subfooter__legal-link {
+  color: var(--subfooter-link-color);
+  font-size: 0.75rem;
+  transition: color var(--transition-fast);
+}
+
+.subfooter__legal-link:hover {
+  color: #FFFFFF;
+}
+
+
+/* =============================================================================
+ * 18. MOBILE BOTTOM NAV SPACER
+ *
+ * ⚠️  ВАЖНО: высота spacer должна ТОЧНО совпадать с высотой .mobile-bottom-nav
+ * Переменная --mobile-bottom-nav-height используется в обоих местах.
+ * Если меняешь высоту nav bar — меняй ТОЛЬКО переменную, остальное подтянется.
+ *
+ * Safe area для iPhone (notch) — env(safe-area-inset-bottom) добавляется
+ * в обоих элементах одинаково через padding-bottom.
+ * ============================================================================= */
+.mobile-bottom-nav-spacer {
+  height: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom));
+  width: 100%;
+}
+
+/* На десктопе spacer скрыт (d-lg-none в HTML, но подстраховка через CSS) */
+@media (min-width: 992px) {
+  .mobile-bottom-nav-spacer {
+    display: none !important;
+  }
+}
+
+
+/* =============================================================================
+ * 19. PRESTASHOP ADMIN BAR FIX
+ * AdminBar PS9 перекрывается Bootstrap z-index — исправляем
+ * ============================================================================= */
+#admin-bar-container {
+  z-index: 9999 !important;
+}
+
+/* Когда AdminBar активен — смещаем наши fixed элементы */
+body.admin-bar-is-fixed .mobile-top-bar,
+body.admin-bar-is-fixed .site-header {
+  top: calc(var(--admin-bar-height, 50px));
+}
+
+/* =============================================================================
+ * SEARCH DROPDOWN — живой поиск
+ * ============================================================================= */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  box-shadow: 0 8px 24px oklch(0% 0 0 / 0.10);
+  z-index: 1060;
+  overflow-y: auto;
+  max-height: 420px;
+  max-height: 420px;
+}
+
+/* Дропдаун выходит за пределы поля вниз */
+/* .search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1060;
+  overflow-y: auto;     
+  max-height: 420px;
+} */
+
+/* Шапка не должна обрезать дропдаун */
+.site-header,
+.main-header,
+.main-header__inner,
+.main-header__search {
+  overflow: visible !important;
+}
+/* Родительский контейнер должен быть relative */
+/* .search-widget {
+  position: relative;
+} */
+ /* search-widget — точка отсчёта для absolute позиционирования */
+.search-widget {
+  position: relative;
+  overflow: visible !important;
+}
+
+.search-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: background-color 0.15s;
+  border-bottom: 1px solid var(--color-border-light);
+  cursor: pointer;
+}
+
+.search-dropdown__item:last-of-type {
+  border-bottom: none;
+}
+
+.search-dropdown__item:hover,
+.search-dropdown__item--active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.search-dropdown__img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: var(--color-background);
+}
+
+.search-dropdown__name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-dropdown__name mark {
+  background: none;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.search-dropdown__price {
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  font-size: var(--font-size-sm);
+}
+
+.search-dropdown__all {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  background: var(--color-primary-xsubtle);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.search-dropdown__all:hover {
+  background: var(--color-primary-subtle);
+}
+
+.search-dropdown__empty,
+.search-dropdown__loading {
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.search-dropdown__loading .fa-circle-notch {
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+
+/* ===== Fix: только один поиск видимый на десктопе ===== */
+@media (min-width: 992px) {
+  .search-widget:not(.main-header__search .search-widget) {
+    display: none !important;
+  }
+}
+
+
+
+
+

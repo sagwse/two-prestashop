@@ -1,0 +1,17 @@
+ 
+
+{shop_url}
+
+Вітаємо,
+
+Повідомлення від клієнта
+
+Ви отримали нове повідомлення щодо замовлення з артикулом {order_name}.
+Покупець: {firstname} {lastname} ({email})
+
+Повідомлення клієнта:
+
+{message}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

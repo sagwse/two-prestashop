@@ -1,0 +1,11 @@
+ 
+
+{shop_url}
+
+Вітаємо,
+
+Складські запаси менші від визначеного мінімуму: {warning_coverage}
+Поточний товарний запас: {current_coverage}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

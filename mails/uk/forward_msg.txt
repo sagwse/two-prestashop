@@ -1,0 +1,14 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Обслуговування клієнтів - Обговорення перенаправлено
+
+{employee} хотів переслати цю дискусію вам.
+Історія обговорення: {messages}
+{employee} додав {comment}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

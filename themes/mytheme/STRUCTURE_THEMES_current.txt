@@ -1,0 +1,174 @@
+.
+├── CATALOG-0.6.0-recommendations.md
+├── CHANGELOG.md
+├── PRODUCT-0.7.0-recommendations.md
+├── PROJECT.md
+├── STRUCTURE_THEMES_current.txt
+├── assets
+│   ├── cache
+│   │   ├── bottom-0dddeb10.js
+│   │   └── theme-a2f17e10.css
+│   ├── css
+│   │   ├── bootstrap.min.css
+│   │   ├── brands.min.css
+│   │   ├── fontawesome.min.css
+│   │   ├── pages
+│   │   │   ├── category.css
+│   │   │   ├── checkout.css
+│   │   │   ├── home.css
+│   │   │   └── product.css
+│   │   ├── solid.min.css
+│   │   └── theme.css
+│   ├── img
+│   │   ├── about-home.webp
+│   │   ├── hero-bg.webp
+│   │   └── og-default.png
+│   ├── js
+│   │   ├── bootstrap.bundle.min.js
+│   │   ├── pages
+│   │   │   ├── cart.js
+│   │   │   ├── checkout.js
+│   │   │   └── product.js
+│   │   └── theme.js
+│   └── webfonts
+│       ├── fa-brands-400.woff2
+│       ├── fa-regular-400.woff2
+│       └── fa-solid-900.woff2
+├── config
+│   └── theme.yml
+├── error_cat.html
+├── modules
+│   ├── ps_bestsellers
+│   │   └── views
+│   │       └── templates
+│   │           └── hook
+│   │               └── ps_bestsellers.tpl
+│   ├── ps_currencyselector
+│   │   └── ps_currencyselector.tpl
+│   ├── ps_featuredproducts
+│   │   └── views
+│   │       └── templates
+│   │           └── hook
+│   │               └── ps_featuredproducts.tpl
+│   ├── ps_imageslider
+│   │   └── views
+│   │       └── templates
+│   │           └── hook
+│   │               └── slider.tpl
+│   ├── ps_languageselector
+│   │   └── ps_languageselector.tpl
+│   ├── ps_mainmenu
+│   │   └── ps_mainmenu.tpl
+│   ├── ps_newproducts
+│   │   └── views
+│   │       └── templates
+│   │           └── hook
+│   │               └── ps_newproducts.tpl
+│   ├── ps_searchbar
+│   │   └── ps_searchbar.tpl
+│   └── ps_specials
+│       └── views
+│           └── templates
+│               └── hook
+│                   └── ps_specials.tpl
+├── periods-for-testing.md
+├── preview.png
+├── templates
+│   ├── _partials
+│   │   ├── breadcrumb.tpl
+│   │   ├── footer.tpl
+│   │   ├── form-errors.tpl
+│   │   ├── form-fields.tpl
+│   │   ├── head.tpl
+│   │   ├── header.tpl
+│   │   ├── hooks
+│   │   │   └── displayHome.tpl
+│   │   ├── javascript.tpl
+│   │   ├── microdata
+│   │   │   ├── schema-article.tpl
+│   │   │   ├── schema-breadcrumb.tpl
+│   │   │   ├── schema-category.tpl
+│   │   │   ├── schema-faq.tpl
+│   │   │   ├── schema-organization.tpl
+│   │   │   └── schema-product.tpl
+│   │   ├── nav.tpl
+│   │   ├── notifications.tpl
+│   │   ├── pagination.tpl
+│   │   └── stylesheets.tpl
+│   ├── catalog
+│   │   ├── _partials
+│   │   │   ├── miniatures
+│   │   │   │   └── product.tpl
+│   │   │   ├── product-add-to-cart.tpl
+│   │   │   ├── product-images.tpl
+│   │   │   ├── product-prices.tpl
+│   │   │   └── product-variants.tpl
+│   │   ├── listing
+│   │   │   ├── _partials
+│   │   │   │   ├── empty-state.tpl
+│   │   │   │   ├── products-top.tpl
+│   │   │   │   └── rating-stars.tpl
+│   │   │   ├── category.tpl
+│   │   │   ├── product-list.tpl
+│   │   │   └── product-miniature.tpl
+│   │   └── product.tpl
+│   ├── checkout
+│   │   ├── _partials
+│   │   │   ├── cart-detailed-actions.tpl
+│   │   │   ├── cart-detailed-totals.tpl
+│   │   │   ├── cart-detailed.tpl
+│   │   │   ├── cart-summary.tpl
+│   │   │   └── modal-terms.tpl
+│   │   ├── cart-empty.tpl
+│   │   ├── cart.tpl
+│   │   ├── checkout-navigation.tpl
+│   │   ├── checkout-process.tpl
+│   │   ├── checkout.tpl
+│   │   └── order-confirmation.tpl
+│   ├── cms
+│   │   ├── category.tpl
+│   │   ├── page.tpl
+│   │   ├── sitemap.tpl
+│   │   └── stores.tpl
+│   ├── contact.tpl
+│   ├── customer
+│   │   ├── _partials
+│   │   │   ├── customer-form.tpl
+│   │   │   ├── login-form.tpl
+│   │   │   └── my-account-links.tpl
+│   │   ├── address.tpl
+│   │   ├── addresses.tpl
+│   │   ├── authentication.tpl
+│   │   ├── discount.tpl
+│   │   ├── guest-login.tpl
+│   │   ├── guest-tracking.tpl
+│   │   ├── history.tpl
+│   │   ├── identity.tpl
+│   │   ├── my-account.tpl
+│   │   ├── order-detail.tpl
+│   │   ├── order-follow.tpl
+│   │   ├── order-return.tpl
+│   │   ├── order-slip.tpl
+│   │   ├── page.tpl
+│   │   ├── password-email.tpl
+│   │   ├── password-infos.tpl
+│   │   ├── password-new.tpl
+│   │   └── registration.tpl
+│   ├── errors
+│   │   ├── 404.tpl
+│   │   ├── forbidden.tpl
+│   │   ├── maintenance.tpl
+│   │   ├── not-found.tpl
+│   │   └── restricted-country.tpl
+│   ├── index.tpl
+│   ├── layouts
+│   │   ├── layout-both-columns.tpl
+│   │   ├── layout-content-only.tpl
+│   │   ├── layout-error.tpl
+│   │   ├── layout-full-width.tpl
+│   │   ├── layout-left-column.tpl
+│   │   └── layout-right-column.tpl
+│   └── page.tpl
+└── подробный-бэклог.md
+
+51 directories, 121 files

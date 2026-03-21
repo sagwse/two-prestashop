@@ -1,0 +1,292 @@
+# =============================================================================
+# theme.yml — mytheme
+# PrestaShop 9.0 Custom Theme
+# =============================================================================
+# ВАЖНО: use_parent_assets: false — тема полностью независимая, без Hummingbird
+# JS: все скрипты с атрибутом defer, position: bottom
+# CSS: bootstrap(5) → fontawesome(6) → theme(50) → страничный(60)
+# Страничные assets подключаются ТОЛЬКО на нужном контроллере
+# =============================================================================
+
+name: mytheme
+display_name: "My Shop Theme"
+version: "1.0.0"
+
+author:
+  name: ""
+  email: ""
+  url: ""
+
+meta:
+  compatibility:
+    from: "9.0.0"
+    to: ~
+
+  # -------------------------------------------------------------------------
+  # Доступные лейауты (все четыре стандартных PS)
+  # Назначаются через BO: Дизайн → Темы → Конфигурация страниц
+  # -------------------------------------------------------------------------
+  available_layouts:
+    layout-full-width:
+      name: "Full Width"
+      description: "Полная ширина, без боковых колонок"
+    layout-left-column:
+      name: "Left Column"
+      description: "С левой боковой колонкой"
+    layout-right-column:
+      name: "Right Column"
+      description: "С правой боковой колонкой"
+    layout-both-columns:
+      name: "Both Columns"
+      description: "С двумя боковыми колонками"
+
+  default_layout: layout-full-width
+
+# =============================================================================
+# ГЛОБАЛЬНЫЕ НАСТРОЙКИ ТЕМЫ
+# =============================================================================
+global_settings:
+
+  # ---------------------------------------------------------------------------
+  # Хуки — регистрация кастомных хуков
+  # displaySchemaMarkup используется для подключения страничных JSON-LD схем
+  # Вызов в head.tpl: {hook h='displaySchemaMarkup'}
+  # ---------------------------------------------------------------------------
+  hooks:
+    custom_hooks:
+      - name: displaySchemaMarkup
+        title: "Schema Markup Hook"
+        description: "Хук для подключения страничных JSON-LD схем через модули/оверрайды"
+
+  # ---------------------------------------------------------------------------
+  # Переопределение конфигурации магазина на уровне темы
+  # Эти значения применяются при активации темы и могут быть перезаписаны в BO
+  # ---------------------------------------------------------------------------
+  configuration:
+    PS_QUICK_VIEW: 0               # Быстрый просмотр товара — отключён (строим полный UX)
+    PS_DISPLAY_QTIES: 1            # Показывать остатки товара
+    PS_PRODUCTS_PER_PAGE: 24       # Товаров на странице листинга
+    PS_GRID_PRODUCT_DEFAULT: 1     # Вид по умолчанию: сетка (1) / список (0)
+    PS_DISPLAY_BEST_SELLERS: 1     # Показывать блок хитов продаж
+    PS_DISPLAY_TAGS: 1             # Показывать теги товара
+    PS_SEARCH_AJAX: 1              # Живой поиск через AJAX
+
+  # ---------------------------------------------------------------------------
+  # Типы изображений (Image formats)
+  # Необходимы для установки темы (ошибка "global_settings.image_types.cart_default")
+  # ---------------------------------------------------------------------------
+  image_types:
+    cart_default:
+      width: 125
+      height: 125
+      scope: [products]
+    small_default:
+      width: 98
+      height: 98
+      scope: [products, categories, manufacturers, suppliers]
+    medium_default:
+      width: 452
+      height: 452
+      scope: [products, manufacturers, suppliers]
+    home_default:
+      width: 250
+      height: 250
+      scope: [products]
+    large_default:
+      width: 800
+      height: 800
+      scope: [products, manufacturers, suppliers]
+    category_default:
+      width: 141
+      height: 180
+      scope: [categories]
+    stores_default:
+      width: 170
+      height: 115
+      scope: [stores]
+
+# =============================================================================
+# ASSETS — CSS и JS
+# =============================================================================
+assets:
+  # Не наследуем assets от Hummingbird — всё своё
+  use_parent_assets: false
+
+  # ===========================================================================
+  # CSS
+  # Порядок загрузки определяется priority (меньше = раньше)
+  # Глобальные: bootstrap(5) → fontawesome(6) → theme(50)
+  # Страничные: priority 60 — грузятся поверх глобальных
+  # ===========================================================================
+  css:
+
+    # -------------------------------------------------------------------------
+    # Глобальные — подключаются на ВСЕХ страницах
+    # -------------------------------------------------------------------------
+    all:
+      - id: bootstrap
+        path: assets/css/bootstrap.min.css
+        media: all
+        priority: 5
+
+      - id: fontawesome
+        path: assets/css/fontawesome.min.css  # ядро FA7 (обязателен)
+        media: all
+        priority: 6
+
+      - id: fontawesome-solid
+        path: assets/css/solid.min.css        # fas — интерфейсные иконки
+        media: all
+        priority: 7
+
+      - id: fontawesome-brands
+        path: assets/css/brands.min.css       # fab — соцсети (Telegram, Instagram...)
+        media: all
+        priority: 8
+
+      - id: theme
+        path: assets/css/theme.css
+        media: all
+        priority: 50
+
+    # -------------------------------------------------------------------------
+    # Страничные — подключаются ТОЛЬКО на указанном контроллере
+    # Ключ = имя контроллера PS (строчные буквы, без "Controller")
+    # -------------------------------------------------------------------------
+
+    # /product/... — карточка товара
+    product:
+      - id: product-page
+        path: assets/css/pages/product.css
+        media: all
+        priority: 60
+
+    # /category/... — страница категории / листинг
+    category:
+      - id: category-page
+        path: assets/css/pages/category.css
+        media: all
+        priority: 60
+
+    # /cart — корзина
+    # checkout — многошаговый checkout используют один файл стилей
+    cart:
+      - id: checkout-styles
+        path: assets/css/pages/checkout.css
+        media: all
+        priority: 60
+
+    order:
+      - id: checkout-styles
+        path: assets/css/pages/checkout.css
+        media: all
+        priority: 60
+
+    # / — главная страница (контроллер index)
+    index:
+      - id: home-page
+        path: assets/css/pages/home.css
+        media: all
+        priority: 60
+
+  # ===========================================================================
+  # JS
+  # Все скрипты: position: bottom + attribute: defer
+  # Порядок: bootstrap(50) → theme(100) → страничные(110)
+  # ===========================================================================
+  js:
+
+    # -------------------------------------------------------------------------
+    # Глобальные — подключаются на ВСЕХ страницах
+    # -------------------------------------------------------------------------
+    all:
+      - id: bootstrap-bundle
+        path: assets/js/bootstrap.bundle.min.js
+        priority: 50
+        position: bottom
+        attribute: defer
+
+      - id: theme
+        path: assets/js/theme.js
+        priority: 100
+        position: bottom
+        attribute: defer
+
+    # -------------------------------------------------------------------------
+    # Страничные JS
+    # -------------------------------------------------------------------------
+
+    # Карточка товара: галерея, варианты, добавление в корзину
+    product:
+      - id: product-page
+        path: assets/js/pages/product.js
+        priority: 110
+        position: bottom
+        attribute: defer
+
+    # Корзина: ajax обновление количества, купоны
+    cart:
+      - id: cart-page
+        path: assets/js/pages/cart.js
+        priority: 110
+        position: bottom
+        attribute: defer
+
+    # Оформление заказа: многошаговый checkout, валидация
+    order:
+      - id: checkout-page
+        path: assets/js/pages/checkout.js
+        priority: 110
+        position: bottom
+        attribute: defer
+
+# =============================================================================
+# МОДУЛИ
+# Список модулей, которые тема включает/отключает при установке
+# =============================================================================
+modules:
+  to_enable:
+    - ps_shoppingcart          # Корзина в шапке
+    - ps_searchbar             # Поиск
+    - ps_featuredproducts      # Рекомендуемые товары на главной
+    - ps_emailsubscription     # Форма подписки на email
+    - ps_languageselector      # Переключатель языка
+    - ps_currencyselector      # Переключатель валюты
+    - ps_socialfollow          # Ссылки на соцсети
+    - ps_productcomments       # Отзывы (нужен для schema AggregateRating!)
+    - psgdpr                   # GDPR / cookie consent
+    - blockwishlist            # Список желаний (иконка в шапке + на карточке товара)
+
+  # to_disable: (нет модулей для отключения)
+
+# =============================================================================
+# ХУКИ — назначение модулей в хуки
+# Указываем явно, чтобы при переносе магазина всё встало на место
+# =============================================================================
+# Примечание: назначение через BO или напрямую через БД.
+# Здесь фиксируем желаемое состояние для документации.
+#
+# displayTop          → ps_languageselector, ps_currencyselector
+# displayNav          → ps_shoppingcart, ps_searchbar
+# displayHeader       → [логотип через BO]
+# displayFooter       → ps_emailsubscription, ps_socialfollow
+# displayHome         → ps_featuredproducts
+# displaySchemaMarkup → [управляется через шаблоны тем / кастомный модуль]
+# displayWishlistTop  → blockwishlist (иконка в шапке десктоп + мобильный бар)
+# =============================================================================
+
+# =============================================================================
+# THEME SETTINGS (Layout configuration)
+# Обязательно для установки темы в PS9
+# =============================================================================
+theme_settings:
+  default_layout: layout-full-width
+  layouts:
+    category: layout-left-column
+    best-sales: layout-left-column
+    new-products: layout-left-column
+    prices-drop: layout-left-column
+    contact: layout-left-column
+    manufacturer: layout-left-column
+    supplier: layout-left-column
+

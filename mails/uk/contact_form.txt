@@ -1,0 +1,15 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Ваше повідомлення успішно надіслано, дякуємо, що знайшли час написати!
+Замовлення №:  {order_name}
+Товар:  {product_name}
+Прикріплений файл: {attached_file}
+
+Ми дамо відповідь якомога скоріше.
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)

@@ -1,0 +1,16 @@
+ 
+
+{shop_url}
+
+Привіт, {firstname} {lastname},
+
+Повідомлення від {shop_name}
+
+Ви отримали нове повідомлення від {shop_name} про замовлення з номером {order_name}.
+
+Повідомлення:
+
+{message}
+
+[{shop_name}]({shop_url})
+Powered by [PrestaShop](https://www.prestashop-project.org/)
