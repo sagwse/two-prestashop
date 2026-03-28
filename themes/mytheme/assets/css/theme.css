@@ -1,273 +1,172 @@
 /* =============================================================================
- * theme.css — глобальные стили mytheme
+ * theme.css — global styles for mytheme
  * PrestaShop 9.0 / Bootstrap 5.3 / BEM / Vanilla CSS
  *
- * СОДЕРЖАНИЕ:
- *  00. CSS Variables (токены дизайна)
+ * TABLE OF CONTENTS:
+ *  00. CSS Variables (design tokens)
  *  01. Reset & Base
- *  02. Typography
+ *  02. Typography helpers
  *  03. Utility classes
- *  04. Announcement Bar
- *  05. Top Bar (desktop)
- *  06. Site Header (обёртка + smart sticky)
- *  07. Main Header (desktop)
- *  08. Site Nav (desktop navigation)
+ *  04. Top Bar (desktop)
+ *  05. Site Header (wrapper + smart sticky)
+ *  06. Main Header (desktop: logo + search + actions)
+ *  07. Site Nav (desktop navigation bar)
+ *  08. Mega Menu — shared styles
+ *  08a. Mega Menu — Catalog panel
+ *  08b. Mega Menu — "For What" panel
  *  09. Mobile Top Bar
  *  10. Mobile Bottom Nav Bar
- *  11. Offcanvas: Mobile Menu
- *  12. Offcanvas: Contact
- *  13. Offcanvas: Mini-Cart
- *  14. Offcanvas: Mini-Wishlist
- *  15. Footer: Benefits Bar
- *  16. Footer: Footer Main + колонки + аккордеон
- *  17. Footer: Subfooter
- *  18. Spacer мобильного nav bar
- *  19. PrestaShop Admin Bar fix
+ *  11. Mobile Drawer (offcanvas menu)
+ *  12. Mobile Drawer — Accordion
+ *  13. Offcanvas: Mini-Wishlist
+ *  14. Offcanvas: Mini-Cart
+ *  15. Benefits Bar
+ *  16. Footer Main + columns + mobile accordion
+ *  17. Subfooter
+ *  18. Subscription Section
+ *  19. Responsive overrides
  * ============================================================================= */
+
 
 /* =============================================================================
- * 00. CSS VARIABLES — токены дизайна
+ * 00. CSS VARIABLES — design tokens
  *
- * Цветовая модель: OKLCH (CSS Color Level 4)
- *   Преимущества перед HEX/HSL:
- *   — Визуальная равномерность: L (яркость) воспринимается одинаково
- *     независимо от оттенка. oklch(60% ...) всегда выглядит как "средний"
- *     тон — в HEX это не гарантировано.
- *   — Безопасные градиенты: переход между цветами не проходит через
- *     "серую зону" как в HSL.
- *   — P3 гамут: браузеры на modern hardware показывают более насыщенные
- *     цвета там где монитор позволяет.
- *   — Браузерная поддержка: Chrome 111+, Firefox 113+, Safari 15.4+ (2026: 97%+)
+ * Color model: OKLCH (CSS Color Level 4)
+ *   Advantages over HEX/HSL:
+ *   — Perceptual uniformity: L (lightness) looks the same across hues.
+ *     oklch(60% ...) always reads as a "mid-tone" — HEX cannot guarantee this.
+ *   — Safe gradients: no "grey zone" transitions as with HSL.
+ *   — P3 gamut: modern hardware shows more vivid colors where the monitor
+ *     supports it.
+ *   — Browser support: Chrome 111+, Firefox 113+, Safari 15.4+ (2026: 97%+)
  *
- * Корпоративные цвета G&G Vitamins (официальный представитель в Украине):
- *   Бренд:   #587459  →  oklch(47% 0.07 145)  тёмно-зелёный
- *   Акцент:  #8CA68C  →  oklch(66% 0.07 145)  средне-зелёный
- *   Психология цвета (Hue Institute, 2024): зелёный в диапазоне 140–150°
- *   ассоциируется с натуральностью, здоровьем и доверием — оптимально
- *   для нутрицевтиков и фармацевтических брендов.
+ * Brand colors G&G Vitamins (official Ukraine representative):
+ *   Brand:  #587459  →  oklch(47% 0.07 145)  dark green
+ *   Accent: #8CA68C  →  oklch(66% 0.07 145)  mid green
+ *   Color psychology (Hue Institute, 2024): green in the 140–150° range
+ *   is associated with naturalness, health and trust — optimal for
+ *   nutraceutical and pharmaceutical brands.
  *
- * Структура токенов:
- *   — Цветовая система          (primary, surface, text, border, functional)
- *   — Типографика               (font-family, размеры)
- *   -- Компоненты шапки/навигации
- *   — Компоненты мобильного UI
+ * Token structure:
+ *   — Color system        (primary, surface, text, border, functional)
+ *   — Typography          (font families)
+ *   — Header / navigation component tokens
+ *   — Mega-menu accent palette (per category)
+ *   — Mobile UI tokens
  *   — Offcanvas
- *   — Футер
- *   — Переходы и анимации
- *   — Радиусы и отступы
- *   — Высоты фиксированных элементов
+ *   — Footer tokens
+ *   — Transitions & animations
+ *   — Border radii & spacing
+ *   — Fixed-element heights
  *
- * Переопределение для конкретного магазина: только эту секцию.
- * Вся остальная тема использует переменные — менять нужно лишь значения здесь.
+ * To rebrand for a different store: change only this section.
+ * The entire theme references variables — only values here need updating.
  * ============================================================================= */
+
 :root {
 
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ЦВЕТОВАЯ СИСТЕМА — корпоративная палитра G&G
-   * Все оттенки одного hue (145) — гарантирует визуальное единство.
-   * ───────────────────────────────────────────────────────────────────────── */
+  /* ── Brand palette ─────────────────────────────────────────────────── */
+  --color-primary: oklch(47% 0.07 145);
+  --color-primary-dark: oklch(35% 0.07 145);
+  --color-primary-light: oklch(66% 0.07 145);
+  --color-primary-subtle: oklch(95% 0.025 145);
+  --color-primary-xsubtle: oklch(98% 0.01 145);
 
-  /* Primary — основной бренд-цвет. Кнопки, активные элементы, иконки. */
-  --color-primary:          oklch(47% 0.07 145);   /* G&G brand: #587459 */
-  --color-primary-dark:     oklch(35% 0.07 145);   /* Hover на primary-кнопках */
-  --color-primary-light:    oklch(66% 0.07 145);   /* G&G accent: #8CA68C — hover-иконки, бордеры */
-  --color-primary-subtle:   oklch(95% 0.025 145);  /* Фон активных состояний, hover карточек */
-  --color-primary-xsubtle:  oklch(98% 0.010 145);  /* Сверхлёгкий фон, зебра в таблицах */
+  /* ── Neutral palette ───────────────────────────────────────────────── */
+  --color-background: oklch(97% 0.008 145);
+  --color-border: oklch(91% 0.01 145);
+  --color-border-light: oklch(95% 0.006 145);
+  --color-text: oklch(22% 0.02 145);
+  --color-text-secondary: oklch(50% 0.03 145);
+  --color-text-muted: oklch(68% 0.02 145);
+  --color-link: oklch(22% 0.02 145);
 
-  /* Surface — фоны. Чуть тёплые (hue 145), не чисто белые/серые. */
-  --color-surface:          oklch(99% 0.005 145);  /* Фон страницы — почти белый, чуть зелёный */
-  --color-card:             oklch(100% 0 0);       /* Белый — фон карточек, шапки */
-  --color-background:       oklch(97% 0.008 145);  /* Страничный фон (чуть темнее surface) */
+  /* ── Typography ────────────────────────────────────────────────────── */
+  --font-brand: 'DM Serif Display', Georgia, serif;
+  --font-base: 'Plus Jakarta Sans', system-ui, sans-serif;
 
-  /* Border — границы. Три уровня контраста. */
-  --color-border:           oklch(91% 0.010 145);  /* Стандартные рамки, разделители */
-  --color-border-hover:     oklch(75% 0.040 145);  /* Hover на карточках, активные поля */
-  --color-border-light:     oklch(95% 0.006 145);  /* Лёгкие внутренние разделители */
+  /* ── Border radii ──────────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-base: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 6px;
+  /* nav buttons; footer uses 999px inline */
 
-  /* Text — три уровня иерархии. */
-  --color-text:             oklch(22% 0.020 145);  /* Основной текст — тёмный, чуть зелёный */
-  --color-text-secondary:   oklch(50% 0.030 145);  /* Вторичный: старые цены, подписи */
-  --color-text-muted:       oklch(68% 0.020 145);  /* Третичный: подсказки, счётчики, лейблы */
-  --color-text-light:       oklch(99% 0 0);        /* На тёмном фоне — белый */
+  /* ── Transitions ───────────────────────────────────────────────────── */
+  --t-fast: 150ms ease;
+  --t-base: 250ms ease;
+  --t-slow: 460ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Link */
-  --color-link:             oklch(22% 0.020 145);  /* = text по умолчанию */
-  --color-link-hover:       oklch(47% 0.07 145);   /* = primary при наведении */
+  /* ── Header / Navigation ───────────────────────────────────────────── */
+  --header-bg: oklch(0.565 0.057 145.68);
+  --header-border: oklch(97.015% 0.00011 271.152);
+  --header-shadow: 0 4px 20px oklch(22% 0.02 145 / 0.2);
+  --nav-dropdown-bg: oklch(100% 0 0);
+  --nav-dropdown-shadow: 0 16px 48px oklch(22% 0.02 145 / 0.16);
 
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ФУНКЦИОНАЛЬНЫЕ ЦВЕТА — статусы и бейджи
-   * Яркость намеренно выровнена в диапазоне 55–76%:
-   * все бейджи на белом фоне имеют одинаковый визуальный вес.
-   * ───────────────────────────────────────────────────────────────────────── */
+  /* ── Fixed element heights ─────────────────────────────────────────── */
+  --top-bar-height: 50px;
+  --main-header-height: 80px;
+  --nav-height: 56px;
 
-  --color-discount:         oklch(55% 0.20 25);    /* Красный — бейдж скидки, скидочная цена */
-  --color-discount-bg:      oklch(97% 0.03 25);    /* Фон для скидочных блоков */
-  --color-new:              oklch(55% 0.15 230);   /* Синий — бейдж «Новинка» */
-  --color-new-bg:           oklch(97% 0.02 230);   /* Фон новинок */
-  --color-sale:             oklch(65% 0.16 60);    /* Оранжевый — бейдж «Акція» */
-  --color-sale-bg:          oklch(97% 0.03 60);    /* Фон акций */
-  --color-rating:           oklch(76% 0.18 85);    /* Золотой — звёзды рейтинга */
+  /* ── Mega Menu — per-category accent colors ────────────────────────── */
+  /* Vitamins */
+  --acc-vit: oklch(66% 0.17 80);
+  --acc-vit-bg: oklch(97% 0.04 80);
+  /* Minerals */
+  --acc-min: oklch(56% 0.14 235);
+  --acc-min-bg: oklch(97% 0.03 235);
+  /* Supplements */
+  --acc-sup: oklch(54% 0.13 185);
+  --acc-sup-bg: oklch(97% 0.03 185);
+  /* Special */
+  --acc-spc: oklch(54% 0.16 305);
+  --acc-spc-bg: oklch(97% 0.03 305);
+  /* Popular */
+  --acc-pop: oklch(54% 0.22 28);
+  --acc-pop-bg: oklch(97% 0.05 28);
+  /* SOOV brand colors */
+  --soov-purple: oklch(52% 0.17 295);
+  --soov-pink: oklch(70% 0.16 350);
 
-  /* Системные уведомления (notifications.tpl) */
-  --color-success:          oklch(55% 0.15 145);   /* Зелёный успех — совпадает с primary */
-  --color-success-bg:       oklch(97% 0.025 145);  /* = primary-xsubtle */
-  --color-warning:          oklch(72% 0.16 80);    /* Жёлто-оранжевый */
-  --color-warning-bg:       oklch(97% 0.03 80);
-  --color-error:            oklch(55% 0.20 25);    /* = discount */
-  --color-error-bg:         oklch(97% 0.03 25);    /* = discount-bg */
-  --color-info:             oklch(58% 0.14 230);   /* Синий информационный */
-  --color-info-bg:          oklch(97% 0.02 230);
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * КНОПКИ — основные и вторичные
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  /* Кнопка «До кошика» — primary fill */
-  --color-btn-cart:         oklch(47% 0.07 145);   /* = primary */
-  --color-btn-cart-hover:   oklch(35% 0.07 145);   /* = primary-dark */
-  --color-btn-cart-text:    oklch(99% 0 0);        /* Белый текст */
-
-  /* Кнопка outline — border + text = primary */
-  --color-btn-outline:      oklch(47% 0.07 145);
-  --color-btn-outline-hover-bg: oklch(47% 0.07 145);
-  --color-btn-outline-hover-text: oklch(99% 0 0);
-
-  /* Кнопка disabled */
-  --color-btn-disabled-bg:  oklch(91% 0.010 145);  /* = border */
-  --color-btn-disabled-text: oklch(68% 0.020 145); /* = text-muted */
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ТИПОГРАФИКА
-   * Шрифт: system-ui как безопасный fallback (нет CDN-зависимостей).
-   * В production заменить на брендовый шрифт через @font-face.
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --font-base:    system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-heading: var(--font-base); /* заменить если нужен отдельный heading-шрифт */
-
-  --font-size-xs:   0.6875rem;   /* 11px — мелкие лейблы */
-  --font-size-sm:   0.8125rem;   /* 13px — вторичный текст, артикул */
-  --font-size-base: 1rem;        /* 16px — основной текст */
-  --font-size-md:   1.0625rem;   /* 17px — крупнее base */
-  --font-size-lg:   1.25rem;     /* 20px */
-  --font-size-xl:   1.5rem;      /* 24px */
-  --font-size-2xl:  2rem;        /* 32px */
-
-  --line-height-tight:  1.2;
-  --line-height-base:   1.6;
-  --line-height-relaxed: 1.75;
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ШАПКА (header + nav)
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  /* Announcement Bar */
-  --announcement-bg:        oklch(47% 0.07 145);   /* = primary */
-  --announcement-color:     oklch(99% 0 0);        /* белый текст */
-  --announcement-height:    40px;
-
-  /* Top Bar (desktop) */
-  --top-bar-bg:             oklch(35% 0.07 145); 
-  --top-bar-color:          oklch(78% 0.020 145);  /* светло-серый зелёный */
-  --top-bar-height:         36px;
-
-  /* Main Header */
-  --header-bg:              oklch(66% 0.07 145);   
-  --header-border:          var(--color-border);
-  --header-height:          var(--header-height-desktop); /* псевдоним для JS */
-  --header-height-desktop:  72px;
-  --header-shadow:          0 2px 8px oklch(22% 0.02 145 / 0.08);
-
-  /* Site Nav */
-  --nav-bg:                 oklch(78% 0.020 145);
-  --nav-border:             var(--color-border-light);
-  --nav-height:             48px;
-  --nav-link-color:         oklch(22% 0.020 145);  /* = text */
-  --nav-link-hover:         var(--color-primary);
-  --nav-dropdown-bg:        oklch(100% 0 0);
-  --nav-dropdown-shadow:    0 8px 24px oklch(22% 0.02 145 / 0.12);
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * МОБИЛЬНЫЙ UI
-   * ───────────────────────────────────────────────────────────────────────── */
-
+  /* ── Mobile UI ─────────────────────────────────────────────────────── */
   /* Mobile Top Bar */
-  --mobile-top-bar-bg:      oklch(100% 0 0);
-  --mobile-top-bar-height:  56px;
-  --mobile-top-bar-shadow:  0 2px 8px oklch(22% 0.02 145 / 0.08);
+  --mobile-top-bar-bg: oklch(100% 0 0);
+  --mobile-top-bar-height: 56px;
+  --mobile-top-bar-shadow: 0 2px 8px oklch(22% 0.02 145 / 0.08);
 
   /* Mobile Bottom Nav Bar */
-  --mobile-bottom-nav-bg:       oklch(100% 0 0);
-  --mobile-bottom-nav-height:   60px;
-  --mobile-bottom-nav-shadow:   0 -2px 8px oklch(22% 0.02 145 / 0.08);
-  --mobile-bottom-nav-color:    oklch(68% 0.020 145);  /* = text-muted */
-  --mobile-bottom-nav-active:   var(--color-primary);
+  --mobile-bottom-nav-bg: oklch(100% 0 0);
+  --mobile-bottom-nav-height: 60px;
+  --mobile-bottom-nav-shadow: 0 -2px 8px oklch(22% 0.02 145 / 0.08);
+  --mobile-bottom-nav-color: oklch(68% 0.020 145);
+  --mobile-bottom-nav-active: var(--color-primary);
   --mobile-bottom-nav-label-size: 10px;
 
-  /* ─────────────────────────────────────────────────────────────────────────
-   * OFFCANVAS (меню, корзина, wishlist, фильтры)
-   * ───────────────────────────────────────────────────────────────────────── */
+  /* ── Benefits Bar ──────────────────────────────────────────────────── */
+  --benefits-bg: oklch(53% 0.065 145);
+  --benefits-border: oklch(45% 0.07 145 / 0.4);
+  --benefits-icon-bg: oklch(42% 0.08 145 / 0.45);
+  --benefits-icon-color: oklch(88% 0.04 145);
+  --benefits-title: oklch(97% 0.008 145);
+  --benefits-text: oklch(80% 0.04 145);
 
-  --offcanvas-width:        320px;
-  --offcanvas-bg:           oklch(100% 0 0);
-  --offcanvas-header-bg:    oklch(100% 0 0);
-  --offcanvas-border:       var(--color-border);
+  /* ── Footer Main (deep forest green) ──────────────────────────────── */
+  --footer-bg: oklch(0.34 0.06 148.45);
+  --footer-surface: oklch(25% 0.09 148);
+  --footer-surface-hover: oklch(30% 0.09 148);
+  --footer-heading: oklch(97% 0.008 145);
+  --footer-color: oklch(78% 0.04 145);
+  --footer-link: oklch(68% 0.045 145);
+  --footer-link-hover: oklch(96% 0.01 145);
+  --footer-border: oklch(38% 0.08 148 / 0.4);
+  --footer-icon-accent: oklch(68% 0.12 148);
 
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ФУТЕР
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --footer-bg:              oklch(18% 0.015 145);  /* очень тёмный зелёный — не чёрный */
-  --footer-color:           oklch(72% 0.015 145);  /* средне-серый зелёный */
-  --footer-heading-color:   oklch(99% 0 0);        /* белый */
-  --footer-link-color:      oklch(63% 0.015 145);  /* приглушённый */
-  --footer-link-hover:      oklch(99% 0 0);        /* белый при hover */
-  --footer-border:          oklch(28% 0.015 145);  /* чуть светлее фона */
-
-  --benefits-bar-bg:        var(--color-primary-xsubtle);
-  --benefits-bar-border:    var(--color-border);
-  --benefits-bar-icon:      var(--color-primary);
-
-  --subfooter-bg:           oklch(13% 0.010 145);  /* темнее footer */
-  --subfooter-color:        oklch(55% 0.015 145);
-  --subfooter-link-color:   oklch(60% 0.015 145);
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * SECONDARY (вспомогательный тёмный цвет)
-   * Используется в heading-цвете и тёмных элементах.
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --color-secondary:        oklch(22% 0.020 145);  /* = text */
-  --color-secondary-soft:   oklch(38% 0.025 145);  /* чуть светлее */
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ПЕРЕХОДЫ И АНИМАЦИИ
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --transition-fast:        150ms ease;
-  --transition-base:        250ms ease;
-  --transition-slow:        400ms ease;
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * BORDER RADIUS
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --radius-sm:    4px;
-  --radius-md:    6px;
-  --radius-base:  8px;
-  --radius-lg:    12px;
-  --radius-xl:    16px;
-  --radius-pill:  999px;
-
-  /* ─────────────────────────────────────────────────────────────────────────
-   * ОТСТУПЫ И ВЫСОТЫ
-   * ───────────────────────────────────────────────────────────────────────── */
-
-  --section-gap:  3rem;
-
-  /* Суммарная высота всего что «прилипает» сверху (JS обновляет при необходимости).
-     Используется в catalog-toolbar sticky offset и sticky aside. */
-  --header-height: 72px; /* десктоп: только main-header. Обновить если добавится nav sticky. */
+  /* ── Subfooter ─────────────────────────────────────────────────────── */
+  --subfooter-bg: oklch(0.29 0.05 148.01);
+  --subfooter-color: oklch(58% 0.04 145);
+  --subfooter-link: oklch(55% 0.04 145);
+  --subfooter-link-hover: oklch(86% 0.03 145);
 }
 
 
@@ -280,43 +179,36 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
-
 body {
-  background-color: var(--color-background);
+  background: var(--color-background);
   color: var(--color-text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-family: var(--font-base);
   margin: 0;
-  /* Отступы для фиксированных элементов — управляются JS/CSS через переменные */
+  overflow-x: hidden;
+  /* Offset fixed mobile headers */
+  padding-top: var(--mobile-top-bar-height);
+  padding-bottom: var(--mobile-bottom-nav-height);
 }
 
-/* Компенсация для фиксированной мобильной шапки */
-@media (max-width: 991.98px) {
+/* Remove mobile padding on desktop (768px+) */
+@media (min-width: 768px) {
   body {
-    padding-top: var(--mobile-top-bar-height);
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
 a {
   color: var(--color-link);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--t-fast);
 }
+
 a:hover {
-  color: var(--color-link-hover);
+  color: var(--color-primary);
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-ul, ol {
+ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -330,395 +222,1095 @@ button {
   padding: 0;
 }
 
+
 /* =============================================================================
- * 02. TYPOGRAPHY
+ * 02. TYPOGRAPHY HELPERS
  * ============================================================================= */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--color-secondary);
-  font-weight: 700;
-  line-height: 1.3;
-  margin: 0 0 0.5em;
-}
+/* Extend here: headings, body text scale, font-smoothing, etc. */
 
 
 /* =============================================================================
  * 03. UTILITY CLASSES
  * ============================================================================= */
-.visually-hidden {
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
+/* Extend here: visually-hidden, truncate, clearfix, container overrides, etc. */
 
 
 /* =============================================================================
- * 04. ANNOUNCEMENT BAR
- * Статичная акционная плашка над шапкой.
- * Скрывается при скролле вниз (JS добавляет .announcement-bar--hidden).
- * ============================================================================= */
-.announcement-bar {
-  background-color: var(--announcement-bg);
-  color: var(--announcement-color);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  min-height: var(--announcement-height);
-  overflow: hidden;
-  transition:
-    max-height var(--transition-slow),
-    opacity var(--transition-base),
-    padding var(--transition-slow);
-  max-height: var(--announcement-height);
-  opacity: 1;
-  will-change: max-height, opacity;
-}
-
-.announcement-bar--hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.announcement-bar__inner {
-  align-items: center;
-  display: flex;
-  height: var(--announcement-height);
-  justify-content: center;
-  text-align: center;
-}
-
-.announcement-bar a {
-  color: currentColor;
-  text-decoration: underline;
-}
-
-
-/* =============================================================================
- * 05. TOP BAR (desktop only)
+ * 04. TOP BAR (desktop)
+ * Small bar above the main header: USP text, phone, language switcher
+ * Collapses (max-height → 0) when .site-header--compact is active
  * ============================================================================= */
 .top-bar {
-  background-color: var(--top-bar-bg);
-  color: var(--top-bar-color);
-  font-size: 0.75rem;
-  height: var(--top-bar-height);
-  transition: max-height var(--transition-slow), opacity var(--transition-base);
+  background: var(--header-bg);
+  color: oklch(18% 0.05 145);
+  font-size: 0.8125rem;
+  overflow: visible;
   max-height: var(--top-bar-height);
-}
-
-.top-bar__selector-zone .search-widget,
-.top-bar__selector-zone .cart-preview,
-.top-bar__selector-zone .js-top-menu,
-.top-bar__selector-zone .user-info {
-  display: none !important;
-}
-
-/* ===== Top Bar: скрываем итоги корзины от ps_shoppingcart ===== */
-.top-bar .cart-preview,
-.top-bar .blockcart__count,
-.top-bar #_desktop_cart .cart-products-count,
-.top-bar .cart-totals,
-.top-bar [class*="cart-subtotals"],
-.user-info,
-.top-bar .value {
-  display: none !important;
-}
-
-.top-bar--hidden {
-  max-height: 0;
-  opacity: 0;
+  opacity: 1;
+  transition: max-height 0.3s ease 0.55s, opacity 0.3s ease 0.55s;
 }
 
 .top-bar__inner {
-  align-items: center;
   display: flex;
-  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--top-bar-height);
+  padding: 0 1.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--header-border);
+}
+
+.top-bar__usp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.top-bar__usp i {
+  color: oklch(30% 0.07 145);
 }
 
 .top-bar__right {
-  align-items: center;
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-/* PS language/currency selector overrides */
-.top-bar .language-selector,
-.top-bar .currency-selector {
-  color: var(--top-bar-color);
-}
-.top-bar .language-selector a,
-.top-bar .currency-selector a {
-  color: var(--top-bar-color);
-  font-size: 0.75rem;
-}
-.top-bar .language-selector a:hover,
-.top-bar .currency-selector a:hover {
-  color: #FFFFFF;
+.top-bar__phone {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: inherit;
+  font-weight: 600;
 }
 
-/* ===== Search Widget ===== */
-.search-widget {
-  flex: 1;
-  max-width: 480px;
-}
-
-.search-widget__form {
-  width: 100%;
-}
-
-.search-widget__inner {
+/* ── Language switcher ───────────────────────────────────────────────── */
+.top-bar__lang {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.search-widget__icon {
+.top-bar__lang i {
+  font-size: 0.6rem;
+  transition: transform var(--t-fast);
+}
+
+.top-bar__lang:hover i {
+  transform: rotate(180deg);
+}
+
+.top-bar__lang-dropdown {
+  display: none;
   position: absolute;
-  left: 0.85rem;
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.search-widget__input {
-  width: 100%;
-  padding: 0.55rem 1rem 0.55rem 2.5rem; /* отступ слева под иконку */
+  top: calc(100% + 4px);
+  right: 0;
+  background: var(--nav-dropdown-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  background: var(--color-surface);
+  border-radius: var(--radius-base);
+  box-shadow: var(--nav-dropdown-shadow);
+  min-width: 140px;
+  z-index: 1600;
+  overflow: hidden;
+}
+
+.top-bar__lang:hover .top-bar__lang-dropdown {
+  display: block;
+}
+
+.top-bar__lang-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
   color: var(--color-text);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  appearance: none; /* убирает браузерный крестик у type=search */
+  font-size: 0.8125rem;
 }
 
-.search-widget__input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-xsubtle);
+.top-bar__lang-dropdown a:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
 
-/* Убираем нативную кнопку очистки в webkit */
-.search-widget__input::-webkit-search-cancel-button {
-  -webkit-appearance: none;
+.top-bar__lang-dropdown a.active {
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 
 /* =============================================================================
- * 06. SITE HEADER — обёртка + Smart Sticky
- *
- * .site-header — содержит только desktop main-header + site-nav
- * Sticky поведение:
- *   [базовое]               → position: sticky, top: 0
- *   .site-header--hidden    → transform: translateY(-100%) — уезжает вверх
- *   .site-header--compact   → тень усиливается при прилипании
- *
- * JS управляет классами через IntersectionObserver (см. theme.js)
+ * 05. SITE HEADER (wrapper + smart sticky)
+ * position: sticky; collapses into compact mode on scroll via JS
+ * Compact mode: top-bar + main-header slide out, nav-compact elements slide in
  * ============================================================================= */
 .site-header {
-  background-color: var(--header-bg);
-  border-bottom: 1px solid var(--header-border);
+  background: var(--header-bg);
   position: sticky;
   top: 0;
-  z-index: 1030; /* Выше Bootstrap modal (1050), но ниже offcanvas (1045 у BS) */
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
-  will-change: transform;
+  z-index: 1030;
+  display: flex;
+  flex-direction: column;
 }
 
-/* При скролле вниз — шапка уезжает */
-.site-header--hidden {
-  transform: translateY(-100%);
-  box-shadow: none;
+/* Always visible on desktop */
+@media (min-width: 768px) {
+  .site-header {
+    display: flex !important;
+  }
 }
 
-/* При прилипании (был скролл вниз, потом вернулся) */
-.site-header--compact {
+/* ── Compact mode: collapse top-bar ─────────────────────────────────── */
+.site-header--compact .top-bar {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+
+/* ── Compact mode: collapse main-header ─────────────────────────────── */
+.site-header--compact .main-header {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease 0.35s, opacity 0.2s ease 0.35s;
+}
+
+/* ── Compact mode: show compact nav elements ─────────────────────────── */
+.site-header--compact .nav-compact-left,
+.site-header--compact .nav-compact-right {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 0.4s ease 0.7s, transform 0.4s ease 0.7s, visibility 0s;
+}
+
+.site-header--compact .site-nav {
   box-shadow: var(--header-shadow);
 }
 
 
 /* =============================================================================
- * 07. MAIN HEADER (desktop)
+ * 06. MAIN HEADER (desktop: logo + search + action icons)
+ * Collapses (max-height → 0) when .site-header--compact is active
  * ============================================================================= */
 .main-header {
-  height: var(--header-height-desktop);
+  overflow: visible;
+  max-height: var(--main-header-height);
+  opacity: 1;
+  transition: max-height 0.3s ease 0.25s, opacity 0.3s ease 0.25s;
 }
 
 .main-header__inner {
-  height: 100%;
-}
-
-/* Логотип */
-.main-header__logo {
-  align-items: center;
   display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: var(--main-header-height);
+  padding: 0 1.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--header-border);
+}
+
+/* ── Logo ────────────────────────────────────────────────────────────── */
+.logo-block {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  gap: 0.5rem;
-  text-decoration: none;
 }
 
-.main-header__logo-img {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
+.logo-text {
+  font-size: 2rem;
+  font-weight: 900;
+  color: oklch(0.4 0.16 147.7);
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
-/* Поиск — занимает всё свободное пространство */
-.main-header__search {
+.logo-sub {
+  font-size: 0.655rem;
+  font-weight: 700;
+  color: oklch(0.75 0.32 145.24);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-top: 3px;
+}
+
+/* ── Search ──────────────────────────────────────────────────────────── */
+.header-search {
   flex: 1 1 auto;
-  max-width: 600px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-/* Иконки-кнопки */
-.main-header__actions {
+.search-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.72rem 1.25rem 0.72rem 2.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+  background: #fff;
+}
+
+/* ── Action buttons (wishlist, cart, account) ────────────────────────── */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   flex-shrink: 0;
 }
 
-.main-header__action-btn {
-  align-items: center;
-  color: var(--color-secondary);
+.action-btn {
   display: flex;
-  flex-direction: column;
-  font-size: 1.25rem;
-  height: 44px;
+  align-items: center;
   justify-content: center;
+  color: oklch(14% 0.05 145);
+  font-size: 1.2rem;
+  width: 46px;
+  height: 46px;
   position: relative;
-  transition: color var(--transition-fast);
-  width: 44px;
+  border-radius: var(--radius-base);
+  transition: color var(--t-fast), background var(--t-fast);
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.main-header__action-btn:hover {
+.action-btn:hover {
+  color: oklch(8% 0.05 145);
+  background: rgba(0, 0, 0, 0.09);
+}
+
+.action-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: oklch(20% 0.02 145);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  min-width: 15px;
+  padding: 2px 3px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Account dropdown ────────────────────────────────────────────────── */
+.header-account {
+  position: relative;
+}
+
+.account-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--nav-dropdown-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--nav-dropdown-shadow);
+  min-width: 200px;
+  z-index: 1060;
+  overflow: hidden;
+  animation: dropIn 150ms ease forwards;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-account:hover .account-dropdown,
+.header-account:focus-within .account-dropdown {
+  display: block;
+}
+
+.account-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1.1rem;
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+.account-dropdown a:hover {
+  background: var(--color-primary-subtle);
   color: var(--color-primary);
 }
 
-/* Счётчик (badge) над иконкой */
-.main-header__action-btn .cart-count,
-.main-header__action-btn .wishlist-count {
-  background-color: var(--color-primary);
-  border-radius: var(--radius-pill);
-  color: #fff;
-  font-size: 0.625rem;
-  font-weight: 700;
-  line-height: 1;
-  min-width: 18px;
-  padding: 2px 4px;
-  position: absolute;
-  right: 2px;
+.account-dropdown a i {
+  width: 16px;
   text-align: center;
-  top: 2px;
+  color: var(--color-text-muted);
 }
 
-.main-header__action-btn .cart-count:empty,
-.main-header__action-btn .wishlist-count:empty {
-  display: none;
+.logout-link {
+  color: oklch(45% 0.2 25) !important;
 }
 
 
 /* =============================================================================
- * 08. SITE NAV — desktop горизонтальное меню
+ * 07. SITE NAV (desktop navigation bar)
+ * Full-width bar below main-header; contains nav-list + compact elements
  * ============================================================================= */
 .site-nav {
-  background-color: var(--nav-bg);
-  border-top: 1px solid var(--nav-border);
+  background: var(--header-bg);
+  transition: box-shadow var(--t-base);
   position: relative;
+}
+
+.site-nav--shadow {
+  box-shadow: var(--header-shadow);
 }
 
 .site-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--nav-height);
+  padding: 0 1.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
   position: relative;
 }
 
-/* Фильтруем контент в навигации, если он тянется из общих хуков */
-.site-nav__inner .language-selector,
-.site-nav__inner .currency-selector,
-/* .site-nav__inner .search-widget, */
-.site-nav__inner .cart-preview,
-.site-nav__inner .user-info {
-  display: none !important;
+/* ── Compact nav: logo (left) + icons (right) visible only in compact mode */
+.nav-compact-left,
+.nav-compact-right {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-15px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
 }
 
+.nav-compact-left {
+  left: 1.5rem;
+  flex-shrink: 0;
+}
 
-/* PrestaShop ps_mainmenu рендерит .top-menu — переопределяем здесь */
-.site-nav .top-menu {
-  align-items: center;
+.nav-compact-right {
+  right: 1.5rem;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.nav-compact-left .logo-text {
+  font-size: 1.1rem;
+}
+
+.nav-compact-left .logo-sub {
+  font-size: 0.5rem;
+}
+
+/* ── Nav list ────────────────────────────────────────────────────────── */
+.nav-list {
   display: flex;
-  gap: 0;
-  height: var(--nav-height);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  align-items: center;
+  height: 100%;
   justify-content: center;
 }
 
-.site-nav .top-menu > li {
-  position: relative;
+.nav-list>li {
+  position: static;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.site-nav .top-menu > li > a {
-  align-items: center;
-  color: var(--nav-link-color);
+.nav-list>li>a {
   display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 1.05rem;
   font-size: 0.9375rem;
+  font-weight: 600;
+  color: oklch(12% 0.05 145);
+  white-space: nowrap;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Active underline indicator */
+.nav-list>li>a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0.65rem;
+  right: 0.65rem;
+  height: 3px;
+  background: oklch(15% 0.02 145);
+  transform: scaleX(0);
+  transition: transform var(--t-fast);
+  border-radius: 2px 2px 0 0;
+}
+
+.nav-list>li.is-active>a::after {
+  transform: scaleX(1);
+}
+
+.nav-caret {
+  font-size: 0.58rem;
+  opacity: 0.6;
+  transition: transform var(--t-fast);
+}
+
+.nav-list>li.is-active>a .nav-caret {
+  transform: rotate(180deg);
+}
+
+/* ── Catalog CTA button in nav ───────────────────────────────────────── */
+.nav-btn-catalog {
+  background: oklch(38% 0.09 145) !important;
+  color: #fff !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 0.48rem 1.1rem !important;
+  height: auto !important;
+  margin: auto 0.6rem auto 0 !important;
+  transition: background var(--t-fast) !important;
+  gap: 7px !important;
+}
+
+.nav-btn-catalog:hover,
+.nav-list>li.is-active .nav-btn-catalog {
+  background: oklch(30% 0.09 145) !important;
+}
+
+.nav-btn-catalog::after {
+  display: none !important;
+}
+
+/* ── Accent nav link (e.g. "Sale") ───────────────────────────────────── */
+.nav-accent {
+  color: oklch(0.49 0.23 28.96) !important;
+  font-weight: 700 !important;
+}
+
+.nav-accent:hover {
+  color: oklch(32% 0.22 25) !important;
+}
+
+
+/* =============================================================================
+ * 08. MEGA MENU — shared styles
+ * position: fixed (full-width below nav); toggled via .is-active on li
+ * ============================================================================= */
+.nav-megamenu {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: var(--nav-dropdown-bg);
+  border-top: 2px solid var(--color-primary-subtle);
+  box-shadow: var(--nav-dropdown-shadow);
+  z-index: 1020;
+  max-height: 75vh;
+  overflow-y: auto;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+
+.nav-list>li.is-active .nav-megamenu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-megamenu__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+/* ── Mega menu top bar (label + "see all" link) ──────────────────────── */
+.mm-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0 0.9rem;
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: 1.1rem;
+}
+
+.mm-topbar__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mm-topbar__label::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.mm-topbar__all {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: gap var(--t-fast);
+  text-decoration: none;
+}
+
+.mm-topbar__all:hover {
+  color: var(--color-primary-dark);
+  gap: 0.55rem;
+}
+
+/* ── Shared badge styles ─────────────────────────────────────────────── */
+.mm-badge {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.14rem 0.4rem;
+  border-radius: 3px;
+  line-height: 1.2;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.mm-badge--top {
+  background: oklch(96% 0.06 80);
+  color: oklch(52% 0.18 80);
+}
+
+.mm-badge--new {
+  background: oklch(95% 0.07 145);
+  color: var(--color-primary-dark);
+}
+
+.mm-badge--sale {
+  background: oklch(96% 0.08 28);
+  color: var(--acc-pop);
+}
+
+/* ── Section divider title ───────────────────────────────────────────── */
+.mm-section-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.7rem 0 0.25rem 0.65rem;
+  pointer-events: none;
+}
+
+.mm-section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+/* ── "See all" link inside column ────────────────────────────────────── */
+.mm-see-all {
+  font-size: 0.775rem !important;
+  font-weight: 600 !important;
+  color: var(--color-primary) !important;
+  border-top: 1px solid var(--color-border-light);
+  margin-top: auto !important;
+  padding-top: 0.5rem !important;
+  gap: 0.35rem;
+}
+
+.mm-see-all:hover {
+  border-left-color: transparent !important;
+  padding-left: 0.65rem !important;
+  background: transparent !important;
+}
+
+/* ── Chips (tag-cloud) ───────────────────────────────────────────────── */
+.mm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.3rem 0 0.5rem;
+}
+
+.mm-chip {
+  font-size: 0.72rem;
   font-weight: 500;
-  gap: 4px;
-  height: var(--nav-height);
-  padding: 0 1rem;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  color: var(--color-text);
+  background: oklch(95% 0.01 145);
+  border: 1px solid var(--color-border);
+  border-radius: 99px;
+  padding: 0.22rem 0.65rem;
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.mm-chip:hover {
+  background: var(--color-primary-subtle);
+  border-color: oklch(78% 0.06 145);
+  color: var(--color-primary-dark);
+}
+
+.mm-chip--hot {
+  background: var(--acc-pop-bg);
+  border-color: oklch(88% 0.09 28);
+  color: var(--acc-pop);
+}
+
+.mm-pop-divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0.65rem 0.65rem;
+}
+
+
+/* =============================================================================
+ * 08a. MEGA MENU — Catalog panel
+ * Grid: 5 category columns + 1 SOOV promo banner
+ * ============================================================================= */
+.megamenu-catalog {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 224px;
+  gap: 0;
+}
+
+/* ── Category columns ────────────────────────────────────────────────── */
+.megamenu-col {
+  padding: 0 1.15rem;
+  border-right: 1px solid var(--color-border-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.megamenu-col:first-child {
+  padding-left: 0;
+}
+
+.megamenu-col:last-of-type {
+  border-right: none;
+}
+
+.megamenu-col__title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border-light);
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+/* ── Column icon (colored pill) ──────────────────────────────────────── */
+.mm-col-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  transition: transform var(--t-fast);
+}
+
+.megamenu-col__title:hover .mm-col-icon {
+  transform: scale(1.1);
+}
+
+/* Per-category icon colors */
+.megamenu-col--vit .mm-col-icon {
+  background: var(--acc-vit-bg);
+  color: var(--acc-vit);
+}
+
+.megamenu-col--min .mm-col-icon {
+  background: var(--acc-min-bg);
+  color: var(--acc-min);
+}
+
+.megamenu-col--sup .mm-col-icon {
+  background: var(--acc-sup-bg);
+  color: var(--acc-sup);
+}
+
+.megamenu-col--spc .mm-col-icon {
+  background: var(--acc-spc-bg);
+  color: var(--acc-spc);
+}
+
+.megamenu-col--pop .mm-col-icon {
+  background: var(--acc-pop-bg);
+  color: var(--acc-pop);
+}
+
+/* ── Column links ────────────────────────────────────────────────────── */
+.megamenu-col__links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.04rem;
+  flex: 1;
+}
+
+.megamenu-col__links a {
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  padding: 0.3rem 0.5rem 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: color var(--t-fast), background var(--t-fast), padding-left var(--t-fast);
+  position: relative;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+/* Per-column hover colors */
+.megamenu-col--vit .megamenu-col__links a:not(.mm-sub):hover {
+  color: var(--acc-vit);
+  background: var(--acc-vit-bg);
+  border-left-color: var(--acc-vit);
+  padding-left: 0.85rem;
+}
+
+.megamenu-col--min .megamenu-col__links a:not(.mm-sub):hover {
+  color: var(--acc-min);
+  background: var(--acc-min-bg);
+  border-left-color: var(--acc-min);
+  padding-left: 0.85rem;
+}
+
+.megamenu-col--sup .megamenu-col__links a:not(.mm-sub):hover {
+  color: var(--acc-sup);
+  background: var(--acc-sup-bg);
+  border-left-color: var(--acc-sup);
+  padding-left: 0.85rem;
+}
+
+.megamenu-col--spc .megamenu-col__links a:not(.mm-sub):hover {
+  color: var(--acc-spc);
+  background: var(--acc-spc-bg);
+  border-left-color: var(--acc-spc);
+  padding-left: 0.85rem;
+}
+
+.megamenu-col--pop .megamenu-col__links a:not(.mm-sub):hover {
+  color: var(--acc-pop);
+  background: var(--acc-pop-bg);
+  border-left-color: var(--acc-pop);
+  padding-left: 0.85rem;
+}
+
+/* Sub-link and top-link modifiers */
+.megamenu-col__links a.mm-sub {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  padding-left: 0.65rem !important;
+  font-style: italic;
+}
+
+.megamenu-col__links a.mm-top {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* ── SOOV promo banner (last column) ─────────────────────────────────── */
+.megamenu-soov {
+  background: linear-gradient(145deg, oklch(46% 0.18 295) 0%, oklch(55% 0.2 310) 40%, oklch(68% 0.18 350) 100%);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  margin-left: 0.7rem;
+}
+
+/* Decorative circles */
+.megamenu-soov::before,
+.megamenu-soov::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.megamenu-soov::before {
+  width: 110px;
+  height: 110px;
+  background: oklch(85% 0.1 350 / 0.14);
+  top: -28px;
+  right: -28px;
+}
+
+.megamenu-soov::after {
+  width: 65px;
+  height: 65px;
+  background: oklch(75% 0.15 295 / 0.16);
+  bottom: 55px;
+  right: -18px;
+}
+
+.soov-inner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+.megamenu-soov__ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: oklch(92% 0.06 350);
+  background: oklch(85% 0.08 350 / 0.18);
+  border: 1px solid oklch(85% 0.08 350 / 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  margin-bottom: 0.45rem;
+  text-align: center;
+}
+
+.megamenu-soov__brand {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-bottom: 0.15rem;
+}
+
+.megamenu-soov__title {
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.megamenu-soov__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: oklch(88% 0.14 350);
+  margin-bottom: 4px;
+}
+
+.megamenu-soov__tagline {
+  font-size: 0.72rem;
+  color: oklch(90% 0.06 350);
+  line-height: 1.45;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+
+.soov-products {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.15rem;
+}
+
+.soov-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.soov-group__label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: oklch(80% 0.08 350);
+}
+
+.soov-group__tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.2rem;
+}
+
+.soov-tag {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: oklch(97% 0.03 350);
+  background: oklch(100% 0 0 / 0.12);
+  border: 1px solid oklch(100% 0 0 / 0.2);
+  padding: 0.11rem 0.28rem;
+  border-radius: 99px;
+  transition: background var(--t-fast), color var(--t-fast);
+  text-decoration: none;
   white-space: nowrap;
 }
 
-.site-nav .top-menu > li > a:hover,
-.site-nav .top-menu > li.current > a {
-  color: var(--nav-link-hover);
+.soov-tag:hover {
+  background: oklch(100% 0 0 / 0.22);
+  color: #fff;
 }
 
-/* Dropdown */
-.site-nav .top-menu > li > .sub-menu {
-  background-color: var(--nav-dropdown-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  box-shadow: var(--nav-dropdown-shadow);
-  left: 0;
-  list-style: none;
-  margin: 0;
-  min-width: 220px;
-  opacity: 0;
-  padding: 0.5rem 0;
-  pointer-events: none;
-  position: absolute;
-  top: 100%;
-  transform: translateY(8px);
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
-  z-index: 100;
-}
-
-.site-nav .top-menu > li:hover > .sub-menu,
-.site-nav .top-menu > li:focus-within > .sub-menu {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.site-nav .top-menu > li > .sub-menu li a {
-  color: var(--color-text);
+.soov-award {
   display: block;
-  font-size: 0.875rem;
-  padding: 0.5rem 1.25rem;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  width: 90px;
+  height: 90px;
+  margin: 0.55rem auto 0.5rem;
+  border-radius: 50%;
+  filter: drop-shadow(0 3px 10px oklch(20% 0.15 295 / 0.5));
+  transition: transform var(--t-fast);
+  position: relative;
+  z-index: 2;
 }
 
-.site-nav .top-menu > li > .sub-menu li a:hover {
-  background-color: var(--color-primary-light);
+.megamenu-soov:hover .soov-award {
+  transform: scale(1.07) rotate(-3deg);
+}
+
+.megamenu-soov__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #fff;
+  color: oklch(46% 0.18 295);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  transition: transform var(--t-fast), box-shadow var(--t-fast), gap var(--t-fast);
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+}
+
+.megamenu-soov__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px oklch(40% 0.18 295 / 0.35);
+  gap: 0.6rem;
+  color: oklch(46% 0.18 295);
+}
+
+
+/* =============================================================================
+ * 08b. MEGA MENU — "For What" panel
+ * Grid: 6 goal columns (by health benefit / target group)
+ * ============================================================================= */
+.megamenu-forwhat {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+.forwhat-col {
+  padding: 0 1rem;
+  border-right: 1px solid var(--color-border-light);
+  text-align: center;
+}
+
+.forwhat-col:first-child {
+  padding-left: 0;
+}
+
+.forwhat-col:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.forwhat-col__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary-subtle);
+  text-align: center;
+}
+
+.forwhat-item {
+  display: block;
+  text-align: center;
+  padding: 0.32rem 0.4rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.84rem;
+  font-weight: 500;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+
+.forwhat-item:hover {
+  background: var(--color-primary-subtle);
   color: var(--color-primary);
 }
 
 
 /* =============================================================================
  * 09. MOBILE TOP BAR
- * position: fixed top — всегда поверх контента на мобиле
+ * position: fixed top — always above content on mobile
+ * Contains: mini logo, search field, contact button
+ * Hidden on desktop (min-width: 768px)
  * ============================================================================= */
 .mobile-top-bar {
   background-color: var(--mobile-top-bar-bg);
@@ -739,9 +1331,39 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 0.75rem;
 }
 
-/* Мини-лого (слева, небольшое) */
+/* ── Mini logo ───────────────────────────────────────────────────────── */
 .mobile-top-bar__logo {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Hide subtitle on mobile logo */
+.mobile-top-bar .logo-sub {
+  display: none;
+}
+
+.mobile-logo-text {
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobile-logo-text .logo-text {
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.mobile-top-bar .mobile-logo-text {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.mobile-top-bar .mobile-logo-text .logo-text {
+  font-size: 1.05rem;
+  white-space: nowrap;
 }
 
 .mobile-top-bar__logo-img {
@@ -752,13 +1374,60 @@ h1, h2, h3, h4, h5, h6 {
   object-fit: contain;
 }
 
-/* Поиск — занимает всё пространство */
+/* ── Inline search widget ────────────────────────────────────────────── */
 .mobile-top-bar__search {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-/* Кнопка связи */
+.mobile-top-bar .search-widget,
+.mobile-top-bar .search-widget__form {
+  width: 100%;
+}
+
+.mobile-top-bar .search-widget__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.mobile-top-bar .search-widget__icon {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mobile-top-bar .search-widget__input {
+  width: 100%;
+  padding: 0.48rem 0.75rem 0.48rem 2rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 5px;
+  font-size: 0.875rem;
+  background: var(--color-background);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.mobile-top-bar .search-widget__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px oklch(47% 0.07 145 / 0.15);
+}
+
+.mobile-top-bar .search-widget__input::placeholder {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+/* ── Contact button ──────────────────────────────────────────────────── */
 .mobile-top-bar__contact-btn {
   align-items: center;
   background-color: var(--color-primary);
@@ -768,7 +1437,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.125rem;
   height: 38px;
   justify-content: center;
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--t-fast);
   width: 38px;
   flex-shrink: 0;
 }
@@ -781,7 +1450,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* =============================================================================
  * 10. MOBILE BOTTOM NAV BAR
- * position: fixed bottom — 5 иконок
+ * position: fixed bottom — 5 icon tabs
+ * Respects iPhone safe-area-inset-bottom
+ * Hidden on desktop (min-width: 768px)
  * ============================================================================= */
 .mobile-bottom-nav {
   background-color: var(--mobile-bottom-nav-bg);
@@ -792,7 +1463,6 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   right: 0;
   z-index: 1030;
-  /* Safe area для iPhone с notch */
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -817,10 +1487,11 @@ h1, h2, h3, h4, h5, h6 {
   gap: 2px;
   height: 100%;
   justify-content: center;
-  min-height: 44px; /* Touch target */
+  min-height: 44px;
+  /* WCAG touch target */
   padding: 6px 0;
   position: relative;
-  transition: color var(--transition-fast);
+  transition: color var(--t-fast);
   width: 100%;
 }
 
@@ -835,7 +1506,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
 
-/* Badge корзины */
+/* Cart badge */
 .mobile-bottom-nav__badge {
   background-color: var(--color-primary);
   border-radius: var(--radius-pill);
@@ -857,333 +1528,463 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* =============================================================================
- * 11. OFFCANVAS: МОБИЛЬНОЕ МЕНЮ
+ * 11. MOBILE DRAWER (offcanvas slide-in menu)
+ * Slides in from the left; backdrop overlay covers the rest of the screen
  * ============================================================================= */
-.offcanvas-mobile-menu {
-  width: var(--offcanvas-width);
-  max-width: 90vw;
+
+/* ── Overlay backdrop ────────────────────────────────────────────────── */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  pointer-events: none;
 }
 
-.offcanvas-mobile-menu .offcanvas-header {
-  border-bottom: 1px solid var(--offcanvas-border);
-  padding: 1rem 1.25rem;
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
-.offcanvas-mobile-menu__logo img {
-  height: 36px;
-  width: auto;
-}
-
-.offcanvas-mobile-menu__shop-name {
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
-.offcanvas-mobile-menu__body {
+/* ── Drawer panel ────────────────────────────────────────────────────── */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 85%;
+  max-width: 320px;
+  height: 100%;
+  background: #fff;
+  z-index: 2001;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  overflow-y: auto;
-  padding: 1rem 0;
 }
 
-/* Поиск в drawer */
-.offcanvas-mobile-menu__search {
-  padding: 0 1.25rem 1rem;
+.mobile-drawer.active {
+  transform: translateX(0);
 }
 
-/* Навигация — PS mainmenu accordion */
-.offcanvas-mobile-menu__nav .top-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.offcanvas-mobile-menu__nav .top-menu > li > a {
-  align-items: center;
-  border-bottom: 1px solid var(--color-border-light);
-  color: var(--color-text);
+/* ── Drawer header ───────────────────────────────────────────────────── */
+.drawer-header {
   display: flex;
-  font-size: 0.9375rem;
-  font-weight: 600;
   justify-content: space-between;
-  padding: 0.875rem 1.25rem;
-}
-
-.offcanvas-mobile-menu__nav .top-menu > li > a:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-}
-
-/* Подкатегории */
-.offcanvas-mobile-menu__nav .sub-menu {
-  background-color: var(--color-background);
-  list-style: none;
-  padding: 0.25rem 0;
-}
-
-.offcanvas-mobile-menu__nav .sub-menu li a {
-  color: var(--color-text-muted);
-  display: block;
-  font-size: 0.875rem;
-  padding: 0.625rem 1.25rem 0.625rem 2rem;
-}
-
-.offcanvas-mobile-menu__nav .sub-menu li a:hover {
-  color: var(--color-primary);
-}
-
-.offcanvas-mobile-menu__divider {
-  border-color: var(--color-border);
-  margin: 0.5rem 1.25rem;
-}
-
-/* Утилитарные ссылки */
-.offcanvas-mobile-menu__utils {
-  list-style: none;
-  padding: 0;
-}
-
-.offcanvas-mobile-menu__util-link {
   align-items: center;
-  color: var(--color-text);
-  display: flex;
-  font-size: 0.875rem;
-  gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--header-bg);
 }
 
-.offcanvas-mobile-menu__util-link:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-}
-
-.offcanvas-mobile-menu__util-link i {
-  color: var(--color-text-muted);
-  font-size: 1rem;
-  width: 20px;
-  text-align: center;
-}
-
-/* Язык/валюта внутри drawer */
-.offcanvas-mobile-menu__locale {
-  padding: 0 1.25rem 1rem;
-}
-
-
-/* =============================================================================
- * 12. OFFCANVAS: СВЯЗАТЬСЯ
- * placement: bottom — выезжает снизу
- * ============================================================================= */
-.offcanvas-contact {
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  max-height: 80vh;
-}
-
-.offcanvas-contact__header {
-  border-bottom: 1px solid var(--offcanvas-border);
-}
-
-.offcanvas-contact__title {
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
-.offcanvas-contact__subtitle {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-  margin-bottom: 1.25rem;
-}
-
-.offcanvas-contact__body {
-  padding: 1.5rem;
-}
-
-.offcanvas-contact__channels {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  list-style: none;
-  padding: 0;
-}
-
-.offcanvas-contact__channel-link {
-  align-items: center;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  color: var(--color-text);
-  display: flex;
-  gap: 1rem;
-  padding: 0.875rem 1.25rem;
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.offcanvas-contact__channel-link:hover {
-  background-color: var(--color-background);
-  color: var(--color-text);
-}
-
-.offcanvas-contact__channel-icon {
+.drawer-logo .logo-text {
   font-size: 1.5rem;
-  width: 32px;
-  text-align: center;
 }
 
-/* Цвета брендов */
-.offcanvas-contact__channel-link--telegram .offcanvas-contact__channel-icon { color: #2AABEE; }
-.offcanvas-contact__channel-link--viber .offcanvas-contact__channel-icon    { color: #7360F2; }
-.offcanvas-contact__channel-link--whatsapp .offcanvas-contact__channel-icon  { color: #25D366; }
-.offcanvas-contact__channel-link--phone .offcanvas-contact__channel-icon     { color: var(--color-primary); }
-
-.offcanvas-contact__channel-name {
-  font-weight: 600;
+.drawer-logo .logo-sub {
+  font-size: 0.55rem;
 }
 
-.offcanvas-contact__channel-hours {
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  margin-left: auto;
+.drawer-close {
+  font-size: 2rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
 }
 
-
-/* =============================================================================
- * 13. OFFCANVAS: MINI-CART
- * На мобиле: offcanvas-bottom (placement: bottom)
- * На десктопе: offcanvas-end (placement: end / справа)
- * Переключение через CSS media query — Bootstrap классы меняются через JS
- * ============================================================================= */
-
-/* Мобиле: снизу */
-.offcanvas-cart {
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  display: flex;
-  flex-direction: column;
-  max-height: 85vh;
+/* ── Drawer navigation links ─────────────────────────────────────────── */
+.drawer-nav {
+  flex: 1;
+  padding: 0.5rem 0 1rem;
 }
 
-/* Десктоп: справа — JS добавляет класс .offcanvas-cart--desktop через resize */
-@media (min-width: 992px) {
-  .offcanvas-cart {
-    border-radius: 0;
-    height: 100% !important;
-    max-height: 100vh;
-    right: 0 !important;
-    width: 400px !important;
-  }
+.drawer-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background var(--t-fast), color var(--t-fast);
 }
 
-.offcanvas-cart__header {
-  border-bottom: 1px solid var(--offcanvas-border);
-  flex-shrink: 0;
+.drawer-nav-link:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
 
-.offcanvas-cart__title {
-  font-size: 1.125rem;
+.nav-accent-mobile {
+  color: oklch(0.49 0.23 28.96) !important;
   font-weight: 700;
 }
 
-.offcanvas-cart__body {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: 1rem 1.25rem;
+/* ── Language switcher inside drawer ─────────────────────────────────── */
+.drawer-lang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--color-border-light);
 }
 
-.offcanvas-cart__footer {
-  border-top: 1px solid var(--offcanvas-border);
-  flex-shrink: 0;
-  padding: 1rem 1.25rem;
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-}
-
-.offcanvas-cart__checkout-btn {
-  background-color: var(--color-primary);
+.lang-btn {
+  font-size: 1rem;
+  font-weight: 500;
+  background: none;
   border: none;
-  border-radius: var(--radius-base);
-  font-weight: 600;
-  padding: 0.875rem 1.5rem;
+  padding: 0.5rem 0.75rem;
+  min-width: 48px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: color var(--t-fast), font-weight var(--t-fast);
 }
 
-.offcanvas-cart__checkout-btn:hover {
-  background-color: var(--color-primary-dark);
+.lang-btn.active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.lang-sep {
+  color: var(--color-text-muted);
+}
+
+/* ── Auth button ─────────────────────────────────────────────────────── */
+.drawer-auth-btn {
+  display: block;
+  width: calc(100% - 2rem);
+  margin: 0.75rem auto;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+
+.drawer-auth-btn:hover {
+  background: var(--color-primary-dark);
 }
 
 
 /* =============================================================================
- * 14. OFFCANVAS: MINI-WISHLIST
- * placement: bottom — выезжает снизу
+ * 12. MOBILE DRAWER — Accordion (category sub-navigation)
+ * Shared .mm-acc__* classes; reuses mega-menu accent colors
  * ============================================================================= */
-.offcanvas-wishlist {
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  max-height: 85vh;
+.drawer-accordion {
+  margin-bottom: 0.5rem;
+}
+
+.mm-acc__item {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.mm-acc__head {
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.78rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: left;
+  transition: background var(--t-fast);
+}
+
+.mm-acc__head:hover,
+.mm-acc__item.is-open .mm-acc__head {
+  background: var(--color-primary-subtle);
+}
+
+/* Per-category icon colors inside accordion heads */
+.mm-acc__head--vit .mm-col-icon {
+  background: var(--acc-vit-bg);
+  color: var(--acc-vit);
+}
+
+.mm-acc__head--min .mm-col-icon {
+  background: var(--acc-min-bg);
+  color: var(--acc-min);
+}
+
+.mm-acc__head--sup .mm-col-icon {
+  background: var(--acc-sup-bg);
+  color: var(--acc-sup);
+}
+
+.mm-acc__head--spc .mm-col-icon {
+  background: var(--acc-spc-bg);
+  color: var(--acc-spc);
+}
+
+.mm-acc__head--pop .mm-col-icon {
+  background: var(--acc-pop-bg);
+  color: var(--acc-pop);
+}
+
+.mm-acc__chevron {
+  margin-left: auto;
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  transition: transform var(--t-base);
+}
+
+.mm-acc__item.is-open .mm-acc__chevron {
+  transform: rotate(180deg);
+}
+
+.mm-acc__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  background: oklch(99% 0.004 145);
+}
+
+.mm-acc__body-inner {
+  padding: 0.15rem 0 0.75rem;
+}
+
+.mm-acc__link {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.48rem 1.25rem 0.48rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: background var(--t-fast), color var(--t-fast), padding-left var(--t-fast);
+  border-left: 3px solid transparent;
+  line-height: 1.35;
+}
+
+.mm-acc__link:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  border-left-color: var(--color-primary);
+  padding-left: 1.4rem;
+}
+
+.mm-acc__link--top {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.mm-acc__link--sub {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  padding-left: 1.5rem;
+}
+
+.mm-acc__link--seeall {
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: var(--color-primary) !important;
+  border-top: 1px solid var(--color-border-light);
+  margin-top: 0.3rem;
+  padding-top: 0.55rem !important;
+}
+
+.mm-acc__section {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.15rem 0.2rem;
+  pointer-events: none;
+}
+
+.mm-acc__section::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+.mm-acc__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.3rem 1.15rem 0.5rem;
+}
+
+.mm-acc__divider {
+  height: 1px;
+  background: var(--color-border-light);
+  margin: 0.4rem 1.15rem;
+}
+
+
+/* =============================================================================
+ * 13. OFFCANVAS: MINI-WISHLIST
+ * Slides up from bottom (offcanvas-bottom); max-height: 75vh
+ * ============================================================================= */
+#offcanvasWishlist {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 75vh;
 }
 
 .offcanvas-wishlist__header {
-  border-bottom: 1px solid var(--offcanvas-border);
-  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-primary-xsubtle);
 }
 
 .offcanvas-wishlist__title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.offcanvas-wishlist__title i {
+  color: oklch(0.49 0.23 28.96);
 }
 
 .offcanvas-wishlist__body {
-  flex: 1 1 auto;
-  overflow-y: auto;
   padding: 1rem 1.25rem;
+  overflow-y: auto;
 }
 
 .offcanvas-wishlist__footer {
-  border-top: 1px solid var(--offcanvas-border);
-  flex-shrink: 0;
-  padding: 1rem 1.25rem;
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--color-border-light);
 }
 
 
 /* =============================================================================
- * 15. FOOTER: BENEFITS BAR
- * Desktop: 5 блоков в ряд
- * Mobile:  горизонтальный скролл (overflow-x: auto)
+ * 14. OFFCANVAS: MINI-CART
+ * Desktop: slides from right (offcanvas-end, 380px wide)
+ * Mobile: slides from bottom (offcanvas-bottom, 75vh)
+ * ============================================================================= */
+#offcanvasCart.offcanvas-end {
+  width: 380px;
+  max-width: 90vw;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+#offcanvasCart.offcanvas-bottom {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 75vh;
+  width: 100%;
+}
+
+.offcanvas-cart__header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-primary-xsubtle);
+}
+
+.offcanvas-cart__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.offcanvas-cart__title i {
+  color: var(--color-primary);
+}
+
+.offcanvas-cart__body {
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.offcanvas-cart__footer {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.offcanvas-cart__checkout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.offcanvas-cart__checkout-btn:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+
+/* =============================================================================
+ * 15. BENEFITS BAR
+ * Full-width strip below footer-main (or top of footer area);
+ * scrollable horizontally on mobile
  * ============================================================================= */
 .benefits-bar {
-  background-color: var(--benefits-bar-bg);
-  border-bottom: 1px solid var(--benefits-bar-border);
-  padding: 1.5rem 0;
+  background-color: var(--benefits-bg);
+  border-bottom: 1px solid var(--benefits-border);
+  padding: clamp(1.25rem, 2.5vw, 2rem) 0;
 }
 
 .benefits-bar__list {
-  align-items: flex-start;
   display: flex;
-  gap: 1.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 @media (max-width: 991.98px) {
   .benefits-bar__list {
-    flex-wrap: nowrap;
     overflow-x: auto;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    padding-bottom: 4px;
+    padding-inline: 1px;
   }
 
   .benefits-bar__list::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
   }
 }
 
 .benefits-bar__item {
-  align-items: center;
   display: flex;
-  flex: 1 0 auto;
+  align-items: center;
   gap: 0.75rem;
-  min-width: 160px;
+  flex: 1 0 auto;
+  min-width: 185px;
 }
 
 @media (min-width: 992px) {
@@ -1194,491 +1995,1000 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .benefits-bar__icon {
-  align-items: center;
-  background-color: var(--color-primary-light);
-  border-radius: var(--radius-base);
-  color: var(--benefits-bar-icon);
   display: flex;
-  flex-shrink: 0;
-  font-size: 1.25rem;
-  height: 44px;
+  align-items: center;
   justify-content: center;
   width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background-color: var(--benefits-icon-bg);
+  border-radius: var(--radius-base);
+  color: var(--benefits-icon-color);
+  font-size: 1.125rem;
 }
 
 .benefits-bar__content {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 0;
 }
 
 .benefits-bar__title {
-  color: var(--color-secondary);
   font-size: 0.875rem;
   font-weight: 700;
-  line-height: 1.3;
+  color: var(--benefits-title);
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 .benefits-bar__text {
-  color: var(--color-text-muted);
   font-size: 0.75rem;
+  color: var(--benefits-text);
   white-space: nowrap;
+  line-height: 1.3;
 }
 
 
 /* =============================================================================
- * 16. FOOTER: FOOTER MAIN + КОЛОНКИ + АККОРДЕОН
+ * 16. FOOTER MAIN + columns + mobile accordion
+ * 4-column grid on desktop; accordion collapse on mobile (no Bootstrap collapse)
  * ============================================================================= */
 .footer-main {
   background-color: var(--footer-bg);
   color: var(--footer-color);
-  padding: 3rem 0 2rem;
+  padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
 }
 
+/* ── Desktop grid ────────────────────────────────────────────────────── */
+@media (min-width: 992px) {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
+/* ── Column headings ─────────────────────────────────────────────────── */
 .footer-col__title {
-  color: var(--footer-heading-color);
-  font-size: 0.9375rem;
+  font-family: var(--font-base);
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  margin-bottom: 1.25rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: var(--footer-icon-accent);
+  margin: 0 0 1.25rem;
 }
 
-/* Заголовок без стрелки (колонки 1 и 4) */
-.footer-col__title--plain {
+/* ── Brand column: logo ──────────────────────────────────────────────── */
+.footer-brand__logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
   margin-bottom: 1rem;
+  line-height: 1;
 }
 
-/* --- Аккордеон на мобиле --- */
-.footer-col__accordion-btn {
-  background: none;
-  border: none;
-  color: var(--footer-heading-color);
-  cursor: pointer;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  padding: 0.75rem 0;
-  text-align: left;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--footer-border);
-  margin-bottom: 0;
-  width: 100%;
+.footer-brand__logo-main {
+  font-family: var(--font-brand);
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  color: var(--footer-heading);
+  letter-spacing: -0.01em;
 }
 
-/* Иконка стрелки — анимируется при раскрытии */
-.footer-col__accordion-icon {
-  flex-shrink: 0;
-  transition: transform var(--transition-base);
+.footer-brand__logo-accent {
+  font-family: var(--font-brand);
+  font-style: italic;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  color: var(--footer-icon-accent);
+  letter-spacing: -0.01em;
 }
 
-.footer-col__accordion-btn[aria-expanded="true"] .footer-col__accordion-icon {
-  transform: rotate(180deg);
-}
-
-@media (max-width: 991.98px) {
-  .footer-col__title {
-    margin-bottom: 0;
-  }
-
-  /* Скрываем desktop-заголовок на мобиле */
-  .footer-col__title .d-none {
-    display: none !important;
-  }
-
-  /* Раскрытый контент аккордеона */
-  .footer-col .collapse.show {
-    padding-top: 0.75rem;
-  }
-}
-
-/* Лого в футере */
-.footer-col__logo-link {
-  display: inline-block;
-  margin-bottom: 1rem;
-}
-
-.footer-col__logo-img {
-  filter: brightness(0) invert(1); /* белый логотип на тёмном фоне */
-  height: 36px;
-  width: auto;
-}
-
-.footer-col__logo-text {
-  color: var(--footer-heading-color);
-  font-size: 1.25rem;
-  font-weight: 800;
-}
-
-.footer-col__description {
-  color: var(--footer-color);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  margin-bottom: 1.25rem;
-}
-
-/* Соцсети */
-.footer-col__social {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-/* PS socialfollow override */
-.footer-col__social .social-sharing,
-.footer-col__social ul {
+.footer-brand__badge {
+  display: inline-flex;
   align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.footer-col__social a {
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-base);
-  color: var(--footer-color);
-  display: flex;
-  font-size: 1rem;
-  height: 36px;
-  justify-content: center;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
-  width: 36px;
-}
-
-.footer-col__social a:hover {
-  background-color: var(--color-primary);
-  color: #fff;
-}
-
-/* Ссылки в колонках */
-.footer-col__links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  list-style: none;
-  padding: 0;
-}
-
-.footer-col__link {
-  color: var(--footer-link-color);
-  font-size: 0.875rem;
-  transition: color var(--transition-fast), padding-left var(--transition-fast);
-}
-
-.footer-col__link:hover {
-  color: var(--footer-link-hover);
-  padding-left: 4px;
-}
-
-/* Newsletter */
-.footer-col--newsletter .footer-col__description {
+  gap: 5px;
+  background-color: var(--footer-surface);
+  border: 1px solid var(--footer-border);
+  border-radius: 999px;
+  padding: 3px 10px 3px 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--footer-icon-accent);
   margin-bottom: 1rem;
+  width: fit-content;
 }
 
-/* PS emailsubscription override */
-.footer-col__newsletter-form .block_newsletter form,
-.footer-col__newsletter-form form {
+.footer-brand__badge i {
+  font-size: 0.625rem;
+}
+
+.footer-brand__desc {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--footer-color);
+  margin: 0 0 1.5rem;
+  max-width: 26ch;
+}
+
+/* ── Social links ────────────────────────────────────────────────────── */
+.footer-social {
   display: flex;
   gap: 0.5rem;
 }
 
-.footer-col__newsletter-form input[type="email"] {
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--footer-border);
+.footer-social__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-base);
-  color: #fff;
-  flex: 1;
-  font-size: 0.875rem;
-  min-width: 0;
-  padding: 0.625rem 0.875rem;
-  transition: border-color var(--transition-fast);
+  background-color: var(--footer-surface);
+  border: 1px solid var(--footer-border);
+  color: var(--footer-link);
+  font-size: 0.9375rem;
+  transition: background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
 }
 
-.footer-col__newsletter-form input[type="email"]::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.footer-col__newsletter-form input[type="email"]:focus {
+.footer-social__link:hover {
+  background-color: var(--color-primary);
   border-color: var(--color-primary);
-  outline: none;
+  color: #fff;
+  transform: translateY(-2px);
 }
 
-.footer-col__newsletter-form button,
-.footer-col__newsletter-form input[type="submit"] {
+/* ── Navigation link columns ─────────────────────────────────────────── */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.footer-links__item a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--footer-link);
+  transition: color var(--t-fast), gap var(--t-fast);
+}
+
+/* Bullet dot before each link */
+.footer-links__item a::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--footer-border);
+  flex-shrink: 0;
+  transition: background-color var(--t-fast), transform var(--t-fast);
+}
+
+.footer-links__item a:hover {
+  color: var(--footer-link-hover);
+}
+
+.footer-links__item a:hover::before {
+  background-color: var(--footer-icon-accent);
+  transform: scale(1.5);
+}
+
+/* ── Contacts column ─────────────────────────────────────────────────── */
+.footer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.footer-contact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
+.footer-contact__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background-color: var(--footer-surface);
+  border-radius: var(--radius-sm);
+  color: var(--footer-icon-accent);
+  font-size: 0.75rem;
+  margin-top: 1px;
+}
+
+.footer-contact__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.footer-contact__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--footer-icon-accent);
+  line-height: 1;
+}
+
+.footer-contact__value {
+  font-size: 0.875rem;
+  color: var(--footer-color);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer-contact__value a {
+  color: var(--footer-color);
+  transition: color var(--t-fast);
+}
+
+.footer-contact__value a:hover {
+  color: var(--footer-heading);
+}
+
+/* ── Newsletter widget ───────────────────────────────────────────────── */
+.footer-newsletter {
+  margin-top: 1.75rem;
+  padding: 1.125rem;
+  background-color: var(--footer-surface);
+  border: 1px solid var(--footer-border);
+  border-radius: var(--radius-lg);
+}
+
+.footer-newsletter__title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--footer-heading);
+  margin: 0 0 0.25rem;
+}
+
+.footer-newsletter__sub {
+  font-size: 0.75rem;
+  color: var(--footer-color);
+  margin: 0 0 0.875rem;
+  line-height: 1.4;
+}
+
+.footer-newsletter__field {
+  display: flex;
+  align-items: center;
+  background-color: var(--footer-bg);
+  border: 1px solid var(--footer-border);
+  border-radius: 999px;
+  padding: 4px 4px 4px 14px;
+  transition: border-color var(--t-base), box-shadow var(--t-base);
+}
+
+.footer-newsletter__field:focus-within {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 3px oklch(66% 0.07 145 / 0.2);
+}
+
+.footer-newsletter__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font-base);
+  font-size: 0.8125rem;
+  color: var(--footer-heading);
+  min-width: 0;
+}
+
+.footer-newsletter__input::placeholder {
+  color: var(--footer-link);
+}
+
+.footer-newsletter__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
   background-color: var(--color-primary);
   border: none;
-  border-radius: var(--radius-base);
+  border-radius: 999px;
   color: #fff;
   cursor: pointer;
   font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.625rem 1rem;
-  transition: background-color var(--transition-fast);
-  white-space: nowrap;
+  transition: background-color var(--t-fast), transform var(--t-fast);
 }
 
-.footer-col__newsletter-form button:hover,
-.footer-col__newsletter-form input[type="submit"]:hover {
+.footer-newsletter__btn:hover {
   background-color: var(--color-primary-dark);
+  transform: scale(1.05);
+}
+
+.footer-newsletter__hint {
+  font-size: 0.6875rem;
+  color: var(--subfooter-color);
+  margin: 0.5rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-newsletter__hint i {
+  font-size: 0.625rem;
+}
+
+/* ── Horizontal divider ──────────────────────────────────────────────── */
+.footer-divider {
+  border: none;
+  border-top: 1px solid var(--footer-border);
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+}
+
+/* ── Mobile accordion — custom, no Bootstrap collapse (no jump effect) ── */
+@media (max-width: 991.98px) {
+  .footer-main {
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  /* Brand column — always open */
+  .footer-col--brand {
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--footer-border);
+    padding-bottom: 1.75rem;
+  }
+
+  .footer-brand__desc {
+    max-width: 100%;
+  }
+
+  /* Accordion columns */
+  .footer-col--accordion {
+    border-bottom: 1px solid var(--footer-border);
+  }
+
+  .footer-col__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.875rem 0;
+    background: none;
+    border: none;
+    color: var(--footer-heading);
+    cursor: pointer;
+    gap: 0.5rem;
+  }
+
+  .footer-col__toggle-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--footer-icon-accent);
+  }
+
+  .footer-col__toggle-icon {
+    color: var(--footer-link);
+    font-size: 0.8125rem;
+    transition: transform var(--t-base);
+    flex-shrink: 0;
+  }
+
+  .footer-col__toggle[aria-expanded="true"] .footer-col__toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .footer-col__body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height var(--t-slow), padding var(--t-base);
+    padding-bottom: 0;
+  }
+
+  .footer-col__body.is-open {
+    max-height: 600px;
+    padding-bottom: 1.25rem;
+  }
+
+  /* Hide desktop heading on mobile (replaced by toggle button) */
+  .footer-col__title {
+    display: none;
+  }
+
+  /* Contacts column — not an accordion on mobile */
+  .footer-col--contacts {
+    margin-top: 1.75rem;
+  }
+
+  .footer-col--contacts .footer-col__title {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+
+  /* Hide accordion toggle on desktop */
+  .footer-col__toggle {
+    display: none;
+  }
+
+  /* Body always open on desktop */
+  .footer-col__body {
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 
 
 /* =============================================================================
- * 17. FOOTER: SUBFOOTER
+ * 17. SUBFOOTER
+ * Dark bottom strip: copyright, legal links, payment icons, SSL badge
  * ============================================================================= */
 .subfooter {
   background-color: var(--subfooter-bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 1.25rem 0;
+  border-top: 1px solid oklch(0.52 0.22 145.81 / 0.6);
+  padding: clamp(1rem, 2vw, 1.25rem) 0;
 }
 
 .subfooter__inner {
-  align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
 }
 
 @media (max-width: 767.98px) {
   .subfooter__inner {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    align-items: center;
     text-align: center;
+    gap: 1rem;
   }
 }
 
+/* Copyright */
 .subfooter__copyright {
+  font-size: 0.75rem;
   color: var(--subfooter-color);
-  font-size: 0.8125rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Legal links */
+.subfooter__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
 
-/* Иконки оплаты */
-.subfooter__payment {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.subfooter__payment-icon {
-  color: var(--subfooter-color);
-  font-size: 1.75rem;
-  transition: color var(--transition-fast);
-}
-
-.subfooter__payment-icon:hover {
-  color: #FFFFFF;
-}
-
-/* Правовые ссылки */
-.subfooter__legal-list {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
-  justify-content: flex-end;
-  list-style: none;
-  padding: 0;
-}
-
 @media (max-width: 767.98px) {
-  .subfooter__legal-list {
+  .subfooter__legal {
     justify-content: center;
   }
 }
 
-.subfooter__legal-link {
-  color: var(--subfooter-link-color);
+.subfooter__legal a {
   font-size: 0.75rem;
-  transition: color var(--transition-fast);
+  color: var(--subfooter-link);
+  transition: color var(--t-fast);
 }
 
-.subfooter__legal-link:hover {
-  color: #FFFFFF;
+.subfooter__legal a:hover {
+  color: var(--subfooter-link-hover);
 }
 
-
-/* =============================================================================
- * 18. MOBILE BOTTOM NAV SPACER
- *
- * ⚠️  ВАЖНО: высота spacer должна ТОЧНО совпадать с высотой .mobile-bottom-nav
- * Переменная --mobile-bottom-nav-height используется в обоих местах.
- * Если меняешь высоту nav bar — меняй ТОЛЬКО переменную, остальное подтянется.
- *
- * Safe area для iPhone (notch) — env(safe-area-inset-bottom) добавляется
- * в обоих элементах одинаково через padding-bottom.
- * ============================================================================= */
-.mobile-bottom-nav-spacer {
-  height: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom));
-  width: 100%;
+/* Payment icons row */
+.subfooter__payments {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
 }
 
-/* На десктопе spacer скрыт (d-lg-none в HTML, но подстраховка через CSS) */
-@media (min-width: 992px) {
-  .mobile-bottom-nav-spacer {
-    display: none !important;
+@media (max-width: 767.98px) {
+  .subfooter__payments {
+    justify-content: center;
   }
 }
 
-
-/* =============================================================================
- * 19. PRESTASHOP ADMIN BAR FIX
- * AdminBar PS9 перекрывается Bootstrap z-index — исправляем
- * ============================================================================= */
-#admin-bar-container {
-  z-index: 9999 !important;
+.subfooter__pay-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 8px;
+  background-color: oklch(20% 0.08 148 / 0.6);
+  border: 1px solid oklch(38% 0.08 148 / 0.5);
+  border-radius: 5px;
+  color: var(--subfooter-color);
+  font-size: 1.375rem;
+  transition: color var(--t-fast), border-color var(--t-fast);
 }
 
-/* Когда AdminBar активен — смещаем наши fixed элементы */
-body.admin-bar-is-fixed .mobile-top-bar,
-body.admin-bar-is-fixed .site-header {
-  top: calc(var(--admin-bar-height, 50px));
+.subfooter__pay-icon:hover {
+  color: #fff;
+  border-color: var(--footer-border);
 }
 
+/* Monobank text badge */
+.subfooter__mono {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px;
+  background-color: oklch(20% 0.08 148 / 0.6);
+  border: 1px solid oklch(38% 0.08 148 / 0.5);
+  border-radius: 5px;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--subfooter-color);
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+
+.subfooter__mono:hover {
+  color: #fff;
+  border-color: var(--footer-border);
+}
+
+/* SSL badge */
+.subfooter__ssl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  color: var(--subfooter-color);
+  padding: 3px 8px;
+  border: 1px solid oklch(38% 0.08 148 / 0.4);
+  border-radius: 999px;
+}
+
+.subfooter__ssl i {
+  color: oklch(62% 0.14 148);
+  font-size: 0.625rem;
+}
+
+
 /* =============================================================================
- * SEARCH DROPDOWN — живой поиск
+ * 18. SUBSCRIPTION SECTION
+ * Full-width light-green strip above the footer; large email opt-in block
  * ============================================================================= */
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  background: var(--color-card);
+.subscription-section {
+  background-color: var(--color-primary-subtle);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-base);
+}
+
+.subscription-title {
+  font-family: var(--font-brand);
+  color: var(--color-text);
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+.subscription-text {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Pill-style input + button wrapper */
+.subscription-form .input-group-custom {
+  background-color: var(--color-background);
+  border-radius: 999px;
+  padding: 6px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  box-shadow: 0 8px 24px oklch(0% 0 0 / 0.10);
-  z-index: 1060;
-  overflow-y: auto;
-  max-height: 420px;
-  max-height: 420px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  transition: all var(--t-base);
 }
 
-/* Дропдаун выходит за пределы поля вниз */
-/* .search-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  z-index: 1060;
-  overflow-y: auto;     
-  max-height: 420px;
-} */
-
-/* Шапка не должна обрезать дропдаун */
-.site-header,
-.main-header,
-.main-header__inner,
-.main-header__search {
-  overflow: visible !important;
-}
-/* Родительский контейнер должен быть relative */
-/* .search-widget {
-  position: relative;
-} */
- /* search-widget — точка отсчёта для absolute позиционирования */
-.search-widget {
-  position: relative;
-  overflow: visible !important;
+.subscription-form .input-group-custom:focus-within {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
-.search-dropdown__item {
+.subscription-form .input-icon {
+  padding-left: 1.25rem;
+  padding-right: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}
+
+.subscription-form .form-control-custom {
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-base);
+  font-size: 1rem;
+  outline: none;
+  box-shadow: none;
+}
+
+.subscription-form .form-control-custom::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+.subscription-form .btn-subscribe {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1rem;
-  color: var(--color-text);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.15s;
-  border-bottom: 1px solid var(--color-border-light);
+  justify-content: center;
+  transition: all var(--t-fast);
   cursor: pointer;
 }
 
-.search-dropdown__item:last-of-type {
-  border-bottom: none;
+.subscription-form .btn-subscribe:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
 }
 
-.search-dropdown__item:hover,
-.search-dropdown__item--active {
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary);
-}
-
-.search-dropdown__img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-  background: var(--color-background);
-}
-
-.search-dropdown__name {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.search-dropdown__name mark {
-  background: none;
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.search-dropdown__price {
-  font-weight: 600;
-  color: var(--color-text);
-  white-space: nowrap;
-  font-size: var(--font-size-sm);
-}
-
-.search-dropdown__all {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1rem;
-  font-size: var(--font-size-sm);
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 500;
-  background: var(--color-primary-xsubtle);
-  border-top: 1px solid var(--color-border-light);
-}
-
-.search-dropdown__all:hover {
-  background: var(--color-primary-subtle);
-}
-
-.search-dropdown__empty,
-.search-dropdown__loading {
-  padding: 1rem;
-  text-align: center;
+.subscription-note {
+  font-size: 0.85rem;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
-.search-dropdown__loading .fa-circle-notch {
-  color: var(--color-primary);
-  font-size: 1.2rem;
+.subscription-note i {
+  color: var(--color-primary-light);
 }
 
-/* ===== Fix: только один поиск видимый на десктопе ===== */
-@media (min-width: 992px) {
-  .search-widget:not(.main-header__search .search-widget) {
+
+/* =============================================================================
+ * 19. RESPONSIVE OVERRIDES
+ * Breakpoints: <480px  |  480–767px  |  768–1023px  |  1024–1199px
+ *              1200–1919px (default)  |  ≥1920px  |  ≥2560px
+ * ============================================================================= */
+
+/* ── Hide mobile bars on desktop ─────────────────────────────────────── */
+@media (min-width: 768px) {
+  .mobile-top-bar {
+    display: none !important;
+  }
+
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  .drawer-overlay {
+    display: none !important;
+  }
+
+  .mobile-drawer {
+    display: none !important;
+  }
+
+  .hamburger-btn {
     display: none !important;
   }
 }
 
+/* ── Tablet: 768–1023px ──────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-megamenu__inner {
+    padding: 0 0.875rem 1.25rem;
+  }
 
+  .megamenu-col {
+    padding: 0 0.5rem;
+  }
 
+  .mm-col-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+  }
 
+  .megamenu-col__title {
+    font-size: 0.75rem;
+    gap: 0.35rem;
+  }
 
+  .megamenu-col__links a {
+    font-size: 0.7rem;
+    padding: 0.22rem 0.28rem 0.22rem 0.45rem;
+  }
+
+  .megamenu-col__links a.mm-sub {
+    display: none;
+  }
+
+  .mm-section-title {
+    font-size: 0.52rem;
+  }
+
+  .mm-see-all {
+    font-size: 0.68rem !important;
+  }
+
+  .mm-chip {
+    font-size: 0.6rem;
+    padding: 0.16rem 0.38rem;
+  }
+
+  .mm-badge {
+    font-size: 0.48rem;
+  }
+}
+
+/* ── Large tablet: 1024–1199px ───────────────────────────────────────── */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .nav-megamenu__inner {
+    padding: 0 1.25rem 1.5rem;
+  }
+
+  .megamenu-col {
+    padding: 0 0.85rem;
+  }
+
+  .mm-col-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 0.7rem;
+  }
+
+  .megamenu-col__title {
+    font-size: 0.8375rem;
+  }
+
+  .megamenu-col__links a {
+    font-size: 0.7875rem;
+  }
+}
+
+/* ── Narrow desktop: hide SOOV banner ───────────────────────────────── */
+@media (max-width: 1199px) {
+  .megamenu-soov {
+    display: none;
+  }
+
+  .megamenu-catalog {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .megamenu-col--pop {
+    border-right: none;
+  }
+}
+
+/* ── Hide desktop mega menu on mobile ────────────────────────────────── */
+@media (max-width: 767px) {
+  .nav-megamenu {
+    display: none;
+  }
+
+  .hamburger-btn {
+    display: flex !important;
+  }
+
+  .main-header__inner {
+    gap: 0.5rem;
+  }
+
+  .header-search {
+    flex: 2;
+    max-width: 100%;
+  }
+
+  .search-input {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem 0.5rem 2rem;
+    border-radius: var(--radius-pill);
+  }
+
+  .search-icon {
+    left: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+  }
+
+  .logo-sub {
+    font-size: 0.4rem;
+  }
+
+  /* Mobile menu color overrides */
+  .mobile-top-bar {
+    background-color: #fff;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .mobile-bottom-nav {
+    background-color: #fff;
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .mobile-bottom-nav__label {
+    color: var(--color-text-muted);
+  }
+
+  .mobile-bottom-nav__link {
+    color: var(--color-text-muted);
+  }
+
+  .mobile-bottom-nav__link:hover,
+  .mobile-bottom-nav__link--active {
+    color: var(--color-primary);
+  }
+
+  /* Drawer color overrides */
+  .mobile-drawer {
+    background: #fff;
+  }
+
+  .drawer-header {
+    background: var(--color-primary-subtle);
+  }
+
+  .drawer-nav-link {
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .drawer-nav-link:hover {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+  }
+
+  .mm-acc__head {
+    color: var(--color-text);
+  }
+
+  .mm-acc__head:hover {
+    background: var(--color-primary-subtle);
+  }
+
+  .mm-acc__link {
+    color: var(--color-text-secondary);
+  }
+
+  .mm-acc__link:hover {
+    color: var(--color-primary);
+    background: var(--color-primary-subtle);
+  }
+}
+
+/* ── Mobile: <480px ──────────────────────────────────────────────────── */
+@media (max-width: 479px) {
+  .search-input {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem 0.4rem 1.8rem;
+  }
+
+  .search-icon {
+    left: 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .mobile-logo-text .logo-text {
+    font-size: 0.85rem;
+  }
+
+  .mobile-logo-text .logo-sub {
+    font-size: 0.4rem;
+  }
+
+  .mobile-bottom-nav__label {
+    font-size: 0.75rem;
+  }
+
+  .mobile-bottom-nav__link {
+    font-size: 1rem;
+  }
+
+  .subscription-title {
+    font-size: 1.75rem;
+  }
+
+  .subscription-form .btn-subscribe {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* ── Mobile: 480–767px ───────────────────────────────────────────────── */
+@media (min-width: 480px) and (max-width: 767px) {
+  .search-input {
+    font-size: 0.8375rem;
+    padding: 0.55rem 0.85rem 0.55rem 2.1rem;
+  }
+
+  .mobile-logo-text .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .mobile-bottom-nav__label {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ── Ultra-wide: ≥1920px ─────────────────────────────────────────────── */
+@media (min-width: 1920px) {
+  .nav-megamenu__inner {
+    padding: 0 2.5rem 2rem;
+  }
+
+  .mm-topbar {
+    padding: 1rem 0 1.05rem;
+  }
+
+  .megamenu-col__title {
+    font-size: 0.9375rem;
+  }
+
+  .mm-col-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
+  }
+
+  .megamenu-col__links a {
+    font-size: 0.875rem;
+    padding: 0.32rem 0.52rem 0.32rem 0.7rem;
+  }
+
+  .mm-section-title {
+    font-size: 0.63rem;
+  }
+
+  .mm-badge {
+    font-size: 0.58rem;
+  }
+
+  .mm-see-all {
+    font-size: 0.8125rem !important;
+  }
+
+  .mm-chip {
+    font-size: 0.76rem;
+    padding: 0.24rem 0.7rem;
+  }
+
+  .megamenu-soov__title {
+    font-size: 2.25rem;
+  }
+
+  .megamenu-soov__tagline {
+    font-size: 0.74rem;
+  }
+}
+
+/* ── Ultra-wide: ≥2560px ─────────────────────────────────────────────── */
+@media (min-width: 2560px) {
+  .nav-megamenu__inner {
+    padding: 0 3rem 2.25rem;
+  }
+
+  .megamenu-col__title {
+    font-size: 1rem;
+  }
+
+  .mm-col-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.82rem;
+  }
+
+  .megamenu-col__links a {
+    font-size: 0.9375rem;
+  }
+
+  .megamenu-catalog {
+    grid-template-columns: repeat(5, 1fr) 240px;
+  }
+}
