@@ -109,14 +109,8 @@
           {* Лого *}
           <a href="{$urls.base_url}" class="footer-col__logo-link" aria-label="{l s='Home' d='Shop.Theme.Global'}">
             {if $shop.logo}
-              <img
-                src="{$shop.logo}"
-                alt="{$shop.name|escape:'html'}"
-                class="footer-col__logo-img"
-                width="140"
-                height="40"
-                loading="lazy"
-              >
+              <img src="{$shop.logo}" alt="{$shop.name|escape:'html'}" class="footer-col__logo-img" width="140"
+                height="40" loading="lazy">
             {else}
               <span class="footer-col__logo-text">{$shop.name|escape:'html'}</span>
             {/if}
@@ -126,7 +120,9 @@
           {if isset($shop.description) && $shop.description}
             <p class="footer-col__description">{$shop.description|escape:'html'}</p>
           {else}
-            <p class="footer-col__description">{l s='Your reliable online shop. Quality products, fast delivery, excellent service.' d='Shop.Theme.Global'}</p>
+            <p class="footer-col__description">
+              {l s='Your reliable online shop. Quality products, fast delivery, excellent service.' d='Shop.Theme.Global'}
+            </p>
           {/if}
 
           {* Соцсети — ps_socialfollow *}
@@ -145,14 +141,9 @@
 
           {* Заголовок-триггер аккордеона (мобиле) / обычный заголовок (десктоп) *}
           <h3 class="footer-col__title">
-            <button
-              class="footer-col__accordion-btn d-lg-none w-100 d-flex justify-content-between align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#footerColBuyers"
-              aria-expanded="false"
-              aria-controls="footerColBuyers"
-            >
+            <button class="footer-col__accordion-btn d-lg-none w-100 d-flex justify-content-between align-items-center"
+              type="button" data-bs-toggle="collapse" data-bs-target="#footerColBuyers" aria-expanded="false"
+              aria-controls="footerColBuyers">
               {l s='For Buyers' d='Shop.Theme.Global'}
               <i class="fa-solid fa-chevron-down footer-col__accordion-icon" aria-hidden="true"></i>
             </button>
@@ -200,14 +191,9 @@
         <div class="col-12 col-lg-3 footer-col footer-col--company">
 
           <h3 class="footer-col__title">
-            <button
-              class="footer-col__accordion-btn d-lg-none w-100 d-flex justify-content-between align-items-center"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#footerColCompany"
-              aria-expanded="false"
-              aria-controls="footerColCompany"
-            >
+            <button class="footer-col__accordion-btn d-lg-none w-100 d-flex justify-content-between align-items-center"
+              type="button" data-bs-toggle="collapse" data-bs-target="#footerColCompany" aria-expanded="false"
+              aria-controls="footerColCompany">
               {l s='Company' d='Shop.Theme.Global'}
               <i class="fa-solid fa-chevron-down footer-col__accordion-icon" aria-hidden="true"></i>
             </button>

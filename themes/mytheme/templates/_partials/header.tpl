@@ -88,7 +88,8 @@
       {* --- Логотип + название магазина --- *}
       <a href="{$urls.base_url}" class="main-header__logo" aria-label="{l s='Home' d='Shop.Theme.Global'}">
         {if $shop.logo}
-          <img src="{$shop.logo}" alt="{$shop.name|escape:'html'}" class="main-header__logo-img" width="140" height="40" loading="eager">
+          <img src="{$shop.logo}" alt="{$shop.name|escape:'html'}" class="main-header__logo-img" width="140" height="40"
+            loading="eager">
         {/if}
         {if $shop.name}
           <span class="main-header__shop-name visually-hidden">{$shop.name|escape:'html'}</span>
@@ -102,10 +103,13 @@
       </div>
 
       {* --- Иконки справа: wishlist | аккаунт | корзина --- *}
-      <div class="main-header__actions d-flex align-items-center gap-3" role="navigation" aria-label="{l s='Header actions' d='Shop.Theme.Global'}">
+      <div class="main-header__actions d-flex align-items-center gap-3" role="navigation"
+        aria-label="{l s='Header actions' d='Shop.Theme.Global'}">
 
         {* Wishlist (blockwishlist) *}
-        <button class="main-header__action-btn main-header__wishlist-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWishlist" aria-controls="offcanvasWishlist" aria-label="{l s='My wishlist' d='Shop.Theme.Global'}">
+        <button class="main-header__action-btn main-header__wishlist-btn" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasWishlist" aria-controls="offcanvasWishlist"
+          aria-label="{l s='My wishlist' d='Shop.Theme.Global'}">
           <i class="fa-regular fa-heart" aria-hidden="true"></i>
           {* Счётчик — рендерится модулем blockwishlist через хук *}
           {hook h='displayWishlistTop'}
@@ -113,17 +117,20 @@
 
         {* Аккаунт *}
         {if isset($logged) && $logged}
-          <a href="{$urls.pages.my_account}" class="main-header__action-btn main-header__account-btn" aria-label="{l s='My account' d='Shop.Theme.Global'}">
+          <a href="{$urls.pages.my_account}" class="main-header__action-btn main-header__account-btn"
+            aria-label="{l s='My account' d='Shop.Theme.Global'}">
             <i class="fa-solid fa-user" aria-hidden="true"></i>
           </a>
         {else}
-          <a href="{$urls.pages.authentication}" class="main-header__action-btn main-header__account-btn" aria-label="{l s='Sign in' d='Shop.Theme.Global'}">
+          <a href="{$urls.pages.authentication}" class="main-header__action-btn main-header__account-btn"
+            aria-label="{l s='Sign in' d='Shop.Theme.Global'}">
             <i class="fa-solid fa-user" aria-hidden="true"></i>
           </a>
         {/if}
 
         {* Корзина (ps_shoppingcart) *}
-        <button class="main-header__action-btn main-header__cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="{l s='Cart' d='Shop.Theme.Global'}">
+        <button class="main-header__action-btn main-header__cart-btn" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="{l s='Cart' d='Shop.Theme.Global'}">
           <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
           {* Счётчик рендерится модулем ps_shoppingcart *}
           {hook h='displayShoppingCart'}
@@ -155,7 +162,8 @@
     {* Лого (скрытый, но для семантики) *}
     <a href="{$urls.base_url}" class="mobile-top-bar__logo" aria-label="{l s='Home' d='Shop.Theme.Global'}">
       {if $shop.logo}
-        <img src="{$shop.logo}" alt="{$shop.name|escape:'html'}" class="mobile-top-bar__logo-img" width="32" height="32" loading="eager">
+        <img src="{$shop.logo}" alt="{$shop.name|escape:'html'}" class="mobile-top-bar__logo-img" width="32" height="32"
+          loading="eager">
       {/if}
     </a>
 
@@ -165,7 +173,9 @@
     </div>
 
     {* Кнопка "Связаться" — открывает offcanvas снизу *}
-    <button class="mobile-top-bar__contact-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasContact" aria-controls="offcanvasContact" aria-label="{l s='Contact us' d='Shop.Theme.Global'}">
+    <button class="mobile-top-bar__contact-btn" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasContact" aria-controls="offcanvasContact"
+      aria-label="{l s='Contact us' d='Shop.Theme.Global'}">
       <i class="fa-solid fa-headset" aria-hidden="true"></i>
     </button>
 
@@ -180,7 +190,9 @@
 
     {* Главная *}
     <li class="mobile-bottom-nav__item">
-      <a href="{$urls.base_url}" class="mobile-bottom-nav__link{if $page.page_name == 'index'} mobile-bottom-nav__link--active{/if}" aria-label="{l s='Home' d='Shop.Theme.Global'}" {if $page.page_name == 'index'}aria-current="page" {/if}>
+      <a href="{$urls.base_url}"
+        class="mobile-bottom-nav__link{if $page.page_name == 'index'} mobile-bottom-nav__link--active{/if}"
+        aria-label="{l s='Home' d='Shop.Theme.Global'}" {if $page.page_name == 'index'}aria-current="page" {/if}>
         <i class="fa-solid fa-house" aria-hidden="true"></i>
         <span class="mobile-bottom-nav__label">{l s='Home' d='Shop.Theme.Global'}</span>
       </a>
@@ -188,15 +200,18 @@
 
     {* Каталог — открывает мобильное меню offcanvas *}
     <li class="mobile-bottom-nav__item">
-      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu" aria-label="{l s='Catalog' d='Shop.Theme.Global'}">
-        <i class="fa-solid fa-grid-2" aria-hidden="true"></i>
+      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu"
+        aria-label="{l s='Catalog' d='Shop.Theme.Global'}">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
         <span class="mobile-bottom-nav__label">{l s='Catalog' d='Shop.Theme.Global'}</span>
       </button>
     </li>
 
     {* Корзина — открывает mini-cart offcanvas *}
     <li class="mobile-bottom-nav__item">
-      <button class="mobile-bottom-nav__link mobile-bottom-nav__cart" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="{l s='Cart' d='Shop.Theme.Global'}">
+      <button class="mobile-bottom-nav__link mobile-bottom-nav__cart" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="{l s='Cart' d='Shop.Theme.Global'}">
         <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
         <span class="mobile-bottom-nav__label">{l s='Cart' d='Shop.Theme.Global'}</span>
         {* Счётчик корзины — inject через JS из данных модуля *}
@@ -206,7 +221,9 @@
 
     {* Избранное (Wishlist) — открывает mini-wishlist offcanvas *}
     <li class="mobile-bottom-nav__item">
-      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWishlist" aria-controls="offcanvasWishlist" aria-label="{l s='My wishlist' d='Shop.Theme.Global'}">
+      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasWishlist" aria-controls="offcanvasWishlist"
+        aria-label="{l s='My wishlist' d='Shop.Theme.Global'}">
         <i class="fa-regular fa-heart" aria-hidden="true"></i>
         <span class="mobile-bottom-nav__label">{l s='Wishlist' d='Shop.Theme.Global'}</span>
       </button>
@@ -214,7 +231,9 @@
 
     {* Меню — открывает мобильное drawer-меню offcanvas *}
     <li class="mobile-bottom-nav__item">
-      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu" aria-label="{l s='Menu' d='Shop.Theme.Global'}">
+      <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu"
+        aria-label="{l s='Menu' d='Shop.Theme.Global'}">
         <i class="fa-solid fa-bars" aria-hidden="true"></i>
         <span class="mobile-bottom-nav__label">{l s='Menu' d='Shop.Theme.Global'}</span>
       </button>
@@ -227,7 +246,8 @@
 7. OFFCANVAS: МОБИЛЬНОЕ МЕНЮ (placement: start — выезжает слева)
 Содержит: поиск вверху, категории аккордеон, lang/currency, ссылки
 ============================================================================ *}
-<div class="offcanvas offcanvas-start offcanvas-mobile-menu" tabindex="-1" id="offcanvasMobileMenu" aria-labelledby="offcanvasMobileMenuLabel">
+<div class="offcanvas offcanvas-start offcanvas-mobile-menu" tabindex="-1" id="offcanvasMobileMenu"
+  aria-labelledby="offcanvasMobileMenuLabel">
   <div class="offcanvas-header">
     <a href="{$urls.base_url}" class="offcanvas-mobile-menu__logo">
       {if $shop.logo}
@@ -236,7 +256,8 @@
         <span class="offcanvas-mobile-menu__shop-name">{$shop.name|escape:'html'}</span>
       {/if}
     </a>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{l s='Close menu' d='Shop.Theme.Global'}"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+      aria-label="{l s='Close menu' d='Shop.Theme.Global'}"></button>
   </div>
 
   <div class="offcanvas-body offcanvas-mobile-menu__body">
@@ -301,12 +322,14 @@
 8. OFFCANVAS: СВЯЗАТЬСЯ (placement: bottom — выезжает снизу)
 Способы связи: чат, Telegram, Viber, WhatsApp, телефон
 ============================================================================ *}
-<div class="offcanvas offcanvas-bottom offcanvas-contact" tabindex="-1" id="offcanvasContact" aria-labelledby="offcanvasContactLabel">
+<div class="offcanvas offcanvas-bottom offcanvas-contact" tabindex="-1" id="offcanvasContact"
+  aria-labelledby="offcanvasContactLabel">
   <div class="offcanvas-header offcanvas-contact__header">
     <h2 class="offcanvas-title offcanvas-contact__title" id="offcanvasContactLabel">
       {l s='Contact us' d='Shop.Theme.Global'}
     </h2>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{l s='Close' d='Shop.Theme.Global'}"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+      aria-label="{l s='Close' d='Shop.Theme.Global'}"></button>
   </div>
 
   <div class="offcanvas-body offcanvas-contact__body">
@@ -315,7 +338,9 @@
 
       {* Telegram *}
       <li class="offcanvas-contact__channel">
-        <a href="https://t.me/{$shop.telegram|default:''|escape:'html'}" class="offcanvas-contact__channel-link offcanvas-contact__channel-link--telegram" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+        <a href="https://t.me/{$shop.telegram|default:''|escape:'html'}"
+          class="offcanvas-contact__channel-link offcanvas-contact__channel-link--telegram" target="_blank"
+          rel="noopener noreferrer" aria-label="Telegram">
           <i class="fa-brands fa-telegram offcanvas-contact__channel-icon" aria-hidden="true"></i>
           <span class="offcanvas-contact__channel-name">Telegram</span>
         </a>
@@ -323,7 +348,8 @@
 
       {* Viber *}
       <li class="offcanvas-contact__channel">
-        <a href="viber://chat?number={$shop.viber|default:''|escape:'html'}" class="offcanvas-contact__channel-link offcanvas-contact__channel-link--viber" aria-label="Viber">
+        <a href="viber://chat?number={$shop.viber|default:''|escape:'html'}"
+          class="offcanvas-contact__channel-link offcanvas-contact__channel-link--viber" aria-label="Viber">
           <i class="fa-brands fa-viber offcanvas-contact__channel-icon" aria-hidden="true"></i>
           <span class="offcanvas-contact__channel-name">Viber</span>
         </a>
@@ -331,7 +357,9 @@
 
       {* WhatsApp *}
       <li class="offcanvas-contact__channel">
-        <a href="https://wa.me/{$shop.whatsapp|default:''|escape:'html'}" class="offcanvas-contact__channel-link offcanvas-contact__channel-link--whatsapp" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <a href="https://wa.me/{$shop.whatsapp|default:''|escape:'html'}"
+          class="offcanvas-contact__channel-link offcanvas-contact__channel-link--whatsapp" target="_blank"
+          rel="noopener noreferrer" aria-label="WhatsApp">
           <i class="fa-brands fa-whatsapp offcanvas-contact__channel-icon" aria-hidden="true"></i>
           <span class="offcanvas-contact__channel-name">WhatsApp</span>
         </a>
@@ -339,7 +367,9 @@
 
       {* Телефон *}
       <li class="offcanvas-contact__channel">
-        <a href="tel:{$shop.phone|default:''|escape:'html'|regex_replace:'/[^+0-9]/':''}" class="offcanvas-contact__channel-link offcanvas-contact__channel-link--phone" aria-label="{l s='Call us' d='Shop.Theme.Global'}">
+        <a href="tel:{$shop.phone|default:''|escape:'html'|regex_replace:'/[^+0-9]/':''}"
+          class="offcanvas-contact__channel-link offcanvas-contact__channel-link--phone"
+          aria-label="{l s='Call us' d='Shop.Theme.Global'}">
           <i class="fa-solid fa-phone offcanvas-contact__channel-icon" aria-hidden="true"></i>
           <span class="offcanvas-contact__channel-name">{$shop.phone|default:''|escape:'html'}</span>
           <span class="offcanvas-contact__channel-hours">{l s='Mon–Sun 09:00–20:00' d='Shop.Theme.Global'}</span>
@@ -355,13 +385,15 @@
 Рендерится через хук ps_shoppingcart — переопределение шаблона в modules/
 На десктопе переключается в offcanvas-end через CSS/JS responsive классы
 ============================================================================ *}
-<div class="offcanvas offcanvas-cart" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel" data-cart-offcanvas="true">
+<div class="offcanvas offcanvas-cart" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel"
+  data-cart-offcanvas="true">
   <div class="offcanvas-header offcanvas-cart__header">
     <h2 class="offcanvas-title offcanvas-cart__title" id="offcanvasCartLabel">
       <i class="fa-solid fa-cart-shopping me-2" aria-hidden="true"></i>
       {l s='My Cart' d='Shop.Theme.Global'}
     </h2>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{l s='Close cart' d='Shop.Theme.Global'}"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+      aria-label="{l s='Close cart' d='Shop.Theme.Global'}"></button>
   </div>
   <div class="offcanvas-body offcanvas-cart__body">
     {* Содержимое рендерится через AJAX при открытии — ps_shoppingcart *}
@@ -379,13 +411,15 @@
 10. OFFCANVAS: MINI-WISHLIST (placement: bottom)
 Рендерится через blockwishlist — переопределение в modules/
 ============================================================================ *}
-<div class="offcanvas offcanvas-bottom offcanvas-wishlist" tabindex="-1" id="offcanvasWishlist" aria-labelledby="offcanvasWishlistLabel">
+<div class="offcanvas offcanvas-bottom offcanvas-wishlist" tabindex="-1" id="offcanvasWishlist"
+  aria-labelledby="offcanvasWishlistLabel">
   <div class="offcanvas-header offcanvas-wishlist__header">
     <h2 class="offcanvas-title offcanvas-wishlist__title" id="offcanvasWishlistLabel">
       <i class="fa-regular fa-heart me-2" aria-hidden="true"></i>
       {l s='My Wishlist' d='Shop.Theme.Global'}
     </h2>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{l s='Close wishlist' d='Shop.Theme.Global'}"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+      aria-label="{l s='Close wishlist' d='Shop.Theme.Global'}"></button>
   </div>
   <div class="offcanvas-body offcanvas-wishlist__body">
     {hook h='displayWishlist'}

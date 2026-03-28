@@ -36,28 +36,16 @@
 
         {assign var='is_last' value=($i === $breadcrumb.links|@count - 1)}
 
-        <li
-          class="breadcrumb-item breadcrumb-nav__item{if $is_last} active{/if}"
-          itemprop="itemListElement"
-          itemscope
-          itemtype="https://schema.org/ListItem"
-        >
+        <li class="breadcrumb-item breadcrumb-nav__item{if $is_last} active{/if}" itemprop="itemListElement" itemscope
+          itemtype="https://schema.org/ListItem">
           {if $is_last}
             {* Текущая страница — не ссылка *}
-            <span
-              class="breadcrumb-nav__current"
-              aria-current="page"
-              itemprop="name"
-            >
+            <span class="breadcrumb-nav__current" aria-current="page" itemprop="name">
               {$link.title}
             </span>
           {else}
             {* Кликабельный элемент *}
-            <a
-              href="{$link.url}"
-              class="breadcrumb-nav__link"
-              itemprop="item"
-            >
+            <a href="{$link.url}" class="breadcrumb-nav__link" itemprop="item">
               <span itemprop="name">{$link.title}</span>
             </a>
           {/if}

@@ -33,12 +33,7 @@
  *}
 
 
-<div
-  class="product-list-empty"
-  role="status"
-  aria-live="polite"
-  aria-atomic="true"
->
+<div class="product-list-empty" role="status" aria-live="polite" aria-atomic="true">
   <div class="product-list-empty__inner">
 
     {* ── Иконка ─────────────────────────────────────────────────────────────
@@ -90,20 +85,14 @@
       </p>
 
       {* CTA 1: Сбросить все фильтры — основное действие *}
-      <a
-        href="{$listing.reset_filters_url|default:$urls.current_url|escape:'html':'UTF-8'}"
-        class="btn btn-primary product-list-empty__btn"
-        data-filter-reset-all
-      >
+      <a href="{$listing.reset_filters_url|default:$urls.current_url|escape:'html':'UTF-8'}"
+        class="btn btn-primary product-list-empty__btn" data-filter-reset-all>
         <i class="fa-solid fa-rotate-left me-2" aria-hidden="true"></i>
         {l s='Скинути всі фільтри' d='Shop.Theme.Catalog'}
       </a>
 
       {* CTA 2: Перейти в корень каталога — запасной путь *}
-      <a
-        href="{$urls.pages.index|escape:'html':'UTF-8'}"
-        class="product-list-empty__link-secondary"
-      >
+      <a href="{$urls.pages.index|escape:'html':'UTF-8'}" class="product-list-empty__link-secondary">
         {l s='Або переглянути весь каталог' d='Shop.Theme.Catalog'}
         <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
       </a>
@@ -124,10 +113,7 @@
         {l s='Зайдіть пізніше або перегляньте інші розділи каталогу' d='Shop.Theme.Catalog'}
       </p>
 
-      <a
-        href="{$urls.pages.index|escape:'html':'UTF-8'}"
-        class="btn btn-primary product-list-empty__btn"
-      >
+      <a href="{$urls.pages.index|escape:'html':'UTF-8'}" class="btn btn-primary product-list-empty__btn">
         <i class="fa-solid fa-store me-2" aria-hidden="true"></i>
         {l s='До всього каталогу' d='Shop.Theme.Catalog'}
       </a>

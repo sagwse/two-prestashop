@@ -42,45 +42,39 @@
   (!empty($notifications.info))
 }
 
-  {* Маппинг тип → Bootstrap класс + FA7 иконка *}
-  {assign var='notif_map' value=[
+{* Маппинг тип → Bootstrap класс + FA7 иконка *}
+{assign var='notif_map' value=[
     'error'   => ['bs' => 'danger',  'icon' => 'fa-circle-xmark'],
     'warning' => ['bs' => 'warning', 'icon' => 'fa-triangle-exclamation'],
     'success' => ['bs' => 'success', 'icon' => 'fa-circle-check'],
     'info'    => ['bs' => 'info',    'icon' => 'fa-circle-info']
   ]}
 
-  <div class="notifications-wrap" role="region" aria-label="{l s='Notifications' d='Shop.Theme.Global'}">
-    <div class="container">
+<div class="notifications-wrap" role="region" aria-label="{l s='Notifications' d='Shop.Theme.Global'}">
+  <div class="container">
 
-      {foreach from=$notif_map key='type' item='cfg'}
-        {if isset($notifications.$type) && !empty($notifications.$type)}
-          {foreach from=$notifications.$type item='message'}
+    {foreach from=$notif_map key='type' item='cfg'}
+      {if isset($notifications.$type) && !empty($notifications.$type)}
+        {foreach from=$notifications.$type item='message'}
 
-            <div
-              class="alert alert-{$cfg.bs} alert-dismissible notifications__alert notifications__alert--{$type} d-flex align-items-start gap-2"
-              role="alert"
-              aria-live="polite"
-            >
-              <i class="fas {$cfg.icon} notifications__icon flex-shrink-0 mt-1" aria-hidden="true"></i>
+          <div
+            class="alert alert-{$cfg.bs} alert-dismissible notifications__alert notifications__alert--{$type} d-flex align-items-start gap-2"
+            role="alert" aria-live="polite">
+            <i class="fas {$cfg.icon} notifications__icon flex-shrink-0 mt-1" aria-hidden="true"></i>
 
-              <div class="notifications__body">
-                {$message}
-              </div>
-
-              <button
-                type="button"
-                class="btn-close notifications__close"
-                data-bs-dismiss="alert"
-                aria-label="{l s='Close' d='Shop.Theme.Global'}"
-              ></button>
+            <div class="notifications__body">
+              {$message}
             </div>
 
-          {/foreach}
-        {/if}
-      {/foreach}
+            <button type="button" class="btn-close notifications__close" data-bs-dismiss="alert"
+              aria-label="{l s='Close' d='Shop.Theme.Global'}"></button>
+          </div>
 
-    </div>
+        {/foreach}
+      {/if}
+    {/foreach}
+
   </div>
+</div>
 
 {/if}

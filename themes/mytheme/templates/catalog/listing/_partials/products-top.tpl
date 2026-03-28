@@ -92,58 +92,53 @@
 {* Не рендерим блок если товаров нет — пустое состояние выводит product-list.tpl *}
 {if $total_items > 0}
 
-<div class="products-top">
+  <div class="products-top">
 
 
-  {* ── СЧЁТЧИК РЕЗУЛЬТАТОВ ─────────────────────────────────────────────────
+    {* ── СЧЁТЧИК РЕЗУЛЬТАТОВ ─────────────────────────────────────────────────
      Формат: «Показано 1–24 з 87 товарів»
      Диапазон помогает пользователю понять где он находится в каталоге.
      aria-live="polite" + aria-atomic="true" — скринридер зачитает
      обновлённое значение целиком после AJAX (не по частям).
      role="status" — не прерывает текущее чтение скринридером.
      ─────────────────────────────────────────────────────────────────────── *}
-  <p
-    class="products-top__counter"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
-  >
-    {if $total_items > $per_page}
-      {* Многостраничный листинг — показываем диапазон *}
-      {l s='Показано %from%–%to% з %total% товарів'
-         sprintf=[
-           '%from%'  => $range_from,
-           '%to%'    => $range_to,
-           '%total%' => $total_items
-         ]
-         d='Shop.Theme.Catalog'
-      }
-    {else}
-      {* Все товары на одной странице — упрощённый формат *}
-      {l s='%total% товарів' sprintf=['%total%' => $total_items] d='Shop.Theme.Catalog'}
-    {/if}
-  </p>
+    <p class="products-top__counter" role="status" aria-live="polite" aria-atomic="true">
+      {if $total_items > $per_page}
+        {* Многостраничный листинг — показываем диапазон *}
+        {l s='Показано %from%–%to% з %total% товарів'
+             sprintf=[
+               '%from%'  => $range_from,
+               '%to%'    => $range_to,
+               '%total%' => $total_items
+             ]
+             d='Shop.Theme.Catalog'
+          }
+      {else}
+        {* Все товары на одной странице — упрощённый формат *}
+        {l s='%total% товарів' sprintf=['%total%' => $total_items] d='Shop.Theme.Catalog'}
+      {/if}
+    </p>
 
 
-  {* ── ТЕКУЩАЯ СОРТИРОВКА (текстовый лейбл) ───────────────────────────────
+    {* ── ТЕКУЩАЯ СОРТИРОВКА (текстовый лейбл) ───────────────────────────────
      Показываем только если выбрана нестандартная сортировка.
      Помогает пользователю понять порядок после AJAX-обновления
      без необходимости смотреть в select (который снаружи AJAX-зоны).
      Пример: «Сортування: Ціна: за зростанням»
      Скрываем если метка пуста или соответствует сортировке по умолчанию.
      ─────────────────────────────────────────────────────────────────────── *}
-  {if $current_sort_label}
-    <p class="products-top__sort-label" aria-live="polite">
-      <span class="visually-hidden">
-        {l s='Поточне сортування:' d='Shop.Theme.Catalog'}
-      </span>
-      <i class="fa-solid fa-arrow-up-short-wide products-top__sort-icon" aria-hidden="true"></i>
-      {$current_sort_label|escape:'html':'UTF-8'}
-    </p>
-  {/if}
+    {if $current_sort_label}
+      <p class="products-top__sort-label" aria-live="polite">
+        <span class="visually-hidden">
+          {l s='Поточне сортування:' d='Shop.Theme.Catalog'}
+        </span>
+        <i class="fa-solid fa-arrow-up-short-wide products-top__sort-icon" aria-hidden="true"></i>
+        {$current_sort_label|escape:'html':'UTF-8'}
+      </p>
+    {/if}
 
 
-  {* ── ПЕРЕКЛЮЧАТЕЛЬ КОЛИЧЕСТВА ТОВАРОВ НА СТРАНИЦЕ (per-page) ─────────────
+    {* ── ПЕРЕКЛЮЧАТЕЛЬ КОЛИЧЕСТВА ТОВАРОВ НА СТРАНИЦЕ (per-page) ─────────────
      Варианты: 12 / 24 / 48.
      Текущее значение — активная кнопка (aria-pressed="true").
      При выборе — JS (category.js v0.14.0) добавляет параметр ?ipp=N к URL
@@ -152,40 +147,33 @@
      На мобильном — скрываем (d-none d-md-flex) — экономим место,
      мобильные пользователи редко меняют per-page.
      ─────────────────────────────────────────────────────────────────────── *}
-  <div
-    class="products-top__per-page d-none d-md-flex"
-    role="group"
-    aria-label="{l s='Кількість товарів на сторінці' d='Shop.Theme.Catalog'}"
-  >
-    <span class="products-top__per-page-label" aria-hidden="true">
-      {l s='Показувати:' d='Shop.Theme.Catalog'}
-    </span>
+    <div class="products-top__per-page d-none d-md-flex" role="group"
+      aria-label="{l s='Кількість товарів на сторінці' d='Shop.Theme.Catalog'}">
+      <span class="products-top__per-page-label" aria-hidden="true">
+        {l s='Показувати:' d='Shop.Theme.Catalog'}
+      </span>
 
-    {foreach from=[12, 24, 48] item='ipp_value'}
+      {foreach from=[12, 24, 48] item='ipp_value'}
 
-      {* Определяем активное значение:
+        {* Определяем активное значение:
          Сравниваем с текущим per_page (кол-во товаров на странице).
          Если значения совпадают — кнопка активна. *}
-      {assign var='is_active_ipp' value=false}
-      {if $ipp_value == $per_page}
-        {assign var='is_active_ipp' value=true}
-      {/if}
+        {assign var='is_active_ipp' value=false}
+        {if $ipp_value == $per_page}
+          {assign var='is_active_ipp' value=true}
+        {/if}
 
-      <button
-        type="button"
-        class="products-top__per-page-btn{if $is_active_ipp} products-top__per-page-btn--active{/if}"
-        aria-pressed="{if $is_active_ipp}true{else}false{/if}"
-        data-ipp="{$ipp_value}"
-        {if $is_active_ipp}aria-current="true"{/if}
-      >
-        {$ipp_value}
-      </button>
+        <button type="button" class="products-top__per-page-btn{if $is_active_ipp} products-top__per-page-btn--active{/if}"
+          aria-pressed="{if $is_active_ipp}true{else}false{/if}" data-ipp="{$ipp_value}"
+          {if $is_active_ipp}aria-current="true" {/if}>
+          {$ipp_value}
+        </button>
 
-    {/foreach}
+      {/foreach}
 
-  </div>{* /.products-top__per-page *}
+    </div>{* /.products-top__per-page *}
 
 
-</div>{* /.products-top *}
+  </div>{* /.products-top *}
 
 {/if}{* /if total_items > 0 *}

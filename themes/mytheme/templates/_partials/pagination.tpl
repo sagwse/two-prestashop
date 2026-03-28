@@ -49,30 +49,19 @@
     {if $p.page == $next_page}{assign var='next_url' value=$p.url}{/if}
   {/foreach}
 
-  <nav
-    class="pagination-nav"
-    aria-label="{l s='Page navigation' d='Shop.Theme.Global'}"
-  >
+  <nav class="pagination-nav" aria-label="{l s='Page navigation' d='Shop.Theme.Global'}">
     <ul class="pagination pagination-nav__list justify-content-center mb-0">
 
       {* ── Кнопка «Предыдущая» ───────────────────────────────────────── *}
       <li class="page-item pagination-nav__item pagination-nav__item--prev{if !$has_prev} disabled{/if}">
         {if $has_prev && $prev_url}
-          <a
-            href="{$prev_url}"
-            class="page-link pagination-nav__link"
-            rel="prev"
-            aria-label="{l s='Previous page' d='Shop.Theme.Global'}"
-          >
+          <a href="{$prev_url}" class="page-link pagination-nav__link" rel="prev"
+            aria-label="{l s='Previous page' d='Shop.Theme.Global'}">
             <i class="fas fa-chevron-left" aria-hidden="true"></i>
             <span class="visually-hidden">{l s='Previous' d='Shop.Theme.Global'}</span>
           </a>
         {else}
-          <span
-            class="page-link pagination-nav__link"
-            aria-disabled="true"
-            tabindex="-1"
-          >
+          <span class="page-link pagination-nav__link" aria-disabled="true" tabindex="-1">
             <i class="fas fa-chevron-left" aria-hidden="true"></i>
             <span class="visually-hidden">{l s='Previous' d='Shop.Theme.Global'}</span>
           </span>
@@ -100,11 +89,8 @@
         {else}
           {* Обычная страница — ссылка *}
           <li class="page-item pagination-nav__item">
-            <a
-              href="{$page_item.url}"
-              class="page-link pagination-nav__link"
-              aria-label="{l s='Page %page%' d='Shop.Theme.Global' sprintf=['%page%' => $page_item.page]}"
-            >
+            <a href="{$page_item.url}" class="page-link pagination-nav__link"
+              aria-label="{l s='Page %page%' d='Shop.Theme.Global' sprintf=['%page%' => $page_item.page]}">
               {$page_item.page}
             </a>
           </li>
@@ -116,21 +102,13 @@
       {* ── Кнопка «Следующая» ─────────────────────────────────────────── *}
       <li class="page-item pagination-nav__item pagination-nav__item--next{if !$has_next} disabled{/if}">
         {if $has_next && $next_url}
-          <a
-            href="{$next_url}"
-            class="page-link pagination-nav__link"
-            rel="next"
-            aria-label="{l s='Next page' d='Shop.Theme.Global'}"
-          >
+          <a href="{$next_url}" class="page-link pagination-nav__link" rel="next"
+            aria-label="{l s='Next page' d='Shop.Theme.Global'}">
             <span class="visually-hidden">{l s='Next' d='Shop.Theme.Global'}</span>
             <i class="fas fa-chevron-right" aria-hidden="true"></i>
           </a>
         {else}
-          <span
-            class="page-link pagination-nav__link"
-            aria-disabled="true"
-            tabindex="-1"
-          >
+          <span class="page-link pagination-nav__link" aria-disabled="true" tabindex="-1">
             <span class="visually-hidden">{l s='Next' d='Shop.Theme.Global'}</span>
             <i class="fas fa-chevron-right" aria-hidden="true"></i>
           </span>
@@ -143,9 +121,9 @@
     <p class="pagination-nav__counter text-center mt-2 mb-0">
       <small class="text-muted">
         {l s='Page %current% of %total%' d='Shop.Theme.Global' sprintf=[
-          '%current%' => $pagination.current_page,
-          '%total%'   => $pagination.pages_count
-        ]}
+            '%current%' => $pagination.current_page,
+            '%total%'   => $pagination.pages_count
+          ]}
       </small>
     </p>
 

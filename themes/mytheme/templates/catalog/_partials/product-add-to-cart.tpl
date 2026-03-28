@@ -93,18 +93,17 @@
    Стандартная PS9 форма — prestashop.js перехватывает submit.
    id="product-add-to-cart-form" — используется JS для IntersectionObserver.
    ═══════════════════════════════════════════════════════════════════════════ *}
-<form
-  action="{$product.add_to_cart_url|escape:'html':'UTF-8'}"
-  method="post"
-  id="product-add-to-cart-form"
-  class="product-add-to-cart"
->
+<form action="{$product.add_to_cart_url|escape:'html':'UTF-8'}" method="post" id="product-add-to-cart-form"
+  class="product-add-to-cart">
 
   {* Hidden fields — обязательны для PS9 *}
   <input type="hidden" name="token" value="{$static_token|escape:'html':'UTF-8'}">
   <input type="hidden" name="id_product" value="{$product.id_product|intval}" id="product_page_product_id">
-  <input type="hidden" name="id_product_attribute" value="{$product.id_product_attribute|intval|default:0}" id="product_page_product_attribute_id">
-  <input type="hidden" name="id_customization" value="{if isset($product.id_customization)}{$product.id_customization|intval}{else}0{/if}" id="product_customization_id">
+  <input type="hidden" name="id_product_attribute" value="{$product.id_product_attribute|intval|default:0}"
+    id="product_page_product_attribute_id">
+  <input type="hidden" name="id_customization"
+    value="{if isset($product.id_customization)}{$product.id_customization|intval}{else}0{/if}"
+    id="product_customization_id">
 
 
   {* ── QUANTITY STEPPER ───────────────────────────────────────────────────
@@ -120,37 +119,20 @@
       </label>
 
       {* Кнопка минус *}
-      <button
-        class="product-add-to-cart__qty-btn product-add-to-cart__qty-btn--minus"
-        type="button"
-        data-action="qty-decrease"
-        aria-label="{l s='Зменшити кількість' d='Shop.Theme.Catalog'}"
-        {if $min_qty >= 1} disabled{/if}
-      >
+      <button class="product-add-to-cart__qty-btn product-add-to-cart__qty-btn--minus" type="button"
+        data-action="qty-decrease" aria-label="{l s='Зменшити кількість' d='Shop.Theme.Catalog'}" {if $min_qty >= 1}
+        disabled{/if}>
         <i class="fa-solid fa-minus" aria-hidden="true"></i>
       </button>
 
       {* Поле ввода количества *}
-      <input
-        class="product-add-to-cart__qty-input"
-        type="number"
-        name="qty"
-        id="quantity_wanted"
-        value="{$min_qty}"
-        min="{$min_qty}"
-        {if $max_qty}max="{$max_qty}"{/if}
-        inputmode="numeric"
-        pattern="[0-9]*"
-        aria-label="{l s='Кількість' d='Shop.Theme.Catalog'}"
-      >
+      <input class="product-add-to-cart__qty-input" type="number" name="qty" id="quantity_wanted" value="{$min_qty}"
+        min="{$min_qty}" {if $max_qty}max="{$max_qty}" {/if} inputmode="numeric" pattern="[0-9]*"
+        aria-label="{l s='Кількість' d='Shop.Theme.Catalog'}">
 
       {* Кнопка плюс *}
-      <button
-        class="product-add-to-cart__qty-btn product-add-to-cart__qty-btn--plus"
-        type="button"
-        data-action="qty-increase"
-        aria-label="{l s='Збільшити кількість' d='Shop.Theme.Catalog'}"
-      >
+      <button class="product-add-to-cart__qty-btn product-add-to-cart__qty-btn--plus" type="button"
+        data-action="qty-increase" aria-label="{l s='Збільшити кількість' d='Shop.Theme.Catalog'}">
         <i class="fa-solid fa-plus" aria-hidden="true"></i>
       </button>
 
@@ -169,12 +151,8 @@
   {if $out_of_stock}
 
     {* Товар не в наличии *}
-    <button
-      class="product-add-to-cart__btn product-add-to-cart__btn--unavailable"
-      type="button"
-      disabled
-      aria-disabled="true"
-    >
+    <button class="product-add-to-cart__btn product-add-to-cart__btn--unavailable" type="button" disabled
+      aria-disabled="true">
       <i class="fa-solid fa-ban me-2" aria-hidden="true"></i>
       {l s='Немає в наявності' d='Shop.Theme.Catalog'}
     </button>
@@ -182,12 +160,8 @@
   {else}
 
     {* Товар в наличии — добавление в корзину *}
-    <button
-      class="product-add-to-cart__btn"
-      type="submit"
-      data-button-action="add-to-cart"
-      aria-label="{l s='Додати до кошика: %name%' sprintf=['%name%' => $product.name|escape:'html':'UTF-8'] d='Shop.Theme.Catalog'}"
-    >
+    <button class="product-add-to-cart__btn" type="submit" data-button-action="add-to-cart"
+      aria-label="{l s='Додати до кошика: %name%' sprintf=['%name%' => $product.name|escape:'html':'UTF-8'] d='Shop.Theme.Catalog'}">
       {* Иконка корзины — CSS: .is-animating { transform: scale(1.2) } *}
       <i class="fa-solid fa-cart-plus product-add-to-cart__cart-icon me-2" aria-hidden="true"></i>
 
@@ -197,12 +171,8 @@
       </span>
 
       {* Скрытый текст подтверждения для скринридера *}
-      <span
-        class="product-add-to-cart__confirm visually-hidden"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      ></span>
+      <span class="product-add-to-cart__confirm visually-hidden" role="status" aria-live="polite"
+        aria-atomic="true"></span>
     </button>
 
     {* Предупреждение «Останні одиниці» *}
@@ -235,14 +205,10 @@
     </span>
 
     {* Кнопка — дублирует основную, упрощённая версия *}
-    <button
-      class="product-sticky-bar__btn"
-      type="button"
-      data-button-action="add-to-cart"
+    <button class="product-sticky-bar__btn" type="button" data-button-action="add-to-cart"
       data-product-id="{$product.id_product|intval}"
       data-product-attribute-id="{$product.id_product_attribute|intval|default:0}"
-      aria-label="{l s='Додати до кошика' d='Shop.Theme.Catalog'}"
-    >
+      aria-label="{l s='Додати до кошика' d='Shop.Theme.Catalog'}">
       <i class="fa-solid fa-cart-plus me-2" aria-hidden="true"></i>
       <span class="product-sticky-bar__btn-text">
         {l s='До кошика' d='Shop.Theme.Catalog'}

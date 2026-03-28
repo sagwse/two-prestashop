@@ -28,9 +28,6 @@
 │       ├── fa-brands-400.woff2
 │       ├── fa-regular-400.woff2
 │       └── fa-solid-900.woff2
-├── config
-│   ├── .htaccess
-│   └── theme.yml
 ├── docs
 │   ├── catalog
 │   │   └── CATALOG-0_6_0-recommendations.md
@@ -43,40 +40,6 @@
 │   │   └── ps9_categories.md
 │   └── product
 │       └── PRODUCT-0_7_0-recommendations.md
-├── modules
-│   ├── ps_bestsellers
-│   │   └── views
-│   │       └── templates
-│   │           └── hook
-│   │               └── ps_bestsellers.tpl
-│   ├── ps_currencyselector
-│   │   └── ps_currencyselector.tpl
-│   ├── ps_featuredproducts
-│   │   └── views
-│   │       └── templates
-│   │           └── hook
-│   │               └── ps_featuredproducts.tpl
-│   ├── ps_imageslider
-│   │   └── views
-│   │       └── templates
-│   │           └── hook
-│   │               └── slider.tpl
-│   ├── ps_languageselector
-│   │   └── ps_languageselector.tpl
-│   ├── ps_mainmenu
-│   │   └── ps_mainmenu.tpl
-│   ├── ps_newproducts
-│   │   └── views
-│   │       └── templates
-│   │           └── hook
-│   │               └── ps_newproducts.tpl
-│   ├── ps_searchbar
-│   │   └── ps_searchbar.tpl
-│   └── ps_specials
-│       └── views
-│           └── templates
-│               └── hook
-│                   └── ps_specials.tpl
 ├── preview.png
 └── templates
     ├── _partials
@@ -175,4 +138,4 @@
     │   └── layout-right-column.tpl
     └── page.tpl
 
-57 directories, 119 files
+31 directories, 108 files

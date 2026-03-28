@@ -22,63 +22,63 @@
 {assign var='_org_logo_url' value="`$urls.base_url`img/`$shop.logo`"}
 
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
+  {
+    "@context": "https://schema.org",
+    "@graph": [
 
-    {* ─── 1. Organization ─── *}
-    {
-      "@type": "Organization",
-      "@id": "{$urls.base_url}#organization",
-      "name": "{$shop.name|escape:'javascript'}",
-      "url": "{$urls.base_url}",
-      "logo": {
-        "@type": "ImageObject",
-        "@id": "{$urls.base_url}#logo",
-        "url": "{$_org_logo_url|escape:'javascript'}",
-        "contentUrl": "{$_org_logo_url|escape:'javascript'}"
-      }{if $shop.phone},
-      "telephone": "{$shop.phone|escape:'javascript'}"{/if}{if $shop.email},
-      "email": "{$shop.email|escape:'javascript'}"{/if}{if isset($shop.address.address1) && $shop.address.address1},
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{$shop.address.address1|escape:'javascript'}{if isset($shop.address.address2) && $shop.address.address2}, {$shop.address.address2|escape:'javascript'}{/if}",
-        "addressLocality": "{$shop.address.city|escape:'javascript'}",
-        "postalCode": "{$shop.address.postcode|escape:'javascript'}",
-        "addressCountry": "{$shop.address.country.iso_code|escape:'javascript'}"
-      }{/if}
-      {*
-        TODO 0.4.x — раскомментируйте и заполните реальными URL аккаунтов:
-        ,"sameAs": [
-          "https://www.facebook.com/YOURPAGE",
-          "https://www.instagram.com/YOURPROFILE",
-          "https://t.me/YOURCHANNEL",
-          "https://www.youtube.com/@YOURCHANNEL",
-          "https://www.tiktok.com/@YOURPROFILE"
-        ]
-      *}
-    },
-
-    {* ─── 2. WebSite + SearchAction (Sitelinks Searchbox) ─── *}
-    {
-      "@type": "WebSite",
-      "@id": "{$urls.base_url}#website",
-      "url": "{$urls.base_url}",
-      "name": "{$shop.name|escape:'javascript'}",
-      "inLanguage": "{$language.iso_code|default:'uk'}",
-      "publisher": {
-        "@id": "{$urls.base_url}#organization"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "{$urls.pages.search}?s={literal}{search_term_string}{/literal}"
+      {* ─── 1. Organization ─── *}
+      {
+        "@type": "Organization",
+        "@id": "{$urls.base_url}#organization",
+        "name": "{$shop.name|escape:'javascript'}",
+        "url": "{$urls.base_url}",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "{$urls.base_url}#logo",
+          "url": "{$_org_logo_url|escape:'javascript'}",
+          "contentUrl": "{$_org_logo_url|escape:'javascript'}"
+          }{if $shop.phone},
+            "telephone": "{$shop.phone|escape:'javascript'}"{/if}{if $shop.email},
+            "email": "{$shop.email|escape:'javascript'}"{/if}{if isset($shop.address.address1) && $shop.address.address1},
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "{$shop.address.address1|escape:'javascript'}{if isset($shop.address.address2) && $shop.address.address2}, {$shop.address.address2|escape:'javascript'}{/if}",
+              "addressLocality": "{$shop.address.city|escape:'javascript'}",
+              "postalCode": "{$shop.address.postcode|escape:'javascript'}",
+              "addressCountry": "{$shop.address.country.iso_code|escape:'javascript'}"
+            }{/if}
+            {*
+            TODO 0.4.x— раскомментируйте и заполните реальными URL аккаунтов: ,
+            "sameAs": [
+                "https://www.facebook.com/YOURPAGE",
+                "https://www.instagram.com/YOURPROFILE",
+                "https://t.me/YOURCHANNEL",
+                "https://www.youtube.com/@YOURCHANNEL",
+                "https://www.tiktok.com/@YOURPROFILE"
+              ] *
+          }
         },
-        "query-input": "required name=search_term_string"
-      }
-    }
 
-  ]
-}
+        {* ─── 2. WebSite + SearchAction (Sitelinks Searchbox) ─── *}
+        {
+          "@type": "WebSite",
+          "@id": "{$urls.base_url}#website",
+          "url": "{$urls.base_url}",
+          "name": "{$shop.name|escape:'javascript'}",
+          "inLanguage": "{$language.iso_code|default:'uk'}",
+          "publisher": {
+            "@id": "{$urls.base_url}#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "{$urls.pages.search}?s={literal}{search_term_string}{/literal}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        }
+
+      ]
+    }
 </script>

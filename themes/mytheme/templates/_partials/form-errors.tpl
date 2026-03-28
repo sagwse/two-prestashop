@@ -43,15 +43,15 @@
  * Подключение в шаблоне формы:
  *
  *   {* Сводный блок над формой *}
- *   {if isset($errors) && $errors|@count > 0}
- *     {include file='_partials/form-errors.tpl' errors=$errors}
- *   {/if}
- *
- *   {* Inline под конкретным полем *}
- *   {if isset($field.errors) && $field.errors|@count > 0}
- *     {include file='_partials/form-errors.tpl' field=$field}
- *   {/if}
- *}
+* {if isset($errors) && $errors|@count > 0}
+  * {include file='_partials/form-errors.tpl' errors=$errors}
+* {/if}
+*
+* {* Inline под конкретным полем *}
+* {if isset($field.errors) && $field.errors|@count > 0}
+  * {include file='_partials/form-errors.tpl' field=$field}
+* {/if}
+*}
 
 
 {* ══════════════════════════════════════════════════════════════════════════
@@ -60,11 +60,7 @@
    ══════════════════════════════════════════════════════════════════════════ *}
 {if isset($field) && isset($field.errors) && $field.errors|@count > 0}
 
-  <div
-    class="invalid-feedback form-errors form-errors--field d-block"
-    role="alert"
-    aria-live="assertive"
-  >
+  <div class="invalid-feedback form-errors form-errors--field d-block" role="alert" aria-live="assertive">
     {foreach from=$field.errors item='error_msg'}
       <span class="form-errors__message">
         <i class="fas fa-circle-exclamation form-errors__icon" aria-hidden="true"></i>
@@ -74,18 +70,13 @@
   </div>
 
 
-{* ══════════════════════════════════════════════════════════════════════════
+  {* ══════════════════════════════════════════════════════════════════════════
    РЕЖИМ 1 — Сводный блок ошибок над формой
    ══════════════════════════════════════════════════════════════════════════ *}
 {elseif isset($errors) && $errors|@count > 0}
 
-  <div
-    id="form-errors-summary"
-    class="alert alert-danger form-errors form-errors--summary"
-    role="alert"
-    aria-live="assertive"
-    tabindex="-1"
-  >
+  <div id="form-errors-summary" class="alert alert-danger form-errors form-errors--summary" role="alert"
+    aria-live="assertive" tabindex="-1">
     <div class="form-errors__header d-flex align-items-center gap-2 mb-2">
       <i class="fas fa-triangle-exclamation form-errors__header-icon" aria-hidden="true"></i>
       <strong class="form-errors__title">

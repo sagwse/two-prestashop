@@ -36,22 +36,22 @@
  *}
 
 {if isset($faq_items) && $faq_items|@count > 0}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {foreach from=$faq_items item=_faq name=_faq_loop}
+  <script type="application/ld+json">
     {
-      "@type": "Question",
-      "name": "{$_faq.question|strip_tags|trim|escape:'javascript'}",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "{$_faq.answer|strip_tags|trim|escape:'javascript'}"
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {foreach from=$faq_items item=_faq name=_faq_loop}
+          {
+            "@type": "Question",
+            "name": "{$_faq.question|strip_tags|trim|escape:'javascript'}",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "{$_faq.answer|strip_tags|trim|escape:'javascript'}"
+            }
+            }{if !$smarty.foreach._faq_loop.last},{/if}
+          {/foreach}
+        ]
       }
-    }{if !$smarty.foreach._faq_loop.last},{/if}
-    {/foreach}
-  ]
-}
-</script>
+  </script>
 {/if}

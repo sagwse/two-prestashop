@@ -50,71 +50,71 @@
 {/if}
 
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "@id": "{$product.url|escape:'javascript'}#product",
-  "name": "{$product.name|escape:'javascript'}",
-  "description": "{$product.description_short|strip_tags|trim|escape:'javascript'}",
-  "url": "{$product.url|escape:'javascript'}",
-
-  "image": [
-    "{$product.cover.large.url|escape:'javascript'}"
-    {foreach from=$product.images item=_img}
-      {if $_img.id_image != $product.cover.id_image}
-    , "{$_img.large.url|escape:'javascript'}"
-      {/if}
-    {/foreach}
-  ],
-
-  "sku": "{$product.reference|escape:'javascript'}"{if $product.ean13 && $product.ean13 != ''},
-  "gtin13": "{$product.ean13|escape:'javascript'}"{/if}{if $product.isbn && $product.isbn != ''},
-  "isbn": "{$product.isbn|escape:'javascript'}"{/if}{if $product.upc && $product.upc != ''},
-  "gtin12": "{$product.upc|escape:'javascript'}"{/if}{if $product.mpn && $product.mpn != ''},
-  "mpn": "{$product.mpn|escape:'javascript'}"{/if}{if $product.manufacturer_name},
-  "brand": {
-    "@type": "Brand",
-    "name": "{$product.manufacturer_name|escape:'javascript'}"
-  }{/if},
-
-  "itemCondition": "{$_cond}",
-
-  "offers": {
-    "@type": "Offer",
-    "@id": "{$product.url|escape:'javascript'}#offer",
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": "{$product.url|escape:'javascript'}#product",
+    "name": "{$product.name|escape:'javascript'}",
+    "description": "{$product.description_short|strip_tags|trim|escape:'javascript'}",
     "url": "{$product.url|escape:'javascript'}",
-    "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
-    "price": "{$product.price_amount}",
-    {*
-      price_amount — float c налогами для B2C магазина.
-      Для B2B (цены без НДС) замените на $product.price_amount_without_tax.
-      priceValidUntil нужен ТОЛЬКО при акции с конкретной датой окончания.
-    *}
-    "availability": "{$_avail}",
-    "itemCondition": "{$_cond}",
-    "seller": {
-      "@id": "{$urls.base_url}#organization"
-    }{if $product.has_discount && $product.reduction_to && $product.reduction_to != ''},
-    "priceValidUntil": "{$product.reduction_to|escape:'javascript'}",
-    "priceSpecification": {
-      "@type": "UnitPriceSpecification",
-      "price": "{$product.price_amount}",
-      "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
-      "validFrom": "{$product.reduction_from|escape:'javascript'}",
-      "validThrough": "{$product.reduction_to|escape:'javascript'}"
-    }{/if}
-  }
 
-  {* ── AggregateRating — только если есть отзывы (зависимость: ps_productcomments) ── *}
-  {if isset($product.comment_count) && $product.comment_count > 0},
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "{$product.comment_average}",
-    "reviewCount": "{$product.comment_count}",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
-  {/if}
+    "image": [
+      "{$product.cover.large.url|escape:'javascript'}"
+      {foreach from=$product.images item=_img}
+        {if $_img.id_image != $product.cover.id_image}
+          , "{$_img.large.url|escape:'javascript'}"
+        {/if}
+      {/foreach}
+    ],
 
-}
+    "sku": "{$product.reference|escape:'javascript'}"{if $product.ean13 && $product.ean13 != ''},
+      "gtin13": "{$product.ean13|escape:'javascript'}"{/if}{if $product.isbn && $product.isbn != ''},
+      "isbn": "{$product.isbn|escape:'javascript'}"{/if}{if $product.upc && $product.upc != ''},
+      "gtin12": "{$product.upc|escape:'javascript'}"{/if}{if $product.mpn && $product.mpn != ''},
+      "mpn": "{$product.mpn|escape:'javascript'}"{/if}{if $product.manufacturer_name},
+      "brand": {
+        "@type": "Brand",
+        "name": "{$product.manufacturer_name|escape:'javascript'}"
+      }{/if},
+
+      "itemCondition": "{$_cond}",
+
+      "offers": {
+        "@type": "Offer",
+        "@id": "{$product.url|escape:'javascript'}#offer",
+        "url": "{$product.url|escape:'javascript'}",
+        "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
+        "price": "{$product.price_amount}",
+        {*
+        price_amount— float c налогами для B2C магазина.
+        Для B2B(цены без НДС) замените на $product.price_amount_without_tax.
+        priceValidUntil нужен ТОЛЬКО при акции с конкретной датой окончания.*
+      }
+      "availability": "{$_avail}",
+      "itemCondition": "{$_cond}",
+      "seller": {
+        "@id": "{$urls.base_url}#organization"
+        }{if $product.has_discount && $product.reduction_to && $product.reduction_to != ''},
+        "priceValidUntil": "{$product.reduction_to|escape:'javascript'}",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "price": "{$product.price_amount}",
+          "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
+          "validFrom": "{$product.reduction_from|escape:'javascript'}",
+          "validThrough": "{$product.reduction_to|escape:'javascript'}"
+          }{/if}
+        }
+
+        {* ── AggregateRating — только если есть отзывы (зависимость: ps_productcomments) ── *}
+        {if isset($product.comment_count) && $product.comment_count > 0},
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "{$product.comment_average}",
+            "reviewCount": "{$product.comment_count}",
+            "bestRating": "5",
+            "worstRating": "1"
+          }
+        {/if}
+
+      }
 </script>

@@ -22,20 +22,20 @@
  *}
 
 {if isset($breadcrumb.links) && $breadcrumb.links|@count > 0}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {foreach from=$breadcrumb.links item=_link name=_bc}
+  <script type="application/ld+json">
     {
-      "@type": "ListItem",
-      "position": {$smarty.foreach._bc.index + 1},
-      "name": "{$_link.title|escape:'javascript'}",
-      "item": "{$_link.url|escape:'javascript'}"
-    }{if !$smarty.foreach._bc.last},{/if}
-    {/foreach}
-  ]
-}
-</script>
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {foreach from=$breadcrumb.links item=_link name=_bc}
+          {
+            "@type": "ListItem",
+            "position": {$smarty.foreach._bc.index + 1},
+            "name": "{$_link.title|escape:'javascript'}",
+            "item": "{$_link.url|escape:'javascript'}"
+            }{if !$smarty.foreach._bc.last},{/if}
+          {/foreach}
+        ]
+      }
+  </script>
 {/if}

@@ -30,45 +30,48 @@
  *}
 
 {if isset($listing.products) && $listing.products|@count > 0}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "{$category.name|escape:'javascript'}",
-  "url": "{$urls.current_url|escape:'javascript'}"{if isset($category.description) && $category.description},
-  "description": "{$category.description|strip_tags|trim|escape:'javascript'}"{/if},
-
-  "numberOfItems": {$listing.products|@count},
-
-  "itemListElement": [
-    {foreach from=$listing.products item=_product name=_cat_list}
+  <script type="application/ld+json">
     {
-      "@type": "ListItem",
-      "position": {$smarty.foreach._cat_list.index + 1},
-      "url": "{$_product.url|escape:'javascript'}"
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "{$category.name|escape:'javascript'}",
+      "url": "{$urls.current_url|escape:'javascript'}"{if isset($category.description) && $category.description},
+      "description": "{$category.description|strip_tags|trim|escape:'javascript'}"{/if},
 
-      {*
-        ── ВАРИАНТ 2: Carousel (Product embedded) ──
-        Раскомментируйте блок ниже и удалите строку "url": выше, если нужен
-        расширенный вариант с вложенными Product-объектами.
-        Внимание: увеличивает размер страницы при большом кол-ве товаров.
+      "numberOfItems": {$listing.products|@count},
 
-        ,"item": {
-          "@type": "Product",
-          "name": "{$_product.name|escape:'javascript'}",
-          "url": "{$_product.url|escape:'javascript'}",
-          "image": "{$_product.cover.medium.url|escape:'javascript'}",
-          "offers": {
-            "@type": "Offer",
-            "price": "{$_product.price_amount}",
-            "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
-            "availability": "https://schema.org/InStock"
+      "itemListElement": [
+        {foreach from=$listing.products item=_product name=_cat_list}
+          {
+            "@type": "ListItem",
+            "position": {$smarty.foreach._cat_list.index + 1},
+            "url": "{$_product.url|escape:'javascript'}"
+
+            {*
+            ──ВАРИАНТ 2: Carousel(Product embedded)──
+            Раскомментируйте блок ниже и удалите строку "url": выше,
+            если нужен
+            расширенный вариант с вложенными Product - объектами.
+            Внимание: увеличивает размер страницы при большом кол - ве товаров.
+
+              ,
+            "item": {
+              "@type": "Product",
+              "name": "{$_product.name|escape:'javascript'}",
+              "url": "{$_product.url|escape:'javascript'}",
+              "image": "{$_product.cover.medium.url|escape:'javascript'}",
+              "offers": {
+                "@type": "Offer",
+                "price": "{$_product.price_amount}",
+                "priceCurrency": "{$currency.iso_code|escape:'javascript'}",
+                "availability": "https://schema.org/InStock"
+              }
+            }
+            *
           }
-        }
-      *}
-    }{if !$smarty.foreach._cat_list.last},{/if}
-    {/foreach}
-  ]
-}
-</script>
+          }{if !$smarty.foreach._cat_list.last},{/if}
+        {/foreach}
+      ]
+    }
+  </script>
 {/if}
