@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoWeSol — Footer v2 (UI/UX 2026)</title>
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Fonts: DM Serif Display (brand) + Plus Jakarta Sans (body) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================================================
+     * 00. CSS VARIABLES — Токени дизайну
+     * Хедер: --header-bg: oklch(0.565 0.057 145.68)
+     * Футер: глибокий лісовий зелений — не чорний, а насичений
+     * ========================================================================= */
+    :root {
+      /* Бренд (з theme.css) */
+      --color-primary: oklch(47% 0.07 145);
+      --color-primary-dark: oklch(35% 0.07 145);
+      --color-primary-light: oklch(66% 0.07 145);
+      --color-primary-subtle: oklch(95% 0.025 145);
+      --color-background: oklch(97% 0.008 145);
+      --color-text: oklch(22% 0.02 145);
+      --color-text-muted: oklch(60% 0.03 145);
+      --color-border: oklch(91% 0.01 145);
+
+      /* Шрифти */
+      --font-brand: 'DM Serif Display', Georgia, serif;
+      --font-base: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      /* Радіуси */
+      --radius-sm: 4px;
+      --radius-base: 8px;
+      --radius-lg: 14px;
+      --radius-pill: 999px;
+
+      /* Переходи */
+      --t-fast: 150ms ease;
+      --t-base: 280ms ease;
+      --t-slow: 460ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* ── Benefits Bar (відтінок шапки → зелений)  ──────────────────── */
+      --benefits-bg: oklch(53% 0.065 145);
+      /* ≈ header-bg, трохи темніший */
+      --benefits-border: oklch(45% 0.07 145 / 0.4);
+      --benefits-icon-bg: oklch(42% 0.08 145 / 0.45);
+      --benefits-icon-color: oklch(88% 0.04 145);
+      --benefits-title: oklch(97% 0.008 145);
+      --benefits-text: oklch(80% 0.04 145);
+
+      /* ── Footer Main (глибокий лісовий зелений) ─────────────────────── */
+      --footer-bg: oklch(0.34 0.06 148.45);
+      /* oklch(0.33 0.06 148.32); */
+      --footer-surface: oklch(25% 0.09 148);
+      /* для карток, полів */
+      --footer-surface-hover: oklch(30% 0.09 148);
+      --footer-heading: oklch(97% 0.008 145);
+      --footer-color: oklch(78% 0.04 145);
+      --footer-link: oklch(68% 0.045 145);
+      --footer-link-hover: oklch(96% 0.01 145);
+      --footer-border: oklch(38% 0.08 148 / 0.4);
+      --footer-icon-accent: oklch(68% 0.12 148);
+      /* яскравіший акцент для іконок */
+
+      /* ── Subfooter ────────────────────────────────────────────────────── */
+      --subfooter-bg: oklch(0.29 0.05 148.01);
+      --subfooter-color: oklch(58% 0.04 145);
+      --subfooter-link: oklch(55% 0.04 145);
+      --subfooter-link-hover: oklch(86% 0.03 145);
+    }
+
+    /* =========================================================================
+     * 01. BASE
+     * ========================================================================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-base);
+      background-color: var(--color-background);
+      color: var(--color-text);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    main {
+      flex: 1;
+      padding: clamp(3rem, 10vh, 8rem) 1rem;
+      text-align: center;
+      display: grid;
+      place-items: center;
+    }
+
+    /* =========================================================================
+     * 15. BENEFITS BAR
+     * ========================================================================= */
+    .benefits-bar {
+      background-color: var(--benefits-bg);
+      border-bottom: 1px solid var(--benefits-border);
+      padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+    }
+
+    .benefits-bar__list {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: clamp(0.75rem, 2vw, 1.5rem);
+    }
+
+    @media (max-width: 991.98px) {
+      .benefits-bar__list {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding-inline: 1px;
+        /* запобігає обрізанню тіні */
+      }
+
+      .benefits-bar__list::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .benefits-bar__item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1 0 auto;
+      min-width: 185px;
+    }
+
+    @media (min-width: 992px) {
+      .benefits-bar__item {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
+    .benefits-bar__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background-color: var(--benefits-icon-bg);
+      border-radius: var(--radius-base);
+      color: var(--benefits-icon-color);
+      font-size: 1.125rem;
+    }
+
+    .benefits-bar__content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .benefits-bar__title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--benefits-title);
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .benefits-bar__text {
+      font-size: 0.75rem;
+      color: var(--benefits-text);
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    /* =========================================================================
+     * 16. FOOTER MAIN
+     * ========================================================================= */
+    .footer-main {
+      background-color: var(--footer-bg);
+      color: var(--footer-color);
+      padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
+    }
+
+    /* ── Тонка декоративна лінія-роздільник між колонками (desktop) ─── */
+    @media (min-width: 992px) {
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+        gap: clamp(1.5rem, 3vw, 3rem);
+      }
+    }
+
+    /* ── Заголовки колонок ───────────────────────────────────────────── */
+    .footer-col__title {
+      font-family: var(--font-base);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--footer-icon-accent);
+      margin: 0 0 1.25rem;
+    }
+
+    /* ── Лого / Бренд ────────────────────────────────────────────────── */
+    .footer-brand__logo {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0;
+      margin-bottom: 1rem;
+      line-height: 1;
+    }
+
+    .footer-brand__logo-main {
+      font-family: var(--font-brand);
+      font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+      color: var(--footer-heading);
+      letter-spacing: -0.01em;
+    }
+
+    .footer-brand__logo-accent {
+      font-family: var(--font-brand);
+      font-style: italic;
+      font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+      color: var(--footer-icon-accent);
+      letter-spacing: -0.01em;
+    }
+
+    .footer-brand__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: var(--footer-surface);
+      border: 1px solid var(--footer-border);
+      border-radius: var(--radius-pill);
+      padding: 3px 10px 3px 6px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--footer-icon-accent);
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+
+    .footer-brand__badge i {
+      font-size: 0.625rem;
+    }
+
+    .footer-brand__desc {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--footer-color);
+      margin: 0 0 1.5rem;
+      max-width: 26ch;
+    }
+
+    /* ── Соцмережі ───────────────────────────────────────────────────── */
+    .footer-social {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .footer-social__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-base);
+      background-color: var(--footer-surface);
+      border: 1px solid var(--footer-border);
+      color: var(--footer-link);
+      font-size: 0.9375rem;
+      transition: background-color var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+    }
+
+    .footer-social__link:hover {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* ── Посилання у колонках ────────────────────────────────────────── */
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .footer-links__item a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--footer-link);
+      transition: color var(--t-fast), gap var(--t-fast);
+    }
+
+    .footer-links__item a::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: var(--footer-border);
+      flex-shrink: 0;
+      transition: background-color var(--t-fast), transform var(--t-fast);
+    }
+
+    .footer-links__item a:hover {
+      color: var(--footer-link-hover);
+    }
+
+    .footer-links__item a:hover::before {
+      background-color: var(--footer-icon-accent);
+      transform: scale(1.5);
+    }
+
+    /* ── Контакти ────────────────────────────────────────────────────── */
+    .footer-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+
+    .footer-contact {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+    }
+
+    .footer-contact__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      background-color: var(--footer-surface);
+      border-radius: var(--radius-sm);
+      color: var(--footer-icon-accent);
+      font-size: 0.75rem;
+      margin-top: 1px;
+    }
+
+    .footer-contact__body {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .footer-contact__label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--footer-icon-accent);
+      line-height: 1;
+    }
+
+    .footer-contact__value {
+      font-size: 0.875rem;
+      color: var(--footer-color);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .footer-contact__value a {
+      color: var(--footer-color);
+      transition: color var(--t-fast);
+    }
+
+    .footer-contact__value a:hover {
+      color: var(--footer-heading);
+    }
+
+    /* ── Newsletter ──────────────────────────────────────────────────── */
+    .footer-newsletter {
+      margin-top: 1.75rem;
+      padding: 1.125rem;
+      background-color: var(--footer-surface);
+      border: 1px solid var(--footer-border);
+      border-radius: var(--radius-lg);
+    }
+
+    .footer-newsletter__title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--footer-heading);
+      margin: 0 0 0.25rem;
+    }
+
+    .footer-newsletter__sub {
+      font-size: 0.75rem;
+      color: var(--footer-color);
+      margin: 0 0 0.875rem;
+      line-height: 1.4;
+    }
+
+    .footer-newsletter__field {
+      display: flex;
+      align-items: center;
+      background-color: var(--footer-bg);
+      border: 1px solid var(--footer-border);
+      border-radius: var(--radius-pill);
+      padding: 4px 4px 4px 14px;
+      transition: border-color var(--t-base), box-shadow var(--t-base);
+    }
+
+    .footer-newsletter__field:focus-within {
+      border-color: var(--color-primary-light);
+      box-shadow: 0 0 0 3px oklch(66% 0.07 145 / 0.2);
+    }
+
+    .footer-newsletter__input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: var(--font-base);
+      font-size: 0.8125rem;
+      color: var(--footer-heading);
+      min-width: 0;
+    }
+
+    .footer-newsletter__input::placeholder {
+      color: var(--footer-link);
+    }
+
+    .footer-newsletter__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-pill);
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background-color var(--t-fast), transform var(--t-fast);
+    }
+
+    .footer-newsletter__btn:hover {
+      background-color: var(--color-primary-dark);
+      transform: scale(1.05);
+    }
+
+    .footer-newsletter__hint {
+      font-size: 0.6875rem;
+      color: var(--subfooter-color);
+      margin: 0.5rem 0 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .footer-newsletter__hint i {
+      font-size: 0.625rem;
+    }
+
+    /* ── Роздільник (desktop) ─────────────────────────────────────────── */
+    .footer-divider {
+      border: none;
+      border-top: 1px solid var(--footer-border);
+      margin: clamp(1.5rem, 3vw, 2.5rem) 0;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * MOBILE ACCORDION — власний, без Bootstrap collapse (без стрибків)
+     * ─────────────────────────────────────────────────────────────────────── */
+    @media (max-width: 991.98px) {
+      .footer-main {
+        padding-block: clamp(1.5rem, 4vw, 2.5rem);
+      }
+
+      /* Брендова колонка — завжди відкрита */
+      .footer-col--brand {
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid var(--footer-border);
+        padding-bottom: 1.75rem;
+      }
+
+      .footer-brand__desc {
+        max-width: 100%;
+      }
+
+      /* Акордеон-колонки */
+      .footer-col--accordion {
+        border-bottom: 1px solid var(--footer-border);
+      }
+
+      .footer-col__toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.875rem 0;
+        background: none;
+        border: none;
+        color: var(--footer-heading);
+        cursor: pointer;
+        gap: 0.5rem;
+      }
+
+      .footer-col__toggle-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--footer-icon-accent);
+      }
+
+      .footer-col__toggle-icon {
+        color: var(--footer-link);
+        font-size: 0.8125rem;
+        transition: transform var(--t-base);
+        flex-shrink: 0;
+      }
+
+      .footer-col__toggle[aria-expanded="true"] .footer-col__toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      .footer-col__body {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height var(--t-slow), padding var(--t-base);
+        padding-bottom: 0;
+      }
+
+      .footer-col__body.is-open {
+        max-height: 600px;
+        padding-bottom: 1.25rem;
+      }
+
+      /* Заголовок (desktop) — прихований на mobile (замінено кнопкою) */
+      .footer-col__title {
+        display: none;
+      }
+
+      /* Контактна колонка (не акордеон на mobile) */
+      .footer-col--contacts {
+        margin-top: 1.75rem;
+      }
+
+      .footer-col--contacts .footer-col__title {
+        display: block;
+      }
+    }
+
+    @media (min-width: 992px) {
+
+      /* Кнопка акордеону — прихована на desktop */
+      .footer-col__toggle {
+        display: none;
+      }
+
+      /* Body завжди відкритий */
+      .footer-col__body {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+    }
+
+    /* =========================================================================
+     * 17. SUBFOOTER
+     * ========================================================================= */
+    .subfooter {
+      background-color: var(--subfooter-bg);
+      border-top: 1px solid oklch(0.52 0.22 145.81 / 0.6);
+      padding: clamp(1rem, 2vw, 1.25rem) 0;
+    }
+
+    .subfooter__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+    }
+
+    @media (max-width: 767.98px) {
+      .subfooter__inner {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+      }
+    }
+
+    /* Копірайт */
+    .subfooter__copyright {
+      font-size: 0.75rem;
+      color: var(--subfooter-color);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Правові посилання */
+    .subfooter__legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.25rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    @media (max-width: 767.98px) {
+      .subfooter__legal {
+        justify-content: center;
+      }
+    }
+
+    .subfooter__legal a {
+      font-size: 0.75rem;
+      color: var(--subfooter-link);
+      transition: color var(--t-fast);
+    }
+
+    .subfooter__legal a:hover {
+      color: var(--subfooter-link-hover);
+    }
+
+    /* Платіжні іконки */
+    .subfooter__payments {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 767.98px) {
+      .subfooter__payments {
+        justify-content: center;
+      }
+    }
+
+    .subfooter__pay-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 26px;
+      padding: 0 8px;
+      background-color: oklch(20% 0.08 148 / 0.6);
+      border: 1px solid oklch(38% 0.08 148 / 0.5);
+      border-radius: 5px;
+      color: var(--subfooter-color);
+      font-size: 1.375rem;
+      transition: color var(--t-fast), border-color var(--t-fast);
+    }
+
+    .subfooter__pay-icon:hover {
+      color: #fff;
+      border-color: var(--footer-border);
+    }
+
+    .subfooter__mono {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 8px;
+      background-color: oklch(20% 0.08 148 / 0.6);
+      border: 1px solid oklch(38% 0.08 148 / 0.5);
+      border-radius: 5px;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--subfooter-color);
+      transition: color var(--t-fast), border-color var(--t-fast);
+    }
+
+    .subfooter__mono:hover {
+      color: #fff;
+      border-color: var(--footer-border);
+    }
+
+    /* SSL Badge */
+    .subfooter__ssl {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.6875rem;
+      color: var(--subfooter-color);
+      padding: 3px 8px;
+      border: 1px solid oklch(38% 0.08 148 / 0.4);
+      border-radius: var(--radius-pill);
+    }
+
+    .subfooter__ssl i {
+      color: oklch(62% 0.14 148);
+      font-size: 0.625rem;
+    }
+
+    /* =========================================================================
+     * Demo placeholder
+     * ========================================================================= */
+    .demo-notice {
+      background: var(--color-primary-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-base);
+      padding: 1.25rem 1.5rem;
+      max-width: 420px;
+    }
+
+    /* ── Subscription Section ────────────────────────────────────────── */
+    .subscription-section {
+      background-color: var(--color-primary-subtle);
+      border-top: 1px solid var(--color-border);
+      font-family: var(--font-base);
+    }
+
+    .subscription-title {
+      font-family: var(--font-brand);
+      color: var(--color-text);
+      font-size: 2.25rem;
+      line-height: 1.2;
+    }
+
+    .subscription-text {
+      color: var(--color-text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* Кастомний контейнер для інпута і кнопки (стиль Pill) */
+    .subscription-form .input-group-custom {
+      background-color: var(--color-background);
+      border-radius: var(--radius-pill);
+      padding: 6px;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      transition: all var(--t-base);
+    }
+
+    .subscription-form .input-group-custom:focus-within {
+      border-color: var(--color-primary-light);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Іконка всередині поля */
+    .subscription-form .input-icon {
+      padding-left: 1.25rem;
+      padding-right: 0.75rem;
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Поле вводу */
+    .subscription-form .form-control-custom {
+      background: transparent;
+      border: none;
+      color: var(--color-text);
+      font-family: var(--font-base);
+      font-size: 1rem;
+      outline: none;
+      box-shadow: none;
+    }
+
+    .subscription-form .form-control-custom::placeholder {
+      color: var(--color-text-muted);
+      opacity: 0.8;
+    }
+
+    /* Кнопка */
+    .subscription-form .btn-subscribe {
+      background-color: var(--color-primary);
+      color: var(--color-background);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0.75rem 1.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t-fast);
+      cursor: pointer;
+    }
+
+    .subscription-form .btn-subscribe:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Текст під формою */
+    .subscription-note {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    .subscription-note i {
+      color: var(--color-primary-light);
+    }
+
+    /* Адаптивність для дрібних екранів */
+    @media (max-width: 576px) {
+      .subscription-title {
+        font-size: 1.75rem;
+      }
+
+      .subscription-form .btn-subscribe {
+        padding: 0.75rem 1.25rem;
+      }
+    }
+  </style>
+
+  <!-- AI & SEO: Schema.org Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SoWeSol",
+    "alternateName": "G&G Vitamins Україна",
+    "url": "https://sowesol.com.ua",
+    "logo": "https://sowesol.com.ua/img/logo.svg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+38-099-000-00-00",
+      "contactType": "customer service",
+      "areaServed": "UA",
+      "availableLanguage": ["Ukrainian", "English"]
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "вул. Хрещатик, 1",
+      "addressLocality": "Київ",
+      "postalCode": "01001",
+      "addressCountry": "UA"
+    },
+    "sameAs": [
+      "https://instagram.com/sowesol",
+      "https://t.me/sowesol",
+      "https://facebook.com/sowesol"
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+  <main>
+    <div class="demo-notice">
+      <h1
+        style="font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .5rem; color:var(--color-primary-dark)">
+        SoWeSol</h1>
+      <p style="margin:0; color:var(--color-text-muted); font-size:.9rem">Footer v2 — UI/UX 2026 · Прокрутіть вниз ↓</p>
+    </div>
+  </main>
+  <section class="subscription-section py-5">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+
+        <div class="col-lg-5 mb-4 mb-lg-0 text-center text-lg-start">
+          <h2 class="subscription-title mb-2">Знижки та новинки G&G</h2>
+          <p class="subscription-text mb-0">Підпишіться, щоб першими дізнаватися про нові надходження британських
+            нутрицевтиків та отримувати ексклюзивні пропозиції.</p>
+        </div>
+
+        <div class="col-lg-6">
+          <form class="subscription-form" action="#" method="POST">
+            <div class="input-group-custom d-flex">
+              <span class="input-icon d-flex align-items-center justify-content-center">
+                <i class="fa-regular fa-envelope"></i>
+              </span>
+              <input type="email" class="form-control-custom w-100" placeholder="Ваш email..." required>
+              <button class="btn-subscribe" type="submit">
+                <span class="d-none d-sm-inline me-2">Підписатися</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </form>
+
+          <div class="subscription-note mt-3 text-center text-lg-start">
+            <i class="fa-solid fa-shield-halved me-1"></i> Без спаму. Відписка в один клік.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- =========================================================================
+       ПОЧАТОК ФУТЕРА
+       ========================================================================= -->
+  <footer class="site-footer" role="contentinfo" itemscope itemtype="https://schema.org/Organization">
+
+    <!-- ── 15. BENEFITS BAR ─────────────────────────────────────────────── -->
+    <section class="benefits-bar" aria-label="Наші переваги">
+      <div class="container">
+        <ul class="benefits-bar__list" role="list">
+
+          <li class="benefits-bar__item">
+            <span class="benefits-bar__icon" aria-hidden="true">
+              <i class="fa-solid fa-certificate"></i>
+            </span>
+            <div class="benefits-bar__content">
+              <strong class="benefits-bar__title">100% Оригінал</strong>
+              <span class="benefits-bar__text">G&G Vitamins · Британія</span>
+            </div>
+          </li>
+
+          <li class="benefits-bar__item">
+            <span class="benefits-bar__icon" aria-hidden="true">
+              <i class="fa-solid fa-seedling"></i>
+            </span>
+            <div class="benefits-bar__content">
+              <strong class="benefits-bar__title">Еко Пакування</strong>
+              <span class="benefits-bar__text">Турбота про природу</span>
+            </div>
+          </li>
+
+          <li class="benefits-bar__item">
+            <span class="benefits-bar__icon" aria-hidden="true">
+              <i class="fa-solid fa-truck-fast"></i>
+            </span>
+            <div class="benefits-bar__content">
+              <strong class="benefits-bar__title">Швидка Доставка</strong>
+              <span class="benefits-bar__text">Нова Пошта · 1–2 дні</span>
+            </div>
+          </li>
+
+          <li class="benefits-bar__item">
+            <span class="benefits-bar__icon" aria-hidden="true">
+              <i class="fa-solid fa-shield-halved"></i>
+            </span>
+            <div class="benefits-bar__content">
+              <strong class="benefits-bar__title">Безпечна Оплата</strong>
+              <span class="benefits-bar__text">Monobank · Apple Pay</span>
+            </div>
+          </li>
+
+          <li class="benefits-bar__item">
+            <span class="benefits-bar__icon" aria-hidden="true">
+              <i class="fa-solid fa-user-doctor"></i>
+            </span>
+            <div class="benefits-bar__content">
+              <strong class="benefits-bar__title">Консультація</strong>
+              <span class="benefits-bar__text">Підтримка нутриціолога</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── 16. FOOTER MAIN ──────────────────────────────────────────────── -->
+    <div class="footer-main">
+      <div class="container">
+        <div class="footer-grid">
+
+          <!-- Колонка 1: Бренд (завжди відкрита) -->
+          <div class="footer-col footer-col--brand">
+            <a href="#" class="footer-brand__logo" aria-label="SoWeSol — головна">
+              <span class="footer-brand__logo-main">SoWe</span><span class="footer-brand__logo-accent">Sol</span>
+            </a>
+
+            <div class="footer-brand__badge">
+              <i class="fa-solid fa-circle-check"></i>
+              Офіційний дистриб'ютор G&G Vitamins
+            </div>
+
+            <p class="footer-brand__desc" itemprop="description">
+              Нутрицевтики британської якості для вашого здоров'я. Прямі поставки з Великобританії без посередників.
+            </p>
+
+            <nav class="footer-social" aria-label="Соціальні мережі">
+              <a href="#" class="footer-social__link" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="Telegram">
+                <i class="fa-brands fa-telegram"></i>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="#" class="footer-social__link" aria-label="YouTube">
+                <i class="fa-brands fa-youtube"></i>
+              </a>
+            </nav>
+          </div>
+
+          <!-- Колонка 2: Каталог (акордеон на mobile) -->
+          <nav class="footer-col footer-col--accordion" aria-label="Каталог продукції">
+            <!-- mobile toggle -->
+            <button class="footer-col__toggle" type="button" aria-expanded="false" aria-controls="footerCatalog">
+              <span class="footer-col__toggle-label">Каталог</span>
+              <i class="fa-solid fa-chevron-down footer-col__toggle-icon" aria-hidden="true"></i>
+            </button>
+
+            <!-- desktop title -->
+            <p class="footer-col__title" aria-hidden="true">Каталог</p>
+
+            <div class="footer-col__body" id="footerCatalog">
+              <ul class="footer-links" role="list">
+                <li class="footer-links__item"><a href="#">Вітаміни</a></li>
+                <li class="footer-links__item"><a href="#">Мінерали</a></li>
+                <li class="footer-links__item"><a href="#">Амінокислоти</a></li>
+                <li class="footer-links__item"><a href="#">Спеціальні комплекси</a></li>
+                <li class="footer-links__item"><a href="#">Омега та жирні кислоти</a></li>
+                <li class="footer-links__item"><a href="#">Новинки G&G</a></li>
+              </ul>
+            </div>
+          </nav>
+
+          <!-- Колонка 3: Покупцям (акордеон на mobile) -->
+          <nav class="footer-col footer-col--accordion" aria-label="Інформація покупцям">
+            <button class="footer-col__toggle" type="button" aria-expanded="false" aria-controls="footerBuyers">
+              <span class="footer-col__toggle-label">Покупцям</span>
+              <i class="fa-solid fa-chevron-down footer-col__toggle-icon" aria-hidden="true"></i>
+            </button>
+
+            <p class="footer-col__title" aria-hidden="true">Покупцям</p>
+
+            <div class="footer-col__body" id="footerBuyers">
+              <ul class="footer-links" role="list">
+                <li class="footer-links__item"><a href="#">Доставка та оплата</a></li>
+                <li class="footer-links__item"><a href="#">Повернення та обмін (14 днів)</a></li>
+                <li class="footer-links__item"><a href="#">Публічна оферта</a></li>
+                <li class="footer-links__item"><a href="#">Політика конфіденційності</a></li>
+                <li class="footer-links__item"><a href="#">Особистий кабінет</a></li>
+                <li class="footer-links__item"><a href="#">Карта сайту</a></li>
+              </ul>
+            </div>
+          </nav>
+
+          <!-- Колонка 4: Контакти + Newsletter -->
+          <address class="footer-col footer-col--contacts" style="font-style: normal;" itemprop="address" itemscope
+            itemtype="https://schema.org/PostalAddress">
+            <p class="footer-col__title">Контакти</p>
+
+            <div class="footer-contacts">
+
+              <div class="footer-contact">
+                <span class="footer-contact__icon" aria-hidden="true">
+                  <i class="fa-solid fa-phone"></i>
+                </span>
+                <div class="footer-contact__body">
+                  <span class="footer-contact__label">Телефон</span>
+                  <p class="footer-contact__value">
+                    <a href="tel:+380990000000" itemprop="telephone">+38 (099) 000-00-00</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="footer-contact">
+                <span class="footer-contact__icon" aria-hidden="true">
+                  <i class="fa-solid fa-envelope"></i>
+                </span>
+                <div class="footer-contact__body">
+                  <span class="footer-contact__label">Email</span>
+                  <p class="footer-contact__value">
+                    <a href="mailto:hello@sowesol.com.ua">hello@sowesol.com.ua</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="footer-contact">
+                <span class="footer-contact__icon" aria-hidden="true">
+                  <i class="fa-solid fa-clock"></i>
+                </span>
+                <div class="footer-contact__body">
+                  <span class="footer-contact__label">Графік підтримки</span>
+                  <p class="footer-contact__value">Пн–Пт: 09:00 – 18:00</p>
+                </div>
+              </div>
+
+              <div class="footer-contact">
+                <span class="footer-contact__icon" aria-hidden="true">
+                  <i class="fa-solid fa-location-dot"></i>
+                </span>
+                <div class="footer-contact__body">
+                  <span class="footer-contact__label">Адреса</span>
+                  <p class="footer-contact__value" itemprop="streetAddress">
+                    м. Київ, вул. Хрещатик, 1
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </address>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 17. SUBFOOTER ────────────────────────────────────────────────── -->
+    <div class="subfooter">
+      <div class="container subfooter__inner">
+
+        <!-- Копірайт + юр. інфо -->
+        <p class="subfooter__copyright">
+          © 2026 SoWeSol · ФОП Іваненко І.І. · ЄДРПОУ 12345678
+          <br>
+          Офіційний представник G&G Vitamins в Україні
+        </p>
+
+        <!-- Платіжні системи -->
+        <div class="subfooter__payments" aria-label="Методи оплати">
+          <span class="subfooter__pay-icon" title="Visa"><i class="fa-brands fa-cc-visa"></i></span>
+          <span class="subfooter__pay-icon" title="Mastercard"><i class="fa-brands fa-cc-mastercard"></i></span>
+          <span class="subfooter__pay-icon" title="Apple Pay"><i class="fa-brands fa-apple-pay"></i></span>
+          <span class="subfooter__pay-icon" title="Google Pay"><i class="fa-brands fa-google-pay"></i></span>
+          <span class="subfooter__mono" title="Monobank">mono</span>
+        </div>
+
+        <!-- Правові посилання -->
+        <ul class="subfooter__legal">
+          <li><a href="#">Оферта</a></li>
+          <li><a href="#">Конфіденційність</a></li>
+          <li><a href="#">UA | EN</a></li>
+        </ul>
+
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Bootstrap JS (тільки для інших компонентів, не для акордеону) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* ─────────────────────────────────────────────────────────────────────────
+     * ACCORDION — без Bootstrap collapse, без стрибків
+     * Метод: max-height transition з is-open класом
+     * ─────────────────────────────────────────────────────────────────────── */
+    (function () {
+      const toggles = document.querySelectorAll('.footer-col__toggle');
+
+      toggles.forEach(function (btn) {
+        const targetId = btn.getAttribute('aria-controls');
+        const body = document.getElementById(targetId);
+        if (!body) return;
+
+        btn.addEventListener('click', function () {
+          const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+          // Закрити всі відкриті (optional: uncomment for single-open)
+          // toggles.forEach(b => { b.setAttribute('aria-expanded','false'); document.getElementById(b.getAttribute('aria-controls'))?.classList.remove('is-open'); });
+
+          btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+          body.classList.toggle('is-open', !isOpen);
+        });
+      });
+    })();
+
+    /* ─────────────────────────────────────────────────────────────────────────
+     * NEWSLETTER — проста анімація успіху
+     * ─────────────────────────────────────────────────────────────────────── */
+    function handleSubscribe(btn) {
+      const field = btn.closest('.footer-newsletter__field');
+      const input = field.querySelector('input[type="email"]');
+      const email = input.value.trim();
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        field.style.borderColor = 'oklch(55% 0.20 25 / 0.7)';
+        input.focus();
+        setTimeout(function () { field.style.borderColor = ''; }, 1500);
+        return;
+      }
+
+      // Success state
+      btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+      btn.style.backgroundColor = 'oklch(55% 0.15 145)';
+      btn.disabled = true;
+      input.value = '';
+      input.placeholder = 'Дякуємо! 🎉';
+
+      setTimeout(function () {
+        btn.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+        btn.style.backgroundColor = '';
+        btn.disabled = false;
+        input.placeholder = 'your@email.com';
+      }, 3000);
+    }
+  </script>
+
+</body>
+
+</html>

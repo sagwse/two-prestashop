@@ -34,3 +34,5 @@ webservice/
 dev-ssl/
 !themes/mytheme/config/theme.yml
 !themes/mytheme/config/
+!themes/mytheme/modules/
+!themes/mytheme/modules/**

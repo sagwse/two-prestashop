@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoWeSOL – Вітаміни та добавки</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- =====================================================================
+    DESKTOP HEADER (visible md+)
+  ====================================================================== -->
+  <header class="site-header d-none d-md-flex" id="js-site-header">
+
+    <!-- Top bar: promo text, phone, language -->
+    <div class="top-bar" id="js-top-bar">
+      <div class="top-bar__inner">
+        <div class="top-bar__usp">
+          <i class="fas fa-leaf"></i>
+          Чисті вітаміни з Великобританії · Офіційний представник G&amp;G Vitamins
+        </div>
+        <div class="top-bar__right">
+          <a href="tel:+380441234567" class="top-bar__phone">
+            <i class="fas fa-phone"></i> Підтримка: +38 (044) 123-45-67
+          </a>
+          <div class="top-bar__lang">
+            UA <i class="fas fa-chevron-down"></i>
+            <div class="top-bar__lang-dropdown">
+              <a href="#" class="active">🇺🇦 Українська</a>
+              <hr>
+              <a href="#">🇷🇺 Русский</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main header: logo, search, action icons -->
+    <div class="main-header" id="js-main-header">
+      <div class="main-header__inner">
+        <a href="/" class="logo-block">
+          <div>
+            <div class="logo-text">SoWeSOL</div>
+            <div class="logo-sub">G&amp;G Vitamins Ukraine</div>
+          </div>
+        </a>
+
+        <div class="header-search">
+          <div class="search-inner">
+            <i class="fas fa-search search-icon"></i>
+            <input type="search" class="search-input"
+              placeholder="Пошук у нашому каталозі — вітаміни, мінерали, добавки...">
+          </div>
+        </div>
+
+        <div class="header-actions" id="js-header-actions">
+          <!-- Hamburger: mobile only, opens custom drawer -->
+          <button class="action-btn hamburger-btn d-md-none" id="js-hamburger-btn" aria-label="Меню">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <!-- Wishlist: opens offcanvasWishlist via Bootstrap -->
+          <button class="action-btn" title="Обране" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWishlist"
+            aria-controls="offcanvasWishlist">
+            <i class="fas fa-heart"></i><span class="action-badge">3</span>
+          </button>
+
+          <!-- Account dropdown -->
+          <div class="header-account">
+            <button class="action-btn" title="Аккаунт">
+              <i class="fas fa-user"></i>
+            </button>
+            <div class="account-dropdown">
+              <a href="#"><i class="fas fa-user-circle"></i> Профіль</a>
+              <a href="#"><i class="fas fa-box"></i> Мої замовлення</a>
+              <a href="#"><i class="fas fa-heart"></i> Обране</a>
+              <hr>
+              <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Вихід</a>
+            </div>
+          </div>
+
+          <!-- Cart: opens offcanvasCart via Bootstrap (direction set by script.js) -->
+          <button class="action-btn" title="Кошик" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
+            aria-controls="offcanvasCart">
+            <i class="fas fa-shopping-cart"></i><span class="action-badge">2</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop sticky nav with megamenus -->
+    <nav class="site-nav" id="js-site-nav">
+      <div class="site-nav__inner">
+
+        <!-- Compact logo (appears when header collapses on scroll) -->
+        <div class="nav-compact-left">
+          <a href="/" class="logo-block">
+            <div>
+              <div class="logo-text">SoWeSOL</div>
+              <div class="logo-sub">G&amp;G Vitamins Ukraine</div>
+            </div>
+          </a>
+        </div>
+
+        <ul class="nav-list">
+          <!-- Catalog megamenu -->
+          <li class="has-megamenu">
+            <a href="/catalog" class="nav-btn-catalog">
+              <i class="fas fa-bars"></i> Каталог
+              <i class="fas fa-chevron-down nav-caret"></i>
+            </a>
+            <div class="nav-megamenu" id="js-megamenu-catalog">
+              <div class="nav-megamenu__inner">
+                <div class="mm-topbar">
+                  <span class="mm-topbar__label">Весь асортимент G&amp;G Vitamins UK</span>
+                  <a href="/catalog" class="mm-topbar__all">
+                    Дивитись усі товари
+                    <i class="fas fa-arrow-right" style="font-size: 0.7rem"></i>
+                  </a>
+                </div>
+                <div class="megamenu-catalog">
+                  <!-- Vitamins column -->
+                  <div class="megamenu-col megamenu-col--vit">
+                    <div class="megamenu-col__title">
+                      <span class="mm-col-icon"><i class="fas fa-sun"></i></span> Вітаміни
+                    </div>
+                    <div class="megamenu-col__links">
+                      <a href="#">Вітамін A</a>
+                      <a href="#" class="mm-top">
+                        Вітамін B (комплекс)
+                        <span class="mm-badge mm-badge--top">ТОП</span>
+                      </a>
+                      <a href="#" class="mm-sub">B1 · B2 · B3 · B5 · B6 · B7 · B9 · B12</a>
+                      <a href="#">Вітамін C</a>
+                      <a href="#" class="mm-top">
+                        Вітамін D3
+                        <span class="mm-badge mm-badge--top">★ №1</span>
+                      </a>
+                      <a href="#">Вітамін E</a>
+                      <a href="#">Вітамін K (K1 + K2-MK7)</a>
+                      <span class="mm-section-title">Мультивітаміни</span>
+                      <a href="#">Загальні</a>
+                      <a href="#">Для жінок</a>
+                      <a href="#">Для чоловіків</a>
+                      <a href="#">Для дітей</a>
+                      <a href="#" class="mm-see-all"><i class="fas fa-arrow-right"></i> Усі вітаміни</a>
+                    </div>
+                  </div>
+                  <!-- Minerals column -->
+                  <div class="megamenu-col megamenu-col--min">
+                    <div class="megamenu-col__title">
+                      <span class="mm-col-icon"><i class="fas fa-gem"></i></span> Мінерали
+                    </div>
+                    <div class="megamenu-col__links">
+                      <a href="#" class="mm-top">Магній (Mg) <span class="mm-badge mm-badge--top">★</span></a>
+                      <a href="#">Цинк (Zn)</a>
+                      <a href="#">Залізо (Fe)</a>
+                      <a href="#">Кальцій (Ca)</a>
+                      <a href="#">Селен (Se)</a>
+                      <a href="#">Йод (I)</a>
+                      <a href="#">Калій (K)</a>
+                      <a href="#">Хром (Cr)</a>
+                      <span class="mm-section-title">Комплекси</span>
+                      <a href="#">Мультимінерали</a>
+                      <a href="#" class="mm-see-all"><i class="fas fa-arrow-right"></i> Усі мінерали</a>
+                    </div>
+                  </div>
+                  <!-- Supplements column -->
+                  <div class="megamenu-col megamenu-col--sup">
+                    <div class="megamenu-col__title">
+                      <span class="mm-col-icon"><i class="fas fa-capsules"></i></span> Добавки
+                    </div>
+                    <div class="megamenu-col__links">
+                      <a href="#" class="mm-top">Омега 3 / 6 / 9 <span class="mm-badge mm-badge--top">★</span></a>
+                      <a href="#" class="mm-top">Пробіотики <span class="mm-badge mm-badge--top">★</span></a>
+                      <a href="#">Амінокислоти</a>
+                      <a href="#">Антиоксиданти</a>
+                      <a href="#">Коензим Q10</a>
+                      <a href="#">Колаген</a>
+                      <a href="#">Травні ферменти</a>
+                      <a href="#">Суперфуди</a>
+                      <a href="#">Рослинні екстракти</a>
+                      <a href="#">Продукти бджільництва</a>
+                      <a href="#">Органічні добавки</a>
+                      <a href="#">Wholefood</a>
+                      <a href="#">Порошки для напоїв</a>
+                      <a href="#" class="mm-see-all"><i class="fas fa-arrow-right"></i> Усі добавки</a>
+                    </div>
+                  </div>
+                  <!-- Special column -->
+                  <div class="megamenu-col megamenu-col--spc">
+                    <div class="megamenu-col__title">
+                      <span class="mm-col-icon"><i class="fas fa-star"></i></span> Спеціальні
+                    </div>
+                    <div class="megamenu-col__links">
+                      <span class="mm-section-title">За аудиторією</span>
+                      <a href="#" class="mm-top">Для жінок · SOOV <span class="mm-badge mm-badge--new">UK</span></a>
+                      <a href="#">Для чоловіків</a>
+                      <a href="#" class="mm-top">Для дітей · Kids <span class="mm-badge mm-badge--top">★</span></a>
+                      <a href="#">50+ (вікова категорія)</a>
+                      <a href="#">Для вагітних</a>
+                      <a href="#">Для спортсменів</a>
+                      <span class="mm-section-title">За філософією</span>
+                      <a href="#">Веганські</a>
+                      <a href="#">Органічні</a>
+                      <a href="#">Clean Label</a>
+                      <a href="#">Daily Packs</a>
+                      <a href="#" class="mm-see-all"><i class="fas fa-arrow-right"></i> Усі лінійки</a>
+                    </div>
+                  </div>
+                  <!-- Popular column -->
+                  <div class="megamenu-col megamenu-col--pop">
+                    <div class="megamenu-col__title">
+                      <span class="mm-col-icon"><i class="fas fa-fire"></i></span> Популярне
+                    </div>
+                    <div class="megamenu-col__links">
+                      <span class="mm-section-title">Топ для початку</span>
+                      <div class="mm-chips">
+                        <a href="#" class="mm-chip mm-chip--hot">Вітамін D3</a>
+                        <a href="#" class="mm-chip mm-chip--hot">Магній</a>
+                        <a href="#" class="mm-chip mm-chip--hot">Омега-3</a>
+                        <a href="#" class="mm-chip">Вітамін C</a>
+                        <a href="#" class="mm-chip">Пробіотики</a>
+                        <a href="#" class="mm-chip">Цинк</a>
+                      </div>
+                      <div class="mm-pop-divider"></div>
+                      <span class="mm-section-title">Розділи</span>
+                      <a href="#"><i class="fas fa-wand-sparkles"></i> Новинки <span
+                          class="mm-badge mm-badge--new">NEW</span></a>
+                      <a href="#"><i class="fas fa-thumbs-up"></i> Рекомендовані</a>
+                      <a href="#"><i class="fas fa-tag"></i> Акційні товари <span
+                          class="mm-badge mm-badge--sale">-%</span></a>
+                      <a href="#"><i class="fas fa-leaf"></i> Сезонні добірки</a>
+                      <a href="#" class="mm-see-all"><i class="fas fa-arrow-right"></i> Переглянути все</a>
+                    </div>
+                  </div>
+                  <!-- SOOV promo banner -->
+                  <div class="megamenu-soov">
+                    <div class="soov-inner">
+                      <div class="megamenu-soov__ribbon">
+                        <i class="fas fa-circle-dot"></i> Лінійка для жінок
+                      </div>
+                      <div class="megamenu-soov__brand">
+                        <div class="megamenu-soov__title">SOOV</div>
+                        <div class="megamenu-soov__dot"></div>
+                      </div>
+                      <div class="megamenu-soov__tagline">Жіноче здоров'я<br>Преміум формули з Великобританії</div>
+                      <div class="soov-products">
+                        <div class="soov-group">
+                          <div class="soov-group__label">Цикл</div>
+                          <div class="soov-group__tags">
+                            <a href="#" class="soov-tag">Flow</a>
+                            <a href="#" class="soov-tag">40+</a>
+                            <a href="#" class="soov-tag">Meno</a>
+                          </div>
+                        </div>
+                        <div class="soov-group">
+                          <div class="soov-group__label">Здоров'я</div>
+                          <div class="soov-group__tags">
+                            <a href="#" class="soov-tag">Deflate</a>
+                            <a href="#" class="soov-tag">Ignite</a>
+                            <a href="#" class="soov-tag">Endo</a>
+                            <a href="#" class="soov-tag">Ova</a>
+                          </div>
+                        </div>
+                        <div class="soov-group">
+                          <div class="soov-group__label">7-денні саше</div>
+                          <div class="soov-group__tags">
+                            <a href="#" class="soov-tag">Buzz</a>
+                            <a href="#" class="soov-tag">Ow</a>
+                            <a href="#" class="soov-tag">Ouch</a>
+                            <a href="#" class="soov-tag">Vibes</a>
+                            <a href="#" class="soov-tag">Crave</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <img class="soov-award" src="Meno_Award_Top-1.png" alt="Platinum 2025 Awards Winner">
+                    <a href="https://soov.uk/" target="_blank" class="megamenu-soov__btn">
+                      Перейти до лінійки <i class="fas fa-arrow-right"></i>
+                    </a>
+                  </div>
+                </div>
+                <!-- /megamenu-catalog -->
+              </div>
+            </div>
+          </li>
+
+          <!-- "For what" megamenu -->
+          <li class="has-megamenu">
+            <a href="/forwhat">Для чого <i class="fas fa-chevron-down nav-caret"></i></a>
+            <div class="nav-megamenu" id="js-megamenu-forwhat">
+              <div class="nav-megamenu__inner">
+                <div class="mm-topbar">
+                  <span class="mm-topbar__label">Весь асортимент G&amp;G Vitamins UK</span>
+                  <a href="/catalog" class="mm-topbar__all">
+                    Дивитись усі товари
+                    <i class="fas fa-arrow-right" style="font-size: 0.7rem"></i>
+                  </a>
+                </div>
+                <div class="megamenu-forwhat">
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Захист</div>
+                    <a href="#" class="forwhat-item">Імунітет</a>
+                    <a href="#" class="forwhat-item">Антиоксидантний захист</a>
+                    <a href="#" class="forwhat-item">Дихальна система</a>
+                  </div>
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Енергія</div>
+                    <a href="#" class="forwhat-item">Енергія та бадьорість</a>
+                    <a href="#" class="forwhat-item">Спорт і м'язи</a>
+                    <a href="#" class="forwhat-item">Схуднення та метаболізм</a>
+                  </div>
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Розум</div>
+                    <a href="#" class="forwhat-item">Мозок і пам'ять</a>
+                    <a href="#" class="forwhat-item">Сон і відновлення</a>
+                    <a href="#" class="forwhat-item">Стрес і нерви</a>
+                  </div>
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Тіло</div>
+                    <a href="#" class="forwhat-item">Серце і судини</a>
+                    <a href="#" class="forwhat-item">Суглоби та кістки</a>
+                    <a href="#" class="forwhat-item">Травлення</a>
+                  </div>
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Краса</div>
+                    <a href="#" class="forwhat-item">Шкіра і волосся</a>
+                    <a href="#" class="forwhat-item">Зір</a>
+                    <a href="#" class="forwhat-item">Детокс та очищення</a>
+                  </div>
+                  <div class="forwhat-col">
+                    <div class="forwhat-col__title">Особливі</div>
+                    <a href="#" class="forwhat-item">Для вагітних</a>
+                    <a href="#" class="forwhat-item">Дитячий розвиток</a>
+                    <a href="#" class="forwhat-item">Гормональний баланс</a>
+                    <a href="#" class="forwhat-item">Щитоподібна залоза</a>
+                  </div>
+                </div>
+                <div
+                  style="margin-top:1rem; padding-top:0.75rem; border-top:1px solid var(--color-border-light); text-align:center;">
+                  <a href="/forwhat" style="font-size:0.875rem; color:var(--color-primary); font-weight:700;">→ Всі 18
+                    напрямків здоров'я</a>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li><a href="/sales" class="nav-accent"><i class="fas fa-tag"></i> Акції</a></li>
+          <li><a href="/about">Про бренд</a></li>
+          <li><a href="/blog">Статті / Блог</a></li>
+          <li><a href="/distributors">Дистриб'ютори</a></li>
+        </ul>
+
+        <!-- Compact action icons (visible when header collapses on scroll) -->
+        <div class="nav-compact-right">
+          <!-- Wishlist: opens offcanvasWishlist -->
+          <button class="action-btn" title="Обране" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWishlist"
+            aria-controls="offcanvasWishlist">
+            <i class="fas fa-heart"></i><span class="action-badge">3</span>
+          </button>
+          <div class="header-account">
+            <button class="action-btn" title="Аккаунт"><i class="fas fa-user"></i></button>
+            <div class="account-dropdown">
+              <a href="#"><i class="fas fa-user-circle"></i> Профіль</a>
+              <a href="#"><i class="fas fa-box"></i> Мої замовлення</a>
+              <a href="#"><i class="fas fa-heart"></i> Обране</a>
+              <hr>
+              <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Вихід</a>
+            </div>
+          </div>
+          <!-- Cart: opens offcanvasCart (offcanvas-end on desktop) -->
+          <button class="action-btn" title="Кошик" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
+            aria-controls="offcanvasCart">
+            <i class="fas fa-shopping-cart"></i><span class="action-badge">2</span>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- =====================================================================
+    MOBILE TOP BAR (hidden md+)
+    Logo centered between search and contact button.
+    logo-sub removed — hidden via CSS too (safety net in styles_additions.css)
+  ====================================================================== -->
+  <header class="mobile-top-bar d-lg-none" role="banner" aria-label="Mobile header">
+    <div class="mobile-top-bar__inner">
+
+      <!-- Logo: text only, no subtitle -->
+      <a href="https://two-prestashop.test/" class="mobile-top-bar__logo mobile-logo-text" aria-label="Головна">
+        <div class="logo-text">SoWeSOL</div>
+      </a>
+
+      <!-- Search: stretches to fill all space between logo and contact btn -->
+      <div class="mobile-top-bar__search flex-grow-1">
+        <div id="search_widget" class="search-widget" data-search-controller-url="//two-prestashop.test/search">
+          <form method="get" action="//two-prestashop.test/search" class="search-widget__form" role="search">
+            <input type="hidden" name="controller" value="search">
+            <div class="search-widget__inner">
+              <!-- Search icon inside the input field -->
+              <i class="fa-solid fa-magnifying-glass search-widget__icon" aria-hidden="true"></i>
+              <input id="search_query_top" class="search-widget__input js-search-input" type="search" name="s"
+                placeholder="Пошук у нашому каталозі..." value="" autocomplete="off" aria-label="Search"
+                data-search-url="//two-prestashop.test/search" aria-haspopup="listbox" aria-autocomplete="list"
+                aria-controls="search-results-dropdown">
+            </div>
+          </form>
+          <div id="search-results-dropdown" class="search-dropdown" role="listbox" hidden></div>
+        </div>
+      </div>
+
+      <!-- Contact / headset button -->
+      <button class="mobile-top-bar__contact-btn" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasContact" aria-controls="offcanvasContact" aria-label="Контакти">
+        <i class="fa-solid fa-headset" aria-hidden="true"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- =====================================================================
+    MOBILE BOTTOM NAV (hidden md+)
+  ====================================================================== -->
+  <nav class="mobile-bottom-nav d-lg-none" role="navigation" aria-label="Mobile navigation">
+    <ul class="mobile-bottom-nav__list" role="list">
+
+      <li class="mobile-bottom-nav__item">
+        <a href="https://two-prestashop.test/" class="mobile-bottom-nav__link" aria-label="Головна">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
+          <span class="mobile-bottom-nav__label">Головна</span>
+        </a>
+      </li>
+
+      <!-- Catalog: opens custom drawer (Bootstrap attrs stripped by script.js) -->
+      <li class="mobile-bottom-nav__item">
+        <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu" aria-label="Catalog">
+          <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+          <span class="mobile-bottom-nav__label">Catalog</span>
+        </button>
+      </li>
+
+      <!-- Cart: offcanvas-bottom on mobile (class toggled by script.js) -->
+      <li class="mobile-bottom-nav__item">
+        <button class="mobile-bottom-nav__link mobile-bottom-nav__cart" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="Cart">
+          <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+          <span class="mobile-bottom-nav__label">Cart</span>
+          <span class="mobile-bottom-nav__badge cart-count" aria-live="polite" aria-atomic="true"></span>
+        </button>
+      </li>
+
+      <!-- Wishlist: offcanvas-bottom, slides up from bottom -->
+      <li class="mobile-bottom-nav__item">
+        <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasWishlist" aria-controls="offcanvasWishlist" aria-label="My wishlist">
+          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+          <span class="mobile-bottom-nav__label">Wishlist</span>
+        </button>
+      </li>
+
+      <!-- Menu: opens custom drawer (Bootstrap attrs stripped by script.js) -->
+      <li class="mobile-bottom-nav__item">
+        <button class="mobile-bottom-nav__link" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenu" aria-label="Menu">
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+          <span class="mobile-bottom-nav__label">Menu</span>
+        </button>
+      </li>
+
+    </ul>
+  </nav>
+
+  <!-- =====================================================================
+    CUSTOM MOBILE DRAWER (slides from left)
+    Overlay + drawer are controlled by custom JS (not Bootstrap Offcanvas).
+    Bootstrap data-bs-* attributes on open-buttons are stripped by script.js.
+  ====================================================================== -->
+  <div class="drawer-overlay" id="js-drawer-overlay"></div>
+  <div class="mobile-drawer" id="offcanvasMobileMenu">
+    <div class="drawer-header">
+      <div class="drawer-logo">
+        <div class="logo-text">SoWeSOL</div>
+        <div class="logo-sub">G&amp;G Vitamins Ukraine</div>
+      </div>
+      <button class="drawer-close" id="js-drawer-close">&times;</button>
+    </div>
+
+    <div class="drawer-nav">
+      <!-- Accordion catalog nav (mobile) -->
+      <nav class="drawer-accordion" aria-label="Каталог мобільний">
+        <div class="mm-acc__item">
+          <button class="mm-acc__head mm-acc__head--vit" aria-expanded="false">
+            <span class="mm-col-icon"><i class="fas fa-sun"></i></span> Вітаміни
+            <i class="fas fa-chevron-down mm-acc__chevron"></i>
+          </button>
+          <div class="mm-acc__body">
+            <div class="mm-acc__body-inner">
+              <a href="#" class="mm-acc__link">Вітамін A</a>
+              <a href="#" class="mm-acc__link mm-acc__link--top">Вітамін B (комплекс) <span
+                  class="mm-badge mm-badge--top">ТОП</span></a>
+              <a href="#" class="mm-acc__link mm-acc__link--sub">B1 · B2 · B3 · B5 · B6 · B7 · B9 · B12</a>
+              <a href="#" class="mm-acc__link">Вітамін C</a>
+              <a href="#" class="mm-acc__link mm-acc__link--top">Вітамін D3 <span class="mm-badge mm-badge--top">★
+                  №1</span></a>
+              <a href="#" class="mm-acc__link">Вітамін E</a>
+              <a href="#" class="mm-acc__link">Вітамін K (K1 + K2-MK7)</a>
+              <div class="mm-acc__section">Мультивітаміни</div>
+              <a href="#" class="mm-acc__link">Загальні</a>
+              <a href="#" class="mm-acc__link">Для жінок</a>
+              <a href="#" class="mm-acc__link">Для чоловіків</a>
+              <a href="#" class="mm-acc__link">Для дітей</a>
+              <a href="#" class="mm-acc__link mm-acc__link--seeall"><i class="fas fa-arrow-right"></i> Усі вітаміни</a>
+            </div>
+          </div>
+        </div>
+        <div class="mm-acc__item">
+          <button class="mm-acc__head mm-acc__head--min" aria-expanded="false">
+            <span class="mm-col-icon"><i class="fas fa-gem"></i></span> Мінерали
+            <i class="fas fa-chevron-down mm-acc__chevron"></i>
+          </button>
+          <div class="mm-acc__body">
+            <div class="mm-acc__body-inner">
+              <a href="#" class="mm-acc__link mm-acc__link--top">Магній (Mg) <span
+                  class="mm-badge mm-badge--top">★</span></a>
+              <a href="#" class="mm-acc__link">Цинк (Zn)</a>
+              <a href="#" class="mm-acc__link">Залізо (Fe)</a>
+              <a href="#" class="mm-acc__link">Кальцій (Ca)</a>
+              <a href="#" class="mm-acc__link">Селен (Se)</a>
+              <a href="#" class="mm-acc__link">Йод (I)</a>
+              <a href="#" class="mm-acc__link">Калій (K)</a>
+              <a href="#" class="mm-acc__link">Хром (Cr)</a>
+              <div class="mm-acc__section">Комплекси</div>
+              <a href="#" class="mm-acc__link">Мультимінерали</a>
+              <a href="#" class="mm-acc__link mm-acc__link--seeall"><i class="fas fa-arrow-right"></i> Усі мінерали</a>
+            </div>
+          </div>
+        </div>
+        <div class="mm-acc__item">
+          <button class="mm-acc__head mm-acc__head--sup" aria-expanded="false">
+            <span class="mm-col-icon"><i class="fas fa-capsules"></i></span> Добавки
+            <i class="fas fa-chevron-down mm-acc__chevron"></i>
+          </button>
+          <div class="mm-acc__body">
+            <div class="mm-acc__body-inner">
+              <a href="#" class="mm-acc__link mm-acc__link--top">Омега 3 / 6 / 9 <span
+                  class="mm-badge mm-badge--top">★</span></a>
+              <a href="#" class="mm-acc__link mm-acc__link--top">Пробіотики <span
+                  class="mm-badge mm-badge--top">★</span></a>
+              <a href="#" class="mm-acc__link">Амінокислоти</a>
+              <a href="#" class="mm-acc__link">Антиоксиданти</a>
+              <a href="#" class="mm-acc__link">Коензим Q10</a>
+              <a href="#" class="mm-acc__link">Колаген</a>
+              <a href="#" class="mm-acc__link">Травні ферменти</a>
+              <a href="#" class="mm-acc__link">Суперфуди</a>
+              <a href="#" class="mm-acc__link">Рослинні екстракти</a>
+              <a href="#" class="mm-acc__link">Продукти бджільництва</a>
+              <a href="#" class="mm-acc__link">Органічні добавки</a>
+              <a href="#" class="mm-acc__link">Wholefood</a>
+              <a href="#" class="mm-acc__link">Порошки для напоїв</a>
+              <a href="#" class="mm-acc__link mm-acc__link--seeall"><i class="fas fa-arrow-right"></i> Усі добавки</a>
+            </div>
+          </div>
+        </div>
+        <div class="mm-acc__item">
+          <button class="mm-acc__head mm-acc__head--spc" aria-expanded="false">
+            <span class="mm-col-icon"><i class="fas fa-star"></i></span> Спеціальні
+            <i class="fas fa-chevron-down mm-acc__chevron"></i>
+          </button>
+          <div class="mm-acc__body">
+            <div class="mm-acc__body-inner">
+              <div class="mm-acc__section">За аудиторією</div>
+              <a href="#" class="mm-acc__link mm-acc__link--top">Для жінок · SOOV <span
+                  class="mm-badge mm-badge--new">UK</span></a>
+              <a href="#" class="mm-acc__link">Для чоловіків</a>
+              <a href="#" class="mm-acc__link mm-acc__link--top">Для дітей · Kids <span
+                  class="mm-badge mm-badge--top">★</span></a>
+              <a href="#" class="mm-acc__link">50+ (вікова категорія)</a>
+              <a href="#" class="mm-acc__link">Для вагітних</a>
+              <a href="#" class="mm-acc__link">Для спортсменів</a>
+              <div class="mm-acc__section">За філософією</div>
+              <a href="#" class="mm-acc__link">Веганські</a>
+              <a href="#" class="mm-acc__link">Органічні</a>
+              <a href="#" class="mm-acc__link">Clean Label</a>
+              <a href="#" class="mm-acc__link">Daily Packs</a>
+              <a href="#" class="mm-acc__link mm-acc__link--seeall"><i class="fas fa-arrow-right"></i> Усі лінійки</a>
+            </div>
+          </div>
+        </div>
+        <div class="mm-acc__item">
+          <button class="mm-acc__head mm-acc__head--pop" aria-expanded="false">
+            <span class="mm-col-icon"><i class="fas fa-fire"></i></span> Популярне
+            <i class="fas fa-chevron-down mm-acc__chevron"></i>
+          </button>
+          <div class="mm-acc__body">
+            <div class="mm-acc__body-inner">
+              <div class="mm-acc__section">Топ для початку</div>
+              <div class="mm-acc__chips">
+                <a href="#" class="mm-chip mm-chip--hot">Вітамін D3</a>
+                <a href="#" class="mm-chip mm-chip--hot">Магній</a>
+                <a href="#" class="mm-chip mm-chip--hot">Омега-3</a>
+                <a href="#" class="mm-chip">Вітамін C</a>
+                <a href="#" class="mm-chip">Пробіотики</a>
+                <a href="#" class="mm-chip">Цинк</a>
+              </div>
+              <div class="mm-acc__divider"></div>
+              <div class="mm-acc__section">Розділи</div>
+              <a href="#" class="mm-acc__link"><i class="fas fa-wand-sparkles"></i> Новинки <span
+                  class="mm-badge mm-badge--new">NEW</span></a>
+              <a href="#" class="mm-acc__link"><i class="fas fa-thumbs-up"></i> Рекомендовані</a>
+              <a href="#" class="mm-acc__link"><i class="fas fa-tag"></i> Акційні товари <span
+                  class="mm-badge mm-badge--sale">-%</span></a>
+              <a href="#" class="mm-acc__link"><i class="fas fa-leaf"></i> Сезонні добірки</a>
+              <a href="#" class="mm-acc__link mm-acc__link--seeall"><i class="fas fa-arrow-right"></i> Переглянути
+                все</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Other nav links -->
+      <a href="/sales" class="drawer-nav-link nav-accent-mobile"><i class="fas fa-tag"></i> Акції</a>
+      <a href="/about" class="drawer-nav-link">Про бренд</a>
+      <a href="/blog" class="drawer-nav-link">Статті / Блог</a>
+      <a href="/distributors" class="drawer-nav-link">Дистриб'ютори</a>
+
+      <!-- Language switcher -->
+      <div class="drawer-lang" id="js-drawer-lang">
+        <button class="lang-btn active" data-lang="ua">UA</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+
+      <!-- Auth button -->
+      <button class="drawer-auth-btn" id="js-drawer-auth">Увійти</button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+    OFFCANVAS: WISHLIST
+    Bootstrap offcanvas-bottom — slides up from bottom on both mobile & desktop.
+    Opened by: mobile bottom nav heart btn + desktop header heart btn.
+  ====================================================================== -->
+  <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasWishlist" aria-labelledby="offcanvasWishlistLabel">
+    <div class="offcanvas-header offcanvas-wishlist__header">
+      <h2 class="offcanvas-title offcanvas-wishlist__title" id="offcanvasWishlistLabel">
+        <i class="fa-regular fa-heart" aria-hidden="true"></i>
+        My Wishlist
+      </h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close wishlist"></button>
+    </div>
+    <div class="offcanvas-body offcanvas-wishlist__body">
+      <p style="color: var(--color-text-muted); text-align: center; margin-top: 2rem;">
+        Your wishlist is empty.
+      </p>
+    </div>
+    <div class="offcanvas-wishlist__footer">
+      <a href="#" class="btn btn-outline-primary w-100">View full wishlist</a>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+    OFFCANVAS: CART
+    Starts as offcanvas-end (desktop: slides from right).
+    script.js switches to offcanvas-bottom on mobile (slides from bottom).
+    Opened by: mobile bottom nav cart btn + desktop header cart btn.
+  ====================================================================== -->
+  <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="offcanvasCart"
+    aria-labelledby="offcanvasCartLabel" data-cart-offcanvas="true">
+    <div class="offcanvas-header offcanvas-cart__header">
+      <h2 class="offcanvas-title offcanvas-cart__title" id="offcanvasCartLabel">
+        <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+        My Cart
+      </h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close cart"></button>
+    </div>
+    <div class="offcanvas-body offcanvas-cart__body">
+      <p style="color: var(--color-text-muted); text-align: center; margin-top: 2rem;">
+        Your cart is empty.
+      </p>
+    </div>
+    <div class="offcanvas-cart__footer">
+      <a href="/cart" class="btn offcanvas-cart__checkout-btn w-100">
+        Go to checkout
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Demo content -->
+  <div class="demo-content">
+    <h2>Прокрутіть вниз ↓</h2>
+    <p>Top Bar → Main Header (з пошуком і іконками) плавно ховаються.<br>Nav Bar закріплюється — логотип з'являється
+      зліва, іконки справа.<br>На мобільних пристроях (до 768px) доступне виїзне меню з акордеоном каталогу, мовним
+      перемикачем та входом/виходом.</p>
+    <div style="height: 200vh; padding-top:1rem; color: var(--color-text-muted);">Контент сторінки…</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

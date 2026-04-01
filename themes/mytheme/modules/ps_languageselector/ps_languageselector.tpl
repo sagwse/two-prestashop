@@ -1,31 +1,30 @@
 {**
- * ps_languageselector — Переключатель языков
- * Версия темы : mytheme v0.6.0
- * Bootstrap    : 5.3 Dropdown
+ * ps_languageselector — Перемикач мов
+ * Версія теми : mytheme v0.6.0 > v0.7.5
  * Файл         : modules/ps_languageselector/ps_languageselector.tpl
  *}
-<div class="language-selector dropdown">
-  <button 
-    class="btn btn-sm btn-link text-white dropdown-toggle d-flex align-items-center gap-1 py-1 px-2 border-0" 
-    type="button" 
-    data-bs-toggle="dropdown" 
-    data-bs-display="static"
-    aria-expanded="false"
-  >
-    <span class="language-selector__label d-none d-md-inline">{l s='Language:' d='Shop.Theme.Global'}</span>
-    <span class="language-selector__current">{$current_language.name_simple}</span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-dark shadow" style="z-index: 2000;">
 
-    {foreach from=$languages item=language}
-      <li>
-        <a 
-          class="dropdown-item {if $language.id_lang == $current_language.id_lang} active {/if}" 
-          href="{$link->getLanguageLink($language.id_lang)}"
-        >
-          {$language.name_simple}
-        </a>
-      </li>
+{* Десктопний дизайн — такий самий як в оригінальному prototype/header.html *}
+<div class="top-bar__lang d-none d-md-flex">
+  {$current_language.iso_code|upper} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+  <div class="top-bar__lang-dropdown">
+    {foreach from=$languages item=language name="langs"}
+      <a href="{$link->getLanguageLink($language.id_lang)}" class="{if $language.id_lang == $current_language.id_lang}active{/if}">
+        {if $language.iso_code|lower == 'uk' || $language.iso_code|lower == 'ua'}🇺🇦{elseif $language.iso_code|lower == 'ru'}🇷🇺{elseif $language.iso_code|lower == 'en'}🇬🇧{/if}
+        {$language.name_simple}
+      </a>
+      {if !$smarty.foreach.langs.last}<hr>{/if}
     {/foreach}
-  </ul>
+  </div>
+</div>
+
+{* Мобільний дизайн для drawer-меню *}
+<div class="drawer-lang-buttons d-md-none" style="display:flex; justify-content:center; gap: 0.5rem; width:100%;">
+  {foreach from=$languages item=language}
+    <a href="{$link->getLanguageLink($language.id_lang)}" 
+       class="lang-btn {if $language.id_lang == $current_language.id_lang}active{/if}"
+       style="padding: 0.5rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-base); color: {if $language.id_lang == $current_language.id_lang}var(--color-primary){else}var(--color-text){/if}; font-weight: {if $language.id_lang == $current_language.id_lang}700{else}500{/if}; background: {if $language.id_lang == $current_language.id_lang}var(--color-primary-subtle){else}transparent{/if}; text-decoration: none;">
+      {$language.iso_code|upper}
+    </a>
+  {/foreach}
 </div>
