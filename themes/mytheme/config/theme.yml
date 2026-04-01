@@ -6,16 +6,18 @@
 # JS: все скрипты с атрибутом defer, position: bottom
 # CSS: bootstrap(5) → fontawesome(6) → theme(50) → страничный(60)
 # Страничные assets подключаются ТОЛЬКО на нужном контроллере
+# jQuery не используется и отключен в \themes\mytheme\templates\_partials\javascript.tpl
+# и отключен в \themes\mytheme\templates\_partials\stylesheets.tpl 
 # =============================================================================
 
 name: mytheme
-display_name: "My Shop Theme"
+display_name: "SoWeSol Shop Theme"
 version: "1.0.0"
 
 author:
-  name: ""
+  name: "Oleksander Semenov"
   email: ""
-  url: ""
+  url: "espinolla.com"
 
 meta:
   compatibility:

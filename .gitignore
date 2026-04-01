@@ -32,3 +32,5 @@ pdf/
 webservice/
 *.log
 dev-ssl/
+!themes/mytheme/config/theme.yml
+!themes/mytheme/config/
