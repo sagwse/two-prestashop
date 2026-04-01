@@ -480,6 +480,153 @@ button {
   background: #fff;
 }
 
+/* ── Search widget (ps_searchbar override — desktop main-header) ─────── */
+#search_widget.search-widget {
+  position: relative;
+  width: 100%;
+}
+
+.search-widget__form {
+  width: 100%;
+}
+
+.search-widget__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-widget__icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-widget__input {
+  width: 100%;
+  padding: 0.72rem 1.25rem 0.72rem 2.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--color-text);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-widget__input:focus {
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+  background: #fff;
+}
+
+.search-widget__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ── Search Results Dropdown ─────────────────────────────────────────── */
+/* #search-results-dropdown.search-dropdown — рендерится в ps_searchbar.tpl */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--nav-dropdown-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--nav-dropdown-shadow);
+  z-index: 1600;
+  max-height: 420px;
+  overflow-y: auto;
+  animation: dropIn 150ms ease forwards;
+}
+
+/* hidden attribute — скрывает дропдаун когда нет результатов */
+.search-dropdown[hidden] {
+  display: none;
+}
+
+/* ── Строка результата ── */
+.search-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background var(--t-fast);
+}
+
+.search-dropdown__item:last-child {
+  border-bottom: none;
+}
+
+.search-dropdown__item:hover,
+.search-dropdown__item[aria-selected="true"] {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+/* Thumbnail in result */
+.search-dropdown__img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: var(--color-background);
+}
+
+/* Product name */
+.search-dropdown__name {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Price */
+.search-dropdown__price {
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* "See all results" footer link */
+.search-dropdown__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  border-top: 1px solid var(--color-border-light);
+  transition: background var(--t-fast);
+}
+
+.search-dropdown__footer:hover {
+  background: var(--color-primary-subtle);
+}
+
+/* No-results message */
+.search-dropdown__empty {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
 /* ── Action buttons (wishlist, cart, account) ────────────────────────── */
 .header-actions {
   display: flex;
@@ -2990,5 +3137,171 @@ button {
 
   .megamenu-catalog {
     grid-template-columns: repeat(5, 1fr) 240px;
+  }
+}
+
+/* =============================================================================
+ * SEARCH DROPDOWN — живой поиск
+ * ============================================================================= */
+
+/* Цепочка родителей не должна обрезать дропдаун */
+.site-header,
+.main-header,
+.main-header__inner,
+.header-search {
+  overflow: visible !important;
+}
+
+/* Точка отсчёта для absolute-позиционирования */
+.search-widget {
+  position: relative;
+  overflow: visible !important;
+}
+
+/* Форма и внутренний контейнер не должны мешать */
+.search-widget__form,
+.search-widget__inner {
+  overflow: visible !important;
+}
+
+/* Сам дропдаун */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  max-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-dropdown[hidden] {
+  display: none;
+}
+
+/* Скроллируемая зона с результатами */
+.search-dropdown__scroll {
+  overflow-y: auto;
+  flex: 1;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.search-dropdown__scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.search-dropdown__scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+/* Один результат */
+.search-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  color: #111827;
+  text-decoration: none;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.search-dropdown__item:last-of-type {
+  border-bottom: none;
+}
+
+.search-dropdown__item:hover,
+.search-dropdown__item--active {
+  background-color: #eff6ff;
+  color: var(--color-primary, #1d4ed8);
+}
+
+/* Картинка товара */
+.search-dropdown__img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+}
+
+/* Название */
+.search-dropdown__name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* Подсветка совпадения */
+.search-dropdown__name mark {
+  background: none;
+  color: var(--color-primary, #1d4ed8);
+  font-weight: 700;
+}
+
+/* Цена */
+.search-dropdown__price {
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* Ссылка «Всі результати» */
+.search-dropdown__all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-primary, #1d4ed8);
+  font-weight: 600;
+  text-decoration: none;
+  background: #f8faff;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.search-dropdown__all:hover {
+  background: #eff6ff;
+}
+
+/* Пусто / загрузка */
+.search-dropdown__empty,
+.search-dropdown__loading {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.search-dropdown__loading .fa-circle-notch {
+  font-size: 1.25rem;
+  color: var(--color-primary, #1d4ed8);
+}
+
+/* На десктопе показываем только поиск в шапке */
+@media (min-width: 992px) {
+  .search-widget:not(.header-search .search-widget) {
+    display: none !important;
   }
 }

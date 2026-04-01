@@ -406,4 +406,347 @@
     updateMegamenuTop();
   });
 
+  /* ===========================================================================
+   * 10. AJAX VANILLA JS SEARCH
+   * Replaces jQuery UI search autocomplete from ps_searchbar
+   * =========================================================================*/
+  /* =============================================================================
+   * LIVE SEARCH 2026
+   *
+   * – Vanilla JS, zero dependencies
+   * – Fetch → PrestaShop 9 search controller (JSON + HTML fallback)
+   * – Keyboard navigation: ↑ ↓ Enter Escape
+   * – position: absolute + overflow: visible на родителях (см. CSS)
+   * – AbortController — отменяет предыдущий запрос при быстром вводе
+   * – ARIA: role="combobox / listbox / option", aria-expanded, aria-activedescendant
+   * ============================================================================= */
+
+  const LiveSearch = (() => {
+    /* ── Настройки ─────────────────────────────────────────────────────────── */
+    const CFG = {
+      minChars: 2,    // минимум символов для старта запроса
+      debounceMs: 250,  // задержка после последнего нажатия
+      resultsMax: 8,    // максимум карточек в дропдауне
+    };
+
+    /* ── Состояние ─────────────────────────────────────────────────────────── */
+    let debounceTimer = null;
+    let activeController = null; // AbortController текущего fetch
+
+    /* ── Fetch ─────────────────────────────────────────────────────────────── */
+    async function fetchResults(query, searchUrl, signal) {
+      const sep = searchUrl.includes("?") ? "&" : "?";
+      const url = `${searchUrl}${sep}s=${encodeURIComponent(query)}&resultsPerPage=${CFG.resultsMax}&ajax=true`;
+
+      const resp = await fetch(url, {
+        signal,
+        headers: {
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      const ct = resp.headers.get("content-type") || "";
+      if (ct.includes("application/json")) {
+        return { type: "json", data: await resp.json() };
+      }
+      return { type: "html", data: await resp.text() };
+    }
+
+    /* ── Helpers ───────────────────────────────────────────────────────────── */
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;",
+      })[c]);
+    }
+
+    function highlight(text, query) {
+      if (!query) return text;
+      const safe = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return text.replace(new RegExp(`(${safe})`, "gi"), "<mark>$1</mark>");
+    }
+
+    function uid() {
+      return "lsi-" + Math.random().toString(36).slice(2, 8);
+    }
+
+    /* ── DOM helpers ───────────────────────────────────────────────────────── */
+    function getItems(dropdown) {
+      return [...dropdown.querySelectorAll(".search-dropdown__item, .search-dropdown__all")];
+    }
+
+    function getActiveIdx(items) {
+      return items.findIndex((el) => el.classList.contains("search-dropdown__item--active"));
+    }
+
+    function setActive(items, idx) {
+      items.forEach((el, i) => {
+        const active = i === idx;
+        el.classList.toggle("search-dropdown__item--active", active);
+        if (active) {
+          el.scrollIntoView({ block: "nearest" });
+        }
+      });
+    }
+
+    /* ── Open / Close ──────────────────────────────────────────────────────── */
+    function open(dropdown, input) {
+      dropdown.removeAttribute("hidden");
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function close(dropdown, input) {
+      dropdown.setAttribute("hidden", "");
+      dropdown.innerHTML = "";
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+    }
+
+    /* ── Render ────────────────────────────────────────────────────────────── */
+    function renderLoading(dropdown, input) {
+      dropdown.innerHTML = `
+      <div class="search-dropdown__scroll">
+        <div class="search-dropdown__loading">
+          <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+        </div>
+      </div>`;
+      open(dropdown, input);
+    }
+
+    function renderEmpty(dropdown, input, query) {
+      dropdown.innerHTML = `
+      <div class="search-dropdown__scroll">
+        <div class="search-dropdown__empty">
+          Нічого не знайдено для «${esc(query)}»
+        </div>
+      </div>`;
+      open(dropdown, input);
+    }
+
+    function renderResults(dropdown, input, products, query, searchUrl) {
+      /* Скроллируемая зона */
+      const scroll = document.createElement("div");
+      scroll.className = "search-dropdown__scroll";
+
+      products.slice(0, CFG.resultsMax).forEach((product, idx) => {
+        const name = esc(product.name || "");
+        const price = product.price ? esc(String(product.price)) : null;
+        const img = product.cover?.bySize?.small_default?.url
+          || product.cover?.bySize?.cart_default?.url
+          || product.image_url
+          || null;
+        const href = product.url || "#";
+        const itemId = uid();
+
+        const a = document.createElement("a");
+        a.id = itemId;
+        a.href = href;
+        a.className = "search-dropdown__item";
+        a.setAttribute("role", "option");
+        a.setAttribute("data-idx", idx);
+        a.innerHTML = `
+        ${img ? `<img src="${esc(img)}" alt="${name}" class="search-dropdown__img" width="44" height="44" loading="lazy" decoding="async">` : ""}
+        <span class="search-dropdown__name">${highlight(name, query)}</span>
+        ${price ? `<span class="search-dropdown__price">${price}</span>` : ""}
+      `;
+        scroll.appendChild(a);
+      });
+
+      dropdown.innerHTML = "";
+      dropdown.appendChild(scroll);
+
+      /* Ссылка «Всі результати» */
+      if (searchUrl) {
+        const all = document.createElement("a");
+        all.className = "search-dropdown__all";
+        all.href = `${searchUrl}&s=${encodeURIComponent(query)}`;
+        all.setAttribute("role", "option");
+        all.innerHTML = `
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        Всі результати для «<strong>${esc(query)}</strong>»
+      `;
+        dropdown.appendChild(all);
+      }
+
+      open(dropdown, input);
+    }
+
+    function renderFallbackHtml(dropdown, input, htmlText, query, searchUrl) {
+      const doc = new DOMParser().parseFromString(htmlText, "text/html");
+      const links = [...doc.querySelectorAll(
+        'a[href*="id_product"], .product-miniature a, h2 a, h3 a'
+      )];
+
+      if (!links.length) {
+        renderEmpty(dropdown, input, query);
+        return;
+      }
+
+      const scroll = document.createElement("div");
+      scroll.className = "search-dropdown__scroll";
+
+      const seen = new Set();
+      let count = 0;
+
+      links.forEach((link) => {
+        if (count >= CFG.resultsMax || seen.has(link.href)) return;
+        seen.add(link.href);
+        count++;
+
+        const a = document.createElement("a");
+        a.href = link.href;
+        a.className = "search-dropdown__item";
+        a.setAttribute("role", "option");
+        a.innerHTML = `<span class="search-dropdown__name">${highlight(esc(link.textContent.trim()), query)}</span>`;
+        scroll.appendChild(a);
+      });
+
+      dropdown.innerHTML = "";
+      dropdown.appendChild(scroll);
+
+      if (searchUrl) {
+        const all = document.createElement("a");
+        all.className = "search-dropdown__all";
+        all.href = `${searchUrl}&s=${encodeURIComponent(query)}`;
+        all.setAttribute("role", "option");
+        all.innerHTML = `<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Всі результати для «<strong>${esc(query)}</strong>»`;
+        dropdown.appendChild(all);
+      }
+
+      open(dropdown, input);
+    }
+
+    /* ── Keyboard navigation ───────────────────────────────────────────────── */
+    function handleKeydown(e, input, dropdown) {
+      if (dropdown.hidden) return;
+
+      const items = getItems(dropdown);
+      if (!items.length) return;
+
+      let idx = getActiveIdx(items);
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          idx = Math.min(idx + 1, items.length - 1);
+          setActive(items, idx);
+          input.setAttribute("aria-activedescendant", items[idx].id || "");
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          idx = Math.max(idx - 1, -1);
+          if (idx === -1) {
+            setActive(items, -1);
+            input.removeAttribute("aria-activedescendant");
+          } else {
+            setActive(items, idx);
+            input.setAttribute("aria-activedescendant", items[idx].id || "");
+          }
+          break;
+
+        case "Enter":
+          if (idx >= 0) {
+            e.preventDefault();
+            items[idx].click();
+          }
+          break;
+
+        case "Escape":
+          close(dropdown, input);
+          input.blur();
+          break;
+      }
+    }
+
+    /* ── Bind one input ────────────────────────────────────────────────────── */
+    function bindInput(input) {
+      const widget = input.closest(".search-widget");
+      if (!widget) return;
+
+      const dropdown = widget.querySelector("#search-results-dropdown, .search-dropdown");
+      if (!dropdown) return;
+
+      const searchUrl = input.dataset.searchUrl
+        || widget.dataset.searchControllerUrl
+        || "";
+      if (!searchUrl) return;
+
+      /* ARIA roles */
+      input.setAttribute("role", "combobox");
+      input.setAttribute("aria-autocomplete", "list");
+      input.setAttribute("aria-expanded", "false");
+      input.setAttribute("aria-controls", dropdown.id || "search-results-dropdown");
+      dropdown.setAttribute("role", "listbox");
+
+      /* ── Input handler ── */
+      input.addEventListener("input", () => {
+        const query = input.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (query.length < CFG.minChars) {
+          if (activeController) activeController.abort();
+          close(dropdown, input);
+          return;
+        }
+
+        renderLoading(dropdown, input);
+
+        debounceTimer = setTimeout(async () => {
+          /* Отменяем предыдущий запрос */
+          if (activeController) activeController.abort();
+          activeController = new AbortController();
+
+          try {
+            const result = await fetchResults(query, searchUrl, activeController.signal);
+
+            if (result.type === "json") {
+              const products = result.data.products || result.data || [];
+              if (!Array.isArray(products) || !products.length) {
+                renderEmpty(dropdown, input, query);
+              } else {
+                renderResults(dropdown, input, products, query, searchUrl);
+              }
+            } else {
+              renderFallbackHtml(dropdown, input, result.data, query, searchUrl);
+            }
+          } catch (err) {
+            if (err.name === "AbortError") return; // нормально — запрос отменён
+            console.error("[LiveSearch] fetch error:", err);
+            close(dropdown, input);
+          }
+        }, CFG.debounceMs);
+      });
+
+      /* ── Keyboard ── */
+      input.addEventListener("keydown", (e) => handleKeydown(e, input, dropdown));
+
+      /* ── Закрытие при клике вне ── */
+      document.addEventListener("click", (e) => {
+        if (!widget.contains(e.target) && !dropdown.contains(e.target)) {
+          close(dropdown, input);
+        }
+      }, { passive: true });
+
+      /* ── Повторное открытие при фокусе ── */
+      input.addEventListener("focus", () => {
+        if (input.value.trim().length >= CFG.minChars) {
+          input.dispatchEvent(new Event("input"));
+        }
+      });
+    }
+
+    /* ── Init ──────────────────────────────────────────────────────────────── */
+    function init() {
+      document.querySelectorAll(".js-search-input").forEach(bindInput);
+    }
+
+    return { init };
+  })();
+
+  document.addEventListener("DOMContentLoaded", () => LiveSearch.init());
+
 })();
