@@ -18,6 +18,8 @@ vendor/
 classes/
 controllers/
 modules/
+!modules/mytheme_core/
+!modules/mytheme_core/**
 override/
 cache/
 config/

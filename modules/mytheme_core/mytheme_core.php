@@ -72,7 +72,8 @@ class Mytheme_Core extends Module
        'ps_imageslider/js/responsiveslides.min.js',
         'ps_imageslider/js/homeslider.js', 
         'ps_facebook/views/js/front/conversion-api.js',
-        'blockreassurance/views/dist/front.js',     
+        'blockreassurance/views/dist/front.js',
+        'ps_searchbar/ps_searchbar.js',     
         // Добавляйте сюда подстроки URL JS-файлов которые нужно удалить, например:
         // 'ps_imageslider/js/responsiveslides.min.js',
         // 'ps_imageslider/js/homeslider.js',
@@ -111,17 +112,17 @@ class Mytheme_Core extends Module
         // jQuery из папок /js/jquery/ и /jquery-plugins/
         '~<script\b[^>]*\bsrc=["\'][^"\']*\/js\/jquery\/[^"\']*\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
         '~<script\b[^>]*\bsrc=["\'][^"\']*\/jquery[-_]?plugins?\/[^"\']*\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
-        // Bootstrap JS
-        '~<script\b[^>]*\bsrc=["\'][^"\']*\/bootstrap(?:\.bundle)?(?:\.min)?\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
-        '~<script\b[^>]*\bsrc=["\'][^"\']*\/bootstrap\/[^"\']*\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
+        // Bootstrap JS — skip theme assets
+        '~<script\b[^>]*\bsrc=["\'](?![^"\']*\/themes\/)[^"\']*\/bootstrap(?:\.bundle)?(?:\.min)?\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
+        '~<script\b[^>]*\bsrc=["\'](?![^"\']*\/themes\/)[^"\']*\/bootstrap\/[^"\']*\.js[^"\']*["\'][^>]*>\s*<\/script>~i',
     ];
 
     private const LINK_PATTERNS = [
         // jQuery UI CSS
         '~<link\b[^>]*\bhref=["\'][^"\']*\/jquery[-.]ui[^"\']*\.css[^"\']*["\'][^>]*\/?>~i',
-        // Bootstrap CSS
-        '~<link\b[^>]*\bhref=["\'][^"\']*\/bootstrap(?:\.min)?\.css[^"\']*["\'][^>]*\/?>~i',
-        '~<link\b[^>]*\bhref=["\'][^"\']*\/bootstrap\/[^"\']*\.css[^"\']*["\'][^>]*\/?>~i',
+        // Bootstrap CSS — skip theme assets
+        '~<link\b[^>]*\bhref=["\'](?![^"\']*\/themes\/)[^"\']*\/bootstrap(?:\.min)?\.css[^"\']*["\'][^>]*\/?>~i',
+        '~<link\b[^>]*\bhref=["\'](?![^"\']*\/themes\/)[^"\']*\/bootstrap\/[^"\']*\.css[^"\']*["\'][^>]*\/?>~i',
     ];
 
     // =========================================================================
@@ -165,7 +166,8 @@ class Mytheme_Core extends Module
     public function install(): bool
     {
         return parent::install()
-            && $this->registerHook('actionFrontControllerSetMedia');
+            && $this->registerHook('actionFrontControllerSetMedia')
+            && $this->registerHook('displayHeader');
     }
 
     public function uninstall(): bool
@@ -185,6 +187,46 @@ class Mytheme_Core extends Module
     {
         ob_start([$this, 'processHtml']);
     }
+
+   // 3. Новый метод после hookActionFrontControllerSetMedia():
+public function hookDisplayHeader(): string
+{
+    return <<<'HTML'
+<script>
+(function () {
+    if (window.__ps_patched) { return; }
+    window.__ps_patched = true;
+
+    function addEmitter(ps) {
+        if (!ps || typeof ps.emit === 'function') { return; }
+        var _l = {};
+        ps.on   = function (e, cb) { (_l[e] || (_l[e] = [])).push(cb); };
+        ps.off  = function (e, cb) { if (_l[e]) { _l[e] = _l[e].filter(function (f) { return f !== cb; }); } };
+        ps.emit = function (e, d)  { (_l[e] || []).forEach(function (f) { try { f(d); } catch (_) {} }); };
+        ps.fire = ps.emit;
+    }
+
+    if (window.prestashop) {
+        addEmitter(window.prestashop);
+    } else {
+        var _stored;
+        Object.defineProperty(window, 'prestashop', {
+            configurable: true,
+            enumerable: true,
+            get: function () { return _stored; },
+            set: function (val) {
+                _stored = val;
+                Object.defineProperty(window, 'prestashop', {
+                    configurable: true, writable: true, enumerable: true, value: val
+                });
+                addEmitter(val);
+            }
+        });
+    }
+}());
+</script>
+HTML;
+}
 
     // =========================================================================
     // Обработка HTML
